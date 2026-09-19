@@ -19,15 +19,19 @@ from auth import (
 from database import OperationLogRepository, UserRepository
 from password_reset import create_reset_token_for_email, reset_password_with_token
 from src.abuse_guard import (
+    check_login_locked,
     client_ip,
     extract_device_id,
     list_linked_accounts,
     normalize_device_id,
     record_login,
+    record_login_failure,
+    record_login_success,
     record_registration,
     trial_eligible,
     validate_registration,
 )
+from src.auth import is_legacy_sha256_hex
 from src.api_limits import effective_api_quota, get_api_usage
 from src.web_common import get_current_user
 from src.web_constants import ADMIN_FILE, BASE_DIR, LOGIN_FILE
@@ -83,29 +87,43 @@ async def login_for_access_token(request: Request):
     username = form_data.get("username")
     password = form_data.get("password")
     device_id = extract_device_id(request) or normalize_device_id(form_data.get("device_id"))
-    
+
+    if check_login_locked(username):
+        raise HTTPException(
+            status_code=429,
+            detail="登录失败次数过多，请 15 分钟后重试",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     user_data = UserRepository.get_by_username(username)
     if not user_data:
+        record_login_failure(username)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     if not verify_password(password, user_data['hashed_password']):
+        record_login_failure(username)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     if not user_data.get('is_active', 1):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Account is disabled",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
+    # 遗留裸 sha256 哈希在登录成功时懒升级为 pbkdf2
+    if is_legacy_sha256_hex(user_data.get('hashed_password') or ''):
+        UserRepository.update(username, {"hashed_password": get_password_hash(password)})
+
+    record_login_success(username)
     ip = client_ip(request)
     record_login(username=username, ip=ip, device_id=device_id)
     OperationLogRepository.log(username, 'login', f'Login from {ip} device={device_id or "-"}')

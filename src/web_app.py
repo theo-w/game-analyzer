@@ -116,9 +116,10 @@ async def _alert_scheduler_loop(stop_event: asyncio.Event) -> None:
 async def app_lifespan(app: FastAPI):
     global _alert_scheduler_stop, _alert_scheduler_task
     try:
-        from src.database import ensure_support_agents
+        from src.database import ensure_support_agents, harden_default_accounts
 
         ensure_support_agents()
+        harden_default_accounts()
     except Exception as exc:
         print(f"Support agent seed skipped: {exc}")
     try:
@@ -779,7 +780,12 @@ async def update_alert(alert_id: int, request: Request, token: Optional[str] = Q
     if not token:
         raise HTTPException(status_code=401, detail="Token required")
     current_user = await get_current_user(token)
-    
+
+    # 属主校验：只能修改自己的预警规则（他人资源返回 404 不暴露存在性）
+    existing = AlertRepository.get_by_id(alert_id)
+    if not existing or existing.get("username") != current_user.username:
+        raise HTTPException(status_code=404, detail="预警规则不存在")
+
     body = await request.json()
     alert_data = {}
     for key in ["name", "product", "metric", "operator", "threshold", "email", "enabled"]:
@@ -788,24 +794,24 @@ async def update_alert(alert_id: int, request: Request, token: Optional[str] = Q
                 alert_data[key] = float(body[key])
             else:
                 alert_data[key] = body[key]
-    
-    if AlertRepository.update(alert_id, alert_data):
-        OperationLogRepository.log(current_user.username, "update_alert", f"Updated alert: {alert_id}")
-        return {"success": True, "message": "更新成功"}
-    else:
-        return {"success": False, "message": "更新失败"}
+
+    AlertRepository.update(alert_id, alert_data)
+    OperationLogRepository.log(current_user.username, "update_alert", f"Updated alert: {alert_id}")
+    return {"success": True, "message": "更新成功"}
 
 @app.delete("/api/alerts/{alert_id}")
 async def delete_alert(alert_id: int, token: Optional[str] = Query(None)):
     if not token:
         raise HTTPException(status_code=401, detail="Token required")
     current_user = await get_current_user(token)
-    
-    if AlertRepository.delete(alert_id):
-        OperationLogRepository.log(current_user.username, "delete_alert", f"Deleted alert: {alert_id}")
-        return {"success": True, "message": "删除成功"}
-    else:
-        return {"success": False, "message": "删除失败"}
+
+    existing = AlertRepository.get_by_id(alert_id)
+    if not existing or existing.get("username") != current_user.username:
+        raise HTTPException(status_code=404, detail="预警规则不存在")
+
+    AlertRepository.delete(alert_id)
+    OperationLogRepository.log(current_user.username, "delete_alert", f"Deleted alert: {alert_id}")
+    return {"success": True, "message": "删除成功"}
 
 @app.post("/api/alerts/test")
 async def test_alert(request: Request, token: Optional[str] = Query(None)):
@@ -1364,6 +1370,27 @@ async def delete_dashboard(dashboard_id: int, token: Optional[str] = Query(None)
     return {"success": False, "message": "删除失败"}
 
 
+def _sanitize_report_fields(node) -> None:
+    """递归净化 report_data 中所有 html/html_excerpt 字符串字段（原地修改）。"""
+    from src.html_sanitizer import sanitize_rich_html
+
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if isinstance(value, str) and key in ("html", "html_excerpt"):
+                node[key] = sanitize_rich_html(value)
+            else:
+                _sanitize_report_fields(value)
+    elif isinstance(node, list):
+        for item in node:
+            _sanitize_report_fields(item)
+
+
+def _normalize_report_type(raw) -> str:
+    """report_type 会回显在前端 innerHTML 模板中，白名单化为安全 token。"""
+    value = str(raw or "daily").strip()
+    return value if re.fullmatch(r"[A-Za-z0-9_-]{1,40}", value) else "custom"
+
+
 @app.post("/api/report/share")
 async def share_report(request: Request, token: Optional[str] = Query(None)):
     if not token:
@@ -1371,10 +1398,13 @@ async def share_report(request: Request, token: Optional[str] = Query(None)):
     
     current_user = await get_current_user(token)
     body = await request.json()
-    
-    report_type = body.get('report_type', 'daily')
+
+    report_type = _normalize_report_type(body.get('report_type'))
     report_data = body.get('report_data', {})
     expires_hours = body.get('expires_hours', 24)
+
+    # 分享内容是公开端点渲染的用户输入，落库前对富文本字段做白名单净化
+    _sanitize_report_fields(report_data)
     
     from datetime import timedelta
     expires_at = (datetime.now() + timedelta(hours=expires_hours)).isoformat() if expires_hours > 0 else None

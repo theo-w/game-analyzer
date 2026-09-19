@@ -31,13 +31,67 @@
             imported: '用户导入经营指标 + 公开口碑',
         };
 
+        // 客户端白名单净化：历史分享数据可能未经过服务端净化，渲染前再防一道
+        const SAN_ALLOWED_TAGS = new Set(['P','BR','HR','H1','H2','H3','H4','H5','H6','UL','OL','LI','STRONG','EM','B','I','U','S','CODE','PRE','BLOCKQUOTE','TABLE','THEAD','TBODY','TR','TH','TD','A','IMG','SPAN','DIV','SMALL','SUP','SUB']);
+        const SAN_DROP_CONTENT = new Set(['SCRIPT','STYLE','IFRAME','OBJECT','EMBED','TEMPLATE','NOSCRIPT']);
+        const SAN_TAG_ATTRS = { A: ['href','title','target'], IMG: ['src','alt','title'] };
+
+        function sanSafeUrl(value) {
+            // 先剥 C0 控制符与 DEL：浏览器 URL 解析会丢前导控制符，"\x0ejavascript:" 可还原 scheme
+            const url = String(value).replace(/[\x00-\x1f\x7f]/g, '').trim();
+            const low = url.toLowerCase();
+            if (/^(https?:|mailto:|#|\/)/.test(low) || low.startsWith('data:image/')) return url;
+            if (!/^[a-z][a-z0-9+.-]*:/.test(low)) return url;
+            return null;
+        }
+
+        function sanCopyChildren(src, dest) {
+            for (const child of Array.from(src.childNodes)) {
+                if (child.nodeType === Node.TEXT_NODE) {
+                    dest.appendChild(document.createTextNode(child.nodeValue));
+                } else if (child.nodeType === Node.ELEMENT_NODE) {
+                    const tag = child.tagName;
+                    if (SAN_DROP_CONTENT.has(tag)) continue;
+                    if (!SAN_ALLOWED_TAGS.has(tag)) { sanCopyChildren(child, dest); continue; }
+                    const el = document.createElement(tag);
+                    const allowed = new Set([...(SAN_TAG_ATTRS[tag] || []), 'class']);
+                    for (const attr of Array.from(child.attributes)) {
+                        const name = attr.name.toLowerCase();
+                        if (!allowed.has(name) || name.startsWith('on')) continue;
+                        if ((name === 'href' || name === 'src')) {
+                            const safe = sanSafeUrl(attr.value);
+                            if (!safe) continue;
+                            el.setAttribute(name, safe);
+                        } else {
+                            el.setAttribute(name, attr.value);
+                        }
+                    }
+                    sanCopyChildren(child, el);
+                    if (tag === 'A' && (el.getAttribute('target') || '').toLowerCase() === '_blank') {
+                        el.setAttribute('rel', 'noopener noreferrer');
+                    }
+                    dest.appendChild(el);
+                }
+            }
+        }
+
+        function sanitizeHtml(raw) {
+            const doc = new DOMParser().parseFromString(String(raw || ''), 'text/html');
+            const out = document.createElement('div');
+            sanCopyChildren(doc.body, out);
+            return out.innerHTML;
+        }
+
         async function load() {
             const el = document.getElementById('content');
             try {
                 const res = await fetch('/api/report/shared/' + encodeURIComponent(token));
                 const data = await res.json();
                 if (!data.success) {
-                    el.innerHTML = '<p class="error">' + (data.message || '链接已过期') + '</p>';
+                    const p = document.createElement('p');
+                    p.className = 'error';
+                    p.textContent = data.message || '链接已过期';
+                    el.replaceChildren(p);
                     return;
                 }
                 const report = data.report?.report_data || {};
@@ -75,13 +129,15 @@
                 const md = report.markdown || report.body_markdown || '';
                 const html = report.html || report.html_excerpt || '';
                 if (html) {
-                    el.innerHTML = html;
+                    el.innerHTML = sanitizeHtml(html);
                 } else if (md && window.MarkdownPreview) {
                     el.innerHTML = MarkdownPreview.render(md);
                 } else if (md) {
                     el.innerHTML = '<pre style="white-space:pre-wrap;font-size:0.9rem;">' + md.replace(/</g, '&lt;') + '</pre>';
                 } else {
-                    el.innerHTML = '<p>' + (report.executive_summary || '无内容') + '</p>';
+                    const p = document.createElement('p');
+                    p.textContent = report.executive_summary || '无内容';
+                    el.replaceChildren(p);
                 }
             } catch (e) {
                 el.innerHTML = '<p class="error">加载失败</p>';

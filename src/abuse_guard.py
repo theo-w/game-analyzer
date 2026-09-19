@@ -3,14 +3,23 @@
 from __future__ import annotations
 
 import re
+import threading
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from database import db_manager
 from src.api_limits import effective_plan_id
 
 _DEVICE_ID_RE = re.compile(r"^[a-zA-Z0-9_-]{8,64}$")
+
+# 登录失败锁定：同一用户名 15 分钟内失败 10 次 → 锁定 15 分钟（内存态，进程重启即清零）
+_LOGIN_LOCK = threading.Lock()
+_LOGIN_FAILURES: Dict[str, List[datetime]] = {}
+LOGIN_FAILURE_THRESHOLD = 10
+LOGIN_FAILURE_WINDOW_MINUTES = 15
+# 键数护栏：/token 未认证，防幽灵用户名探测把字典撑到无界（触发时清扫过期条目）
+LOGIN_FAILURE_MAX_KEYS = 10000
 
 
 @dataclass(frozen=True)
@@ -54,6 +63,41 @@ def extract_device_id(request) -> Optional[str]:
 
 def _since_iso(hours: int = 0, days: int = 0) -> str:
     return (datetime.now() - timedelta(hours=hours, days=days)).isoformat()
+
+
+def check_login_locked(username: str) -> bool:
+    """该用户名是否处于登录失败锁定窗口内。"""
+    key = (username or "").strip().lower()
+    if not key:
+        return False
+    cutoff = datetime.now() - timedelta(minutes=LOGIN_FAILURE_WINDOW_MINUTES)
+    with _LOGIN_LOCK:
+        failures = [t for t in _LOGIN_FAILURES.get(key, []) if t > cutoff]
+        if not failures:
+            # 未命中不留条目，避免幽灵用户名探测撑爆内存
+            _LOGIN_FAILURES.pop(key, None)
+            return False
+        _LOGIN_FAILURES[key] = failures
+        return len(failures) >= LOGIN_FAILURE_THRESHOLD
+
+
+def record_login_failure(username: str) -> None:
+    key = (username or "").strip().lower()
+    if not key:
+        return
+    with _LOGIN_LOCK:
+        _LOGIN_FAILURES.setdefault(key, []).append(datetime.now())
+        if len(_LOGIN_FAILURES[key]) > 100:
+            del _LOGIN_FAILURES[key][: -LOGIN_FAILURE_THRESHOLD]
+        if len(_LOGIN_FAILURES) > LOGIN_FAILURE_MAX_KEYS:
+            cutoff = datetime.now() - timedelta(minutes=LOGIN_FAILURE_WINDOW_MINUTES)
+            expired = [k for k, v in _LOGIN_FAILURES.items() if not any(t > cutoff for t in v)]
+            for k in expired:
+                _LOGIN_FAILURES.pop(k, None)
+
+
+def record_login_success(username: str) -> None:
+    _LOGIN_FAILURES.pop((username or "").strip().lower(), None)
 
 
 def count_registrations_by_ip(ip: str, *, hours: int = 0, days: int = 0) -> int:

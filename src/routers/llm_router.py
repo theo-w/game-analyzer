@@ -48,8 +48,10 @@ async def get_llm_providers(token: Optional[str] = Query(None)):
 async def get_llm_config(token: Optional[str] = Query(None)):
     if not token:
         raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
+    current_user = await get_current_user(token)
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="只有管理员可以查看LLM配置")
+
     db_config = LLMConfigRepository.get()
     if db_config:
         config = {
@@ -147,8 +149,11 @@ async def update_llm_config(request: Request, token: Optional[str] = Query(None)
 async def test_llm_connection(request: Request, token: Optional[str] = Query(None)):
     if not token:
         raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
+    current_user = await get_current_user(token)
+    if current_user.role != "admin":
+        # 测试接口会用服务端真实 key 向用户自填 endpoint 发起请求，必须收敛到管理员
+        raise HTTPException(status_code=403, detail="只有管理员可以测试LLM连接")
+
     body = await request.json()
     provider = body.get("provider", LLM_CONFIG["provider"])
     model = body.get("model", LLM_CONFIG["model"])
