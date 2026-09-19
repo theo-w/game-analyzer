@@ -510,7 +510,7 @@ _PUBLIC_PAGES = [
     ("/guide", "0.8", "weekly"),
     ("/work", "0.7", "weekly"),
     ("/mvp", "0.7", "weekly"),
-    ("/hotspot", "0.7", "daily"),
+    ("/hotspot", "0.3", "monthly"),
     ("/games/library", "0.7", "weekly"),
     ("/games/review", "0.7", "weekly"),
     ("/games/compare", "0.6", "monthly"),

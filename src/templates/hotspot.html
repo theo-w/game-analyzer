@@ -3,383 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>行业热点深度分析</title>
+    <title>行业热点文章存档</title>
     <link rel="stylesheet" href="/static/css/analysis-guide.css">
-    <link rel="stylesheet" href="/static/css/scenario-workspace.css">
     <script src="/static/js/auth-token.js"></script>
-    <script src="/static/js/data-provenance.js"></script>
     <script src="/static/js/app-nav.js" defer></script>
     <script src="/static/js/markdown-preview.js"></script>
     <style>
         :root {
             --bg: #0f1419; --panel: #1a2332; --text: #e7ecf3; --muted: #94a3b8;
-            --accent: #f59e0b; --accent2: #06b6d4; --border: rgba(255,255,255,0.08);
+            --accent: #f59e0b; --border: rgba(255,255,255,0.08);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
         .page { max-width: 1100px; margin: 0 auto; padding: 20px 24px 48px; }
-        .hero { margin: 16px 0 24px; }
+        .hero { margin: 16px 0 20px; }
         .hero h1 { font-size: 1.45rem; margin-bottom: 8px; }
         .hero p { color: var(--muted); line-height: 1.6; font-size: 0.92rem; }
+        .archive-notice {
+            border: 1px solid rgba(245,158,11,0.35); border-radius: 14px;
+            background: rgba(245,158,11,0.07); padding: 16px 18px; margin-bottom: 20px;
+            font-size: 0.86rem; line-height: 1.75;
+        }
+        .archive-notice strong { color: #fcd34d; }
+        .archive-notice p { margin-bottom: 6px; }
+        .archive-notice p:last-child { margin-bottom: 0; }
         .grid { display: grid; grid-template-columns: 340px 1fr; gap: 20px; align-items: start; }
         @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
         .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
         .panel h2 { font-size: 1rem; margin-bottom: 12px; }
-        .topic-list { display: flex; flex-direction: column; gap: 10px; max-height: 70vh; overflow-y: auto; }
-        .topic-card {
+        .article-list { display: flex; flex-direction: column; gap: 10px; max-height: 70vh; overflow-y: auto; }
+        .article-card {
             border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; cursor: pointer;
             transition: border-color 0.15s, background 0.15s;
         }
-        .topic-card:hover { border-color: rgba(245,158,11,0.45); }
-        .topic-card.active { border-color: var(--accent); background: rgba(245,158,11,0.1); }
-        .topic-card h3 { font-size: 0.88rem; line-height: 1.45; margin-bottom: 6px; }
-        .topic-meta { font-size: 0.75rem; color: var(--muted); }
-        .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; align-items: center; }
-        .btn {
-            border: 1px solid var(--border); background: #243044; color: var(--text);
-            padding: 9px 16px; border-radius: 10px; cursor: pointer; font-size: 0.875rem;
-        }
-        .btn-primary { background: linear-gradient(135deg, var(--accent), #d97706); border: none; color: #111; font-weight: 600; }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .article-card:hover { border-color: rgba(245,158,11,0.45); }
+        .article-card.active { border-color: var(--accent); background: rgba(245,158,11,0.1); }
+        .article-card h3 { font-size: 0.88rem; line-height: 1.45; margin-bottom: 6px; }
+        .article-meta { font-size: 0.75rem; color: var(--muted); }
         .status { font-size: 0.82rem; color: var(--muted); min-height: 1.2em; }
         .article-shell { min-height: 360px; }
         .article-shell .md-preview { line-height: 1.7; font-size: 0.95rem; }
         .article-shell .md-preview h2 { margin: 1.2em 0 0.5em; font-size: 1.15rem; color: #fcd34d; }
         .article-shell .md-preview h3 { margin: 1em 0 0.4em; font-size: 1rem; }
         .article-shell .md-preview blockquote.lead { border-left: 3px solid var(--accent); padding-left: 12px; color: var(--muted); margin-bottom: 1em; }
+        .article-source { font-size: 0.78rem; color: var(--muted); margin-bottom: 12px; }
         .empty { text-align: center; color: var(--muted); padding: 48px 16px; }
-        .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.7rem; background: rgba(6,182,212,0.15); color: #67e8f9; margin-left: 6px; }
-        .badge-custom { background: rgba(245,158,11,0.2); color: #fcd34d; }
-        .aan-panel { margin-bottom: 16px; }
-        .custom-form {
-            border: 1px dashed var(--border); border-radius: 12px; padding: 12px; margin-bottom: 14px;
-            background: rgba(0,0,0,0.15);
-        }
-        .custom-form label { display: block; font-size: 0.75rem; color: var(--muted); margin: 8px 0 4px; }
-        .custom-form input, .custom-form select, .custom-form textarea {
-            width: 100%; background: #121a26; border: 1px solid var(--border); color: var(--text);
-            border-radius: 8px; padding: 8px 10px; font-size: 0.82rem; font-family: inherit;
-        }
-        .custom-form textarea { min-height: 72px; resize: vertical; }
-        .custom-form-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-        .btn-sm { padding: 6px 12px; font-size: 0.78rem; }
-        .btn-danger { border-color: rgba(248,113,113,0.35); color: #fca5a5; }
-        .topic-card .topic-actions { margin-top: 8px; display: none; }
-        .topic-card.custom .topic-actions { display: block; }
-        .topic-card.custom { border-color: rgba(245,158,11,0.25); }
     </style>
 </head>
 <body>
     <div id="app-nav-mount"></div>
     <div class="page">
         <div class="hero">
-            <h1>🔥 行业热点深度分析</h1>
-            <p>
-                AI 结合平台内评论样本、指标摘要与 Steam 公开新闻，自动生成「热点起底」式长文；
-                也可<strong>自定义热点问题</strong>，由 AI 辅助润色标题后生成。
-                标题示例：<em>为什么《XX》新版本流水暴跌？基于 N 条玩家评论的数据起底</em>。
-                样本不足时请先在 <a href="/mvp" style="color:#67e8f9;">/mvp</a> 抓取或 <a href="/import" style="color:#67e8f9;">导入数据</a>。
-            </p>
-            <div id="hotspot-notice"></div>
+            <h1>📚 行业热点文章存档</h1>
+            <p>此前由 AI 流水线生成的行业热点深度文章，现转为静态存档供查阅。</p>
+        </div>
+        <div class="archive-notice">
+            <p><strong>内容溯源</strong>：以下文章由本平台 AI 流水线（评论样本统计 + LLM）于 2026-09-19 之前生成；
+                数据来源为平台内抓取/导入的玩家评论样本与 Steam 公开新闻，样本量有限，结论不代表全网统计。
+                每篇文末保留生成时间与生成引擎标注。</p>
+            <p><strong>降级说明</strong>：依上线前预设的处置阈值（30 天自然访问 &lt;10 且搜索展示 &lt;100；
+                2026-09-19 依实际数据确认触发），本功能停止生成新文章，已有文章转为静态存档。</p>
         </div>
         <div class="grid">
             <aside class="panel">
-                <h2>热点选题</h2>
-                <div class="custom-form" id="custom-form">
-                    <div style="font-size:0.82rem;font-weight:600;margin-bottom:4px;">✏️ 自定义热点</div>
-                    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:6px;">描述你想深挖的问题，AI 可辅助生成标题</div>
-                    <label for="custom-product">关联产品</label>
-                    <select id="custom-product"><option value="">加载中…</option></select>
-                    <label for="custom-brief">热点问题 / 分析角度</label>
-                    <textarea id="custom-brief" placeholder="例：新版本通行证涨价后，玩家为何集体差评？"></textarea>
-                    <label for="custom-title">文章标题（可 AI 生成）</label>
-                    <input id="custom-title" type="text" placeholder="AI 辅助润色后自动填入" />
-                    <label for="custom-hook">分析切入点（可选）</label>
-                    <input id="custom-hook" type="text" placeholder="一句话导语 / 悬念" />
-                    <div class="custom-form-actions">
-                        <button class="btn btn-sm" type="button" id="btn-suggest">🤖 AI 辅助润色</button>
-                        <button class="btn btn-sm btn-primary" type="button" id="btn-add-custom">＋ 添加选题</button>
-                    </div>
-                    <div class="status" id="custom-status" style="margin-top:8px;"></div>
-                </div>
-                <div class="status" id="topics-status">加载中…</div>
-                <div class="topic-list" id="topic-list"></div>
+                <h2>存档列表</h2>
+                <div class="status" id="list-status">加载中…</div>
+                <div class="article-list" id="article-list"></div>
             </aside>
             <main class="panel">
-                <div class="toolbar">
-                    <button class="btn btn-primary" id="btn-generate" disabled>✨ AI 生成深度文章</button>
-                    <button class="btn" id="btn-archive" disabled>📁 存入复盘归档</button>
-                    <button class="btn" id="btn-copy-md" disabled>复制 Markdown</button>
-                    <span class="status" id="gen-status"></span>
-                </div>
                 <div class="article-shell" id="article-view">
-                    <div class="empty">← 选择左侧热点选题，点击「AI 生成深度文章」</div>
+                    <div class="empty">← 选择左侧文章查看全文</div>
                 </div>
             </main>
         </div>
     </div>
     <script>
         (function () {
-            var selected = null;
-            var lastArticle = null;
-            var allTopics = [];
-            var products = [];
+            var allArticles = [];
             var token = window.getAuthToken && window.getAuthToken();
 
             function esc(s) {
                 var d = document.createElement("div");
-                d.textContent = s || "";
+                d.textContent = s == null ? "" : String(s);
                 return d.innerHTML;
             }
 
-            function authFetch(url, opts) {
-                opts = opts || {};
-                opts.headers = opts.headers || {};
-                if (token) opts.headers.Authorization = "Bearer " + token;
+            function authFetch(url) {
                 var sep = url.indexOf("?") >= 0 ? "&" : "?";
+                var opts = { headers: {} };
+                if (token) opts.headers.Authorization = "Bearer " + token;
                 return fetch(url + sep + "token=" + encodeURIComponent(token || ""), opts);
             }
 
-            function renderProductSelect() {
-                var sel = document.getElementById("custom-product");
-                if (!products.length) {
-                    sel.innerHTML = '<option value="">请先抓取评论数据</option>';
-                    return;
-                }
-                sel.innerHTML = products.map(function (p) {
-                    return '<option value="' + esc(p.product_id) + '">' + esc(p.product_name) + "</option>";
-                }).join("");
+            function formatDate(iso) {
+                return (iso || "").slice(0, 10);
             }
 
-            function renderTopics(topics) {
-                allTopics = topics || [];
-                var list = document.getElementById("topic-list");
-                if (!allTopics.length) {
-                    list.innerHTML = '<div class="empty">暂无选题。请添加自定义热点或先抓取评论数据。</div>';
+            function renderList(articles, total) {
+                allArticles = articles || [];
+                var list = document.getElementById("article-list");
+                var status = document.getElementById("list-status");
+                if (!allArticles.length) {
+                    status.textContent = "";
+                    list.innerHTML = '<div class="empty">暂无存档文章。</div>';
                     return;
                 }
-                list.innerHTML = allTopics.map(function (t) {
-                    var isCustom = t.source === "custom";
-                    var badge = isCustom ? '<span class="badge badge-custom">自定义</span>' : "";
-                    var delBtn = isCustom
-                        ? '<div class="topic-actions"><button class="btn btn-sm btn-danger btn-del-custom" data-tid="' + esc(t.topic_id) + '">删除</button></div>'
-                        : "";
+                var count = (total != null) ? total : allArticles.length;
+                status.textContent = count > allArticles.length
+                    ? "共 " + count + " 篇存档（仅显示最新 " + allArticles.length + " 篇）"
+                    : "共 " + count + " 篇存档";
+                list.innerHTML = allArticles.map(function (a, i) {
+                    var facts = (a.snapshot_json && a.snapshot_json.facts) || {};
+                    var meta = [];
+                    if (facts.product_name) meta.push("《" + facts.product_name + "》");
+                    if (facts.sample_size != null) meta.push("样本 " + facts.sample_size + " 条");
+                    if (facts.data_basis) meta.push("数据来源 " + facts.data_basis);
+                    meta.push(formatDate(a.created_at));
                     return (
-                        '<div class="topic-card' + (isCustom ? " custom" : "") + '" data-id="' + esc(t.id) + '">' +
-                        '<h3>' + esc(t.title) + badge + "</h3>" +
-                        '<div class="topic-meta">' + esc(t.product_name) +
-                        ' · 样本 ' + (t.sample_size || 0) + " 条" +
-                        (t.hook ? " · " + esc(t.hook) : "") +
-                        "</div>" + delBtn + "</div>"
+                        '<div class="article-card" data-idx="' + i + '">' +
+                        "<h3>" + esc(a.title) + "</h3>" +
+                        '<div class="article-meta">' + esc(meta.filter(Boolean).join(" · ")) + "</div>" +
+                        "</div>"
                     );
                 }).join("");
-                list.querySelectorAll(".topic-card").forEach(function (el) {
-                    el.addEventListener("click", function (ev) {
-                        if (ev.target.closest(".btn-del-custom")) return;
-                        list.querySelectorAll(".topic-card").forEach(function (c) { c.classList.remove("active"); });
+                list.querySelectorAll(".article-card").forEach(function (el) {
+                    el.addEventListener("click", function () {
+                        list.querySelectorAll(".article-card").forEach(function (c) { c.classList.remove("active"); });
                         el.classList.add("active");
-                        var id = el.getAttribute("data-id");
-                        selected = allTopics.find(function (x) { return x.id === id; }) || null;
-                        document.getElementById("btn-generate").disabled = !selected;
-                    });
-                });
-                list.querySelectorAll(".btn-del-custom").forEach(function (btn) {
-                    btn.addEventListener("click", function (ev) {
-                        ev.stopPropagation();
-                        void deleteCustomTopic(btn.getAttribute("data-tid"));
+                        renderArticle(allArticles[Number(el.getAttribute("data-idx"))]);
                     });
                 });
             }
 
-            async function loadTopics() {
-                var status = document.getElementById("topics-status");
+            function renderArticle(article) {
+                var view = document.getElementById("article-view");
+                var facts = (article.snapshot_json && article.snapshot_json.facts) || {};
+                var sourceBits = [];
+                if (facts.product_name) sourceBits.push("产品：" + facts.product_name);
+                if (facts.sample_size != null) sourceBits.push("评论样本：" + facts.sample_size + " 条");
+                if (facts.data_basis) sourceBits.push("数据来源：" + facts.data_basis);
+                sourceBits.push("生成时间：" + formatDate(article.created_at));
+                sourceBits.push("静态存档 · 非实时数据");
+                var body = (window.MarkdownPreview && window.MarkdownPreview.render(article.body_markdown))
+                    || "<pre style=\"white-space:pre-wrap;\">" + esc(article.body_markdown) + "</pre>";
+                view.innerHTML =
+                    '<h2 style="margin-bottom:10px;font-size:1.1rem;">' + esc(article.title) + "</h2>" +
+                    '<div class="article-source">' + esc(sourceBits.join(" · ")) + "</div>" + body;
+            }
+
+            async function loadArchive() {
+                var status = document.getElementById("list-status");
                 try {
-                    var res = await authFetch("/api/hotspot/topics");
-                    var data = await res.json();
-                    if (!data.success) throw new Error(data.message || "加载失败");
-                    status.textContent = "共 " + (data.topics || []).length + " 个选题 · 数据来源 " + (data.data_basis || "—");
-                    products = data.products || [];
-                    renderProductSelect();
-                    renderTopics(data.topics || []);
-                    if (window.DataProvenance && data.data_basis) {
-                        window.DataProvenance.renderBanner && window.DataProvenance.renderBanner("hotspot-notice", data.data_basis);
+                    var res = await authFetch("/api/hotspot/archive");
+                    if (res.status === 401) {
+                        location.href = "/login?redirect=" + encodeURIComponent("/hotspot");
+                        return;
                     }
+                    var data = await res.json();
+                    if (!data.success) throw new Error(data.detail || data.message || "加载失败");
+                    renderList(data.articles || [], data.total);
                 } catch (e) {
                     status.textContent = "加载失败：" + (e.message || e);
                 }
             }
-
-            async function generateArticle() {
-                if (!selected) return;
-                var btn = document.getElementById("btn-generate");
-                var genStatus = document.getElementById("gen-status");
-                var view = document.getElementById("article-view");
-                btn.disabled = true;
-                genStatus.textContent = "正在生成，请稍候…";
-                view.innerHTML = '<div class="empty">AI 撰写中…</div>';
-                try {
-                    var res = await authFetch("/api/hotspot/generate", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            product_id: selected.product_id,
-                            angle: selected.angle,
-                            title: selected.title,
-                            brief: selected.brief || "",
-                        }),
-                    });
-                    var data = await res.json();
-                    if (!data.success) throw new Error(data.message || "生成失败");
-                    lastArticle = data;
-                    var badge = data.using_llm
-                        ? '<span class="badge">AI</span>'
-                        : '<span class="badge">规则引擎</span>';
-                    var html = (window.MarkdownPreview && window.MarkdownPreview.render(data.markdown)) || data.html || "";
-                    view.innerHTML = '<h2 style="margin-bottom:12px;font-size:1.1rem;">' + esc(data.title) + badge + "</h2>" + html;
-                    genStatus.textContent = data.using_llm
-                        ? "AI 长文已生成（" + (data.llm_provider || "") + " / " + (data.llm_model || "") + "）"
-                        : (data.llm_configured && data.llm_error
-                            ? "LLM 已配置但生成失败：" + data.llm_error
-                            : (data.llm_error || "规则引擎初稿（未检测到 LLM 配置）"));
-                    document.getElementById("btn-archive").disabled = false;
-                    document.getElementById("btn-copy-md").disabled = false;
-                } catch (e) {
-                    genStatus.textContent = "失败：" + (e.message || e);
-                    view.innerHTML = '<div class="empty">生成失败</div>';
-                } finally {
-                    btn.disabled = !selected;
-                }
-            }
-
-            async function archiveArticle() {
-                if (!lastArticle) return;
-                var res = await authFetch("/api/hotspot/archive", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        title: lastArticle.title,
-                        markdown: lastArticle.markdown,
-                        html: lastArticle.html,
-                        product_id: lastArticle.product_id,
-                        angle: lastArticle.angle,
-                        facts: lastArticle.facts,
-                    }),
-                });
-                var data = await res.json();
-                document.getElementById("gen-status").textContent = data.success
-                    ? "已存入复盘归档，可在 /games/review 查看"
-                    : "归档失败";
-            }
-
-            async function suggestCustomTopic() {
-                var brief = document.getElementById("custom-brief").value.trim();
-                var productId = document.getElementById("custom-product").value;
-                var status = document.getElementById("custom-status");
-                if (!brief || !productId) {
-                    status.textContent = "请先选择产品并描述热点问题";
-                    return;
-                }
-                status.textContent = "AI 润色中…";
-                try {
-                    var res = await authFetch("/api/hotspot/suggest", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ brief: brief, product_id: productId }),
-                    });
-                    var data = await res.json();
-                    if (!data.success) throw new Error(data.detail || data.message || "润色失败");
-                    document.getElementById("custom-title").value = data.title || "";
-                    document.getElementById("custom-hook").value = data.hook || "";
-                    status.textContent = data.using_llm
-                        ? "AI 已生成标题建议"
-                        : (data.llm_error || "规则引擎标题建议（可手动修改）");
-                    if (data.angle) {
-                        document.getElementById("custom-form").dataset.angle = data.angle;
-                    }
-                } catch (e) {
-                    status.textContent = "润色失败：" + (e.message || e);
-                }
-            }
-
-            async function addCustomTopic() {
-                var brief = document.getElementById("custom-brief").value.trim();
-                var title = document.getElementById("custom-title").value.trim();
-                var hook = document.getElementById("custom-hook").value.trim();
-                var productId = document.getElementById("custom-product").value;
-                var angle = document.getElementById("custom-form").dataset.angle || "custom";
-                var status = document.getElementById("custom-status");
-                if (!productId) {
-                    status.textContent = "请选择产品";
-                    return;
-                }
-                if (!brief && !title) {
-                    status.textContent = "请描述热点问题或填写标题";
-                    return;
-                }
-                status.textContent = "保存中…";
-                try {
-                    var res = await authFetch("/api/hotspot/custom", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            product_id: productId,
-                            title: title || brief,
-                            brief: brief || title,
-                            hook: hook,
-                            angle: angle,
-                        }),
-                    });
-                    var data = await res.json();
-                    if (!data.success) throw new Error(data.detail || data.message || "添加失败");
-                    document.getElementById("custom-brief").value = "";
-                    document.getElementById("custom-title").value = "";
-                    document.getElementById("custom-hook").value = "";
-                    status.textContent = "已添加自定义选题";
-                    await loadTopics();
-                    var topic = data.topic;
-                    if (topic) {
-                        selected = topic;
-                        document.getElementById("btn-generate").disabled = false;
-                        var card = document.querySelector('.topic-card[data-id="' + topic.id + '"]');
-                        if (card) {
-                            document.querySelectorAll(".topic-card").forEach(function (c) { c.classList.remove("active"); });
-                            card.classList.add("active");
-                        }
-                    }
-                } catch (e) {
-                    status.textContent = "添加失败：" + (e.message || e);
-                }
-            }
-
-            async function deleteCustomTopic(topicId) {
-                if (!topicId || !confirm("确定删除这条自定义选题？")) return;
-                await authFetch("/api/hotspot/custom/" + encodeURIComponent(topicId), { method: "DELETE" });
-                if (selected && selected.topic_id === topicId) {
-                    selected = null;
-                    document.getElementById("btn-generate").disabled = true;
-                }
-                await loadTopics();
-            }
-
-            document.getElementById("btn-suggest").addEventListener("click", function () { void suggestCustomTopic(); });
-            document.getElementById("btn-add-custom").addEventListener("click", function () { void addCustomTopic(); });
-            document.getElementById("btn-generate").addEventListener("click", generateArticle);
-            document.getElementById("btn-archive").addEventListener("click", archiveArticle);
-            document.getElementById("btn-copy-md").addEventListener("click", function () {
-                if (!lastArticle || !lastArticle.markdown) return;
-                navigator.clipboard.writeText(lastArticle.markdown);
-                document.getElementById("gen-status").textContent = "Markdown 已复制";
-            });
 
             if (window.AppNav) {
                 document.getElementById("app-nav-mount").innerHTML = window.AppNav.render("hotspot");
                 window.AppNav.bind();
             }
             if (!token) {
-                location.href = "/login?next=" + encodeURIComponent("/hotspot");
+                location.href = "/login?redirect=" + encodeURIComponent("/hotspot");
                 return;
             }
-            loadTopics();
+            loadArchive();
         })();
     </script>
 </body>

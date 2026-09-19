@@ -154,6 +154,33 @@ class AnalysisArchiveRepository:
         return out
 
     @staticmethod
+    def list_hotspot_articles(username: str, *, limit: int = 50) -> List[Dict[str, Any]]:
+        """热点文章存档（含正文），供 /hotspot 静态存档页渲染。
+
+        2026-09-19 AI 生成链路降级移除后，热点文章只读不再新增。
+        """
+        rows = db_manager.execute(
+            """
+            SELECT archive_id, title, category, product_ids, snapshot_json,
+                   body_markdown, html_excerpt, created_at, updated_at
+            FROM analysis_archives
+            WHERE username = ? AND report_type = 'hotspot'
+            ORDER BY COALESCE(updated_at, created_at) DESC
+            LIMIT ?
+            """,
+            (username, limit),
+        ) or []
+        return [_row_to_archive(dict(row)) for row in rows]
+
+    @staticmethod
+    def count_hotspot_articles(username: str) -> int:
+        row = db_manager.execute_one(
+            "SELECT COUNT(*) AS n FROM analysis_archives WHERE username = ? AND report_type = 'hotspot'",
+            (username,),
+        )
+        return int(row["n"]) if row else 0
+
+    @staticmethod
     def get(archive_id: str, username: Optional[str] = None) -> Optional[Dict[str, Any]]:
         if username:
             row = db_manager.execute_one(
