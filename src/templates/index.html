@@ -5565,7 +5565,7 @@ ${data.summary || ''}
                     listEl.innerHTML = result.reports.slice(0, 5).map(r => `
                         <div style="display: flex; justify-content: space-between; align-items: center; background: #f5f5f7; padding: 12px 16px; border-radius: 12px; margin-bottom: 8px;">
                             <div>
-                                <div style="font-weight: 600; color: #1d1d1f;">${r.report_type}报告</div>
+                                <div style="font-weight: 600; color: #1d1d1f;">${String(r.report_type || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}报告</div>
                                 <div style="font-size: 0.75rem; color: #86868b;">${new Date(r.created_at).toLocaleDateString()}</div>
                             </div>
                             <button class="btn btn-secondary" onclick="copyShareLink('${r.share_token}')" style="padding: 8px 16px;">📋 复制链接</button>

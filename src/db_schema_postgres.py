@@ -55,6 +55,7 @@ POSTGRES_SCHEMA_STATEMENTS = [
     """
     CREATE TABLE IF NOT EXISTS alert_rules (
         id SERIAL PRIMARY KEY,
+        username TEXT,
         name TEXT NOT NULL,
         product TEXT,
         metric TEXT NOT NULL,
@@ -68,6 +69,8 @@ POSTGRES_SCHEMA_STATEMENTS = [
         updated_at TEXT
     )
     """,
+    # 存量库补列：早期建表缺 username，导致 /api/alerts 查询报列不存在
+    "ALTER TABLE alert_rules ADD COLUMN IF NOT EXISTS username TEXT",
     """
     CREATE TABLE IF NOT EXISTS teams (
         id SERIAL PRIMARY KEY,

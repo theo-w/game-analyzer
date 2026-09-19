@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
@@ -24,6 +25,21 @@ _IS_PRODUCTION = os.getenv("APP_ENV", "development").lower() == "production"
 def _api_error(exc: Exception, user_msg: str = "操作失败，请稍后重试") -> str:
     logger.exception("Dashboard API error: %s", exc)
     return user_msg if _IS_PRODUCTION else str(exc)
+
+
+def _sanitize_report_fields(node) -> None:
+    """递归净化 report_data 中所有 html/html_excerpt 字符串字段（原地修改）。"""
+    from src.html_sanitizer import sanitize_rich_html
+
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if isinstance(value, str) and key in ("html", "html_excerpt"):
+                node[key] = sanitize_rich_html(value)
+            else:
+                _sanitize_report_fields(value)
+    elif isinstance(node, list):
+        for item in node:
+            _sanitize_report_fields(item)
 
 
 # ---------------------------------------------------------------------------
@@ -133,8 +149,13 @@ async def share_report(
 ):
     body = await request.json()
     report_type = body.get("report_type", "daily")
+    if not re.fullmatch(r"[A-Za-z0-9_-]{1,40}", str(report_type or "")):
+        report_type = "custom"
     report_data = body.get("report_data", {})
     expires_hours = body.get("expires_hours", 24)
+
+    # 分享内容是公开端点渲染的用户输入，落库前对富文本字段做白名单净化
+    _sanitize_report_fields(report_data)
 
     expires_at = (
         (datetime.now(timezone.utc) + timedelta(hours=expires_hours)).isoformat()

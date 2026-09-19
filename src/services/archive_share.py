@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, Optional
 
 from database import SharedReportRepository
+from src.html_sanitizer import sanitize_rich_html
 from src.services.analysis_archive import AnalysisArchiveRepository
 
 
@@ -28,7 +29,8 @@ def build_report_data_from_archive(archive: Dict[str, Any]) -> Dict[str, Any]:
         "title": archive.get("title") or "分析报告",
         "executive_summary": snap.get("executive_summary") or "",
         "markdown": archive.get("body_markdown") or "",
-        "html": archive.get("html_excerpt") or "",
+        # 分享页是公开端点，归档内容（可能含 LLM 生成/用户输入片段）落库前净化
+        "html": sanitize_rich_html(archive.get("html_excerpt") or ""),
         "sections": snap.get("sections") or [],
         "action_items": snap.get("action_items") or [],
         "dimension_scores": snap.get("dimension_scores") or [],

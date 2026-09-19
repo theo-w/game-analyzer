@@ -123,10 +123,19 @@ LLM_CONFIG: Dict[str, Dict] = {
     "max_tokens": 2000
 }
 
+def is_legacy_sha256_hex(value: str) -> bool:
+    return len(value) == 64 and all(c in "0123456789abcdef" for c in value.lower())
+
+
 def verify_password(plain_password, hashed_password):
+    """passlib 校验；64 位 hex 视为遗留裸 sha256（迁移期显式兼容，不做静默兜底）。"""
+    if not hashed_password:
+        return False
     try:
         return pwd_context.verify(plain_password, hashed_password)
     except Exception:
+        if not is_legacy_sha256_hex(hashed_password):
+            return False
         import hashlib
         return hashlib.sha256(plain_password.encode()).hexdigest() == hashed_password
 

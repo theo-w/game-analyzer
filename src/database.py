@@ -5,6 +5,7 @@
 """
 import os
 import json
+import secrets
 from datetime import datetime
 from typing import Optional, List, Dict, Any
 from contextlib import contextmanager
@@ -266,8 +267,116 @@ def _hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
 
 
+def _hash_password_strong(password: str) -> str:
+    """优先复用 auth 的 passlib pbkdf2 哈希；导入失败时降级为遗留 sha256（仅极端环境）。"""
+    try:
+        from src.auth import get_password_hash
+        return get_password_hash(password)
+    except ImportError:
+        pass
+    try:
+        from auth import get_password_hash
+        return get_password_hash(password)
+    except ImportError:
+        return _hash_password(password)
+
+
+def _is_production() -> bool:
+    return os.getenv("APP_ENV", "development").lower() == "production"
+
+
+def _demo_accounts_allowed() -> bool:
+    """演示账号开关：默认开启（生产 landing 的 CTA 依赖 demo 登录），可显式关闭。"""
+    return os.getenv("ALLOW_DEMO_ACCOUNTS", "true").strip().lower() not in ("0", "false", "no")
+
+
+def _resolve_initial_admin_password() -> str:
+    """首次创建 admin 的口令：优先 INITIAL_ADMIN_PASSWORD；生产未配置则随机（等效锁定）。"""
+    env_password = os.getenv("INITIAL_ADMIN_PASSWORD", "").strip()
+    if env_password:
+        return env_password
+    if _is_production():
+        print(
+            "[security] production 首次初始化未设置 INITIAL_ADMIN_PASSWORD，"
+            "已为 admin 生成随机口令；请设置该环境变量后重启以重新指定。"
+        )
+        return secrets.token_urlsafe(24)
+    return "admin123"
+
+
+def admin_password_is_default(stored_hash: Optional[str]) -> bool:
+    """判断存储哈希是否对应默认口令 admin123（兼容遗留 sha256 与 pbkdf2 两种格式）。"""
+    if not stored_hash:
+        return False
+    if stored_hash == _hash_password("admin123"):
+        return True
+    try:
+        from src.auth import pwd_context
+    except ImportError:
+        try:
+            from auth import pwd_context
+        except ImportError:
+            return False
+    try:
+        return bool(pwd_context.verify("admin123", stored_hash))
+    except Exception:
+        return False
+
+
+def harden_default_accounts() -> None:
+    """生产环境启动时同步 admin 口令：存量默认口令必须替换，INITIAL_ADMIN_PASSWORD 幂等生效。"""
+    if not _is_production():
+        return
+    row = db_manager.execute_one(
+        "SELECT hashed_password FROM users WHERE username = 'admin'"
+    )
+    if not row:
+        return
+    stored = row.get("hashed_password")
+    env_password = os.getenv("INITIAL_ADMIN_PASSWORD", "").strip()
+    if env_password:
+        if _password_matches(env_password, stored) and not admin_password_is_default(stored):
+            return
+        db_manager.execute(
+            "UPDATE users SET hashed_password = ?, updated_at = ? WHERE username = 'admin'",
+            (_hash_password_strong(env_password), datetime.now().isoformat()),
+        )
+        print("[security] admin 口令已按 INITIAL_ADMIN_PASSWORD 同步")
+        return
+    if not admin_password_is_default(stored):
+        return
+    random_password = secrets.token_urlsafe(24)
+    db_manager.execute(
+        "UPDATE users SET hashed_password = ?, updated_at = ? WHERE username = 'admin'",
+        (_hash_password_strong(random_password), datetime.now().isoformat()),
+    )
+    print(
+        "[security] admin 账号仍在使用默认口令 admin123，已重置为随机口令；"
+        "设置 INITIAL_ADMIN_PASSWORD 后重启即可重新指定（每次启动都会同步该变量），"
+        "或删除 admin 行后重启走首次初始化。"
+    )
+
+
+def _password_matches(plain: str, stored_hash: Optional[str]) -> bool:
+    if not stored_hash:
+        return False
+    try:
+        from src.auth import verify_password
+    except ImportError:
+        try:
+            from auth import verify_password
+        except ImportError:
+            return False
+    try:
+        return bool(verify_password(plain, stored_hash))
+    except Exception:
+        return False
+
+
 def _seed_support_agent_users(cursor) -> None:
     """Ensure default human-agent accounts exist (idempotent)."""
+    if _is_production():
+        return
     now = datetime.now().isoformat()
     for agent_username, agent_name, agent_password in (
         ("agent1", "坐席小王", "agent123"),
@@ -358,21 +467,23 @@ def init_database():
         )
         conn.commit()
         
-        # 添加默认管理员用户
+        # 添加默认管理员用户：生产环境绝不种入默认口令 admin123
         cursor.execute('SELECT COUNT(*) FROM users WHERE username = ?', ('admin',))
         if cursor.fetchone()[0] == 0:
+            admin_password = _resolve_initial_admin_password()
             cursor.execute('''
                 INSERT INTO users (username, email, full_name, hashed_password, role, plan_id, games_limit, api_quota, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', ('admin', 'admin@example.com', '管理员', _hash_password('admin123'), 'admin', 'enterprise', 10, 10000, 1, datetime.now().isoformat(), datetime.now().isoformat()))
-        
-        # 添加默认演示用户
-        cursor.execute('SELECT COUNT(*) FROM users WHERE username = ?', ('demo',))
-        if cursor.fetchone()[0] == 0:
-            cursor.execute('''
-                INSERT INTO users (username, email, full_name, hashed_password, role, plan_id, games_limit, api_quota, is_active, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', ('demo', 'demo@example.com', '演示用户', _hash_password('demo123'), 'user', 'pro', 5, 5000, 1, datetime.now().isoformat(), datetime.now().isoformat()))
+            ''', ('admin', 'admin@example.com', '管理员', _hash_password_strong(admin_password), 'admin', 'enterprise', 10, 10000, 1, datetime.now().isoformat(), datetime.now().isoformat()))
+
+        # 添加默认演示用户（受 ALLOW_DEMO_ACCOUNTS 门控，默认开启）
+        if _demo_accounts_allowed():
+            cursor.execute('SELECT COUNT(*) FROM users WHERE username = ?', ('demo',))
+            if cursor.fetchone()[0] == 0:
+                cursor.execute('''
+                    INSERT INTO users (username, email, full_name, hashed_password, role, plan_id, games_limit, api_quota, is_active, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ''', ('demo', 'demo@example.com', '演示用户', _hash_password('demo123'), 'user', 'pro', 5, 5000, 1, datetime.now().isoformat(), datetime.now().isoformat()))
 
         _seed_support_agent_users(cursor)
         
@@ -416,6 +527,7 @@ def init_database():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS alert_rules (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT,
                 name TEXT NOT NULL,
                 product TEXT,
                 metric TEXT NOT NULL,
@@ -429,6 +541,9 @@ def init_database():
                 updated_at TEXT
             )
         ''')
+
+        # 存量库补列：alert_rules 此前缺 username 列，导致 /api/alerts 必然 500
+        _ensure_sqlite_columns(cursor, "alert_rules", {"username": "TEXT"})
         
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS teams (
