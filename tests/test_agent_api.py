@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import os
+import shutil
 import uuid
 
 import pytest
@@ -16,7 +18,7 @@ def client():
     return TestClient(app)
 
 
-def _register_and_token(client: TestClient) -> str:
+def _register_and_token(client: TestClient) -> tuple[str, str]:
     username = f"agent_{uuid.uuid4().hex[:8]}"
     password = "agent-test-pass"
     client.post(
@@ -30,12 +32,12 @@ def _register_and_token(client: TestClient) -> str:
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
     assert res.status_code == 200, res.text
-    return res.json()["access_token"]
+    return username, res.json()["access_token"]
 
 
 def test_agent_status(client, monkeypatch):
     monkeypatch.delenv("SUPABASE_DATABASE_URL", raising=False)
-    token = _register_and_token(client)
+    _, token = _register_and_token(client)
     res = client.get("/api/agent/status", params={"token": token})
     assert res.status_code == 200, res.text
     body = res.json()
@@ -46,7 +48,7 @@ def test_agent_status(client, monkeypatch):
 
 def test_agent_process_offline(client, tmp_path, monkeypatch):
     monkeypatch.delenv("SUPABASE_DATABASE_URL", raising=False)
-    token = _register_and_token(client)
+    _, token = _register_and_token(client)
 
     data = {
         "source": "test",
@@ -92,14 +94,14 @@ def test_migrate_endpoint_auth(client, monkeypatch):
 
 def test_migrate_endpoint_requires_admin(client, monkeypatch):
     monkeypatch.delenv("SUPABASE_DATABASE_URL", raising=False)
-    token = _register_and_token(client)
+    _, token = _register_and_token(client)
     res = client.post("/api/agent/migrate", params={"token": token}, json={})
     assert res.status_code == 403
 
 
 def test_agent_themes_empty_without_data(client, monkeypatch):
     monkeypatch.delenv("SUPABASE_DATABASE_URL", raising=False)
-    token = _register_and_token(client)
+    _, token = _register_and_token(client)
     res = client.get("/api/agent/themes", params={"token": token})
     assert res.status_code == 200, res.text
     body = res.json()
@@ -107,21 +109,25 @@ def test_agent_themes_empty_without_data(client, monkeypatch):
     assert body["themes"] == []
 
 
-def test_agent_themes_from_dataset(client, tmp_path, monkeypatch):
+def test_agent_themes_from_dataset(client, monkeypatch):
     monkeypatch.delenv("SUPABASE_DATABASE_URL", raising=False)
-    token = _register_and_token(client)
-    # 构造一个带 themes 的数据集放到默认路径(会被 resolve_dataset 读到)
-    import json
-    import os
-
-    path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "mvp", "steam_dataset.json")
-    assert os.path.isfile(path)
-    orig = json.load(open(path, encoding="utf-8"))
-    orig["themes"] = [
-        {"cluster_id": "clu_1", "theme_name": "反作弊", "description": "外挂多",
-         "key_issues": ["外挂"], "member_count": 3, "avg_similarity": 0.9}
-    ]
-    json.dump(orig, open(path, "w", encoding="utf-8"), ensure_ascii=False)
+    username, token = _register_and_token(client)
+    # 数据集写到该用户的用户级路径(resolve_dataset 优先读取)，不依赖本地总库文件；
+    # data/ 已被 gitignore，finally 自清理，CI 与本地行为一致。
+    user_dir = os.path.join("data", "mvp", "users", username)
+    os.makedirs(user_dir, exist_ok=True)
+    path = os.path.join(user_dir, "steam_dataset.json")
+    with open(path, "w", encoding="utf-8") as handle:
+        json.dump(
+            {
+                "themes": [
+                    {"cluster_id": "clu_1", "theme_name": "反作弊", "description": "外挂多",
+                     "key_issues": ["外挂"], "member_count": 3, "avg_similarity": 0.9}
+                ]
+            },
+            handle,
+            ensure_ascii=False,
+        )
     try:
         res = client.get("/api/agent/themes", params={"token": token})
         assert res.status_code == 200, res.text
@@ -129,6 +135,4 @@ def test_agent_themes_from_dataset(client, tmp_path, monkeypatch):
         assert len(themes) >= 1
         assert themes[0]["theme_name"] == "反作弊"
     finally:
-        # 还原
-        orig.pop("themes", None)
-        json.dump(orig, open(path, "w", encoding="utf-8"), ensure_ascii=False)
+        shutil.rmtree(user_dir, ignore_errors=True)
