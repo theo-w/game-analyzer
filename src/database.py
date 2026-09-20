@@ -117,7 +117,12 @@ class ConfigManager:
     
     def get_database_config(self) -> Dict:
         """获取数据库配置"""
-        return self.get('database', DEFAULT_CONFIG['database'])
+        cfg = dict(self.get('database', DEFAULT_CONFIG['database']))
+        # 环境变量覆盖 sqlite 路径（tests/conftest.py 用它把测试写入隔离到临时目录）
+        env_path = os.environ.get('GA_SQLITE_PATH')
+        if env_path and cfg.get('type', 'sqlite') == 'sqlite':
+            cfg['path'] = env_path
+        return cfg
     
     def get_redis_config(self) -> Dict:
         """获取Redis配置"""
@@ -136,13 +141,15 @@ class DatabaseManager:
     """数据库管理器"""
     
     def __init__(self):
+        from src.db_dialect import resolve_database_backend
+
         self.config = ConfigManager()
-        self.db_type = self.config.get('database.type', 'sqlite')
-        self._connection_pool = {}
-        
+        # DATABASE_URL / DATABASE_TYPE 在此真正生效, 与健康页展示同源
+        self.db_type, self._db_config = resolve_database_backend(self.config)
+
     def _create_connection(self):
         """创建数据库连接"""
-        db_config = self.config.get_database_config()
+        db_config = self._db_config
         
         if self.db_type == 'sqlite':
             import sqlite3
@@ -154,36 +161,26 @@ class DatabaseManager:
             return sqlite3.connect(db_path)
         
         elif self.db_type == 'postgresql':
-            try:
-                import psycopg2
-                return psycopg2.connect(
-                    host=db_config['host'],
-                    port=db_config['port'],
-                    dbname=db_config['database'],
-                    user=db_config['username'],
-                    password=db_config['password'],
-                    connect_timeout=db_config['connect_timeout']
-                )
-            except ImportError:
-                print("Warning: psycopg2 not installed, falling back to SQLite")
-                import sqlite3
-                return sqlite3.connect(db_config['path'])
-        
+            import psycopg2
+            return psycopg2.connect(
+                host=db_config['host'],
+                port=db_config['port'],
+                dbname=db_config['database'],
+                user=db_config['username'],
+                password=db_config['password'],
+                connect_timeout=db_config['connect_timeout']
+            )
+
         elif self.db_type == 'mysql':
-            try:
-                import pymysql
-                return pymysql.connect(
-                    host=db_config['host'],
-                    port=db_config['port'],
-                    database=db_config['database'],
-                    user=db_config['username'],
-                    password=db_config['password'],
-                    connect_timeout=db_config['connect_timeout']
-                )
-            except ImportError:
-                print("Warning: pymysql not installed, falling back to SQLite")
-                import sqlite3
-                return sqlite3.connect(db_config['path'])
+            import pymysql
+            return pymysql.connect(
+                host=db_config['host'],
+                port=db_config['port'],
+                database=db_config['database'],
+                user=db_config['username'],
+                password=db_config['password'],
+                connect_timeout=db_config['connect_timeout']
+            )
         
         else:
             import sqlite3
@@ -315,6 +312,13 @@ def _ensure_sqlite_columns(cursor, table: str, columns: Dict[str, str]) -> None:
 
 def init_database():
     """初始化数据库（兼容旧代码）"""
+    if db_manager.db_type != 'sqlite':
+        # init_database 的 DDL 与 _ensure_sqlite_columns 均为 sqlite 方言,
+        # PostgreSQL schema 尚未完成迁移; 宁可启动报错也不静默写错库
+        raise RuntimeError(
+            f"数据库类型 {db_manager.db_type} 的建表初始化尚未支持, "
+            "当前版本请使用 sqlite (移除 DATABASE_URL / DATABASE_TYPE 配置)"
+        )
     db_config = config_manager.get_database_config()
     
     # 确保数据目录存在

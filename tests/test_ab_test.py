@@ -1,20 +1,13 @@
 import pytest
-import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
-
-from ab_test_platform import ABTestPlatform, ABTestExperiment
-
+from src.ab_test_platform import ABTestPlatform, ABTestExperiment
 
 class TestABTestPlatform:
-    
-    def setup_method(self):
-        # 使用正确的mock_data路径
-        mock_data_dir = os.path.join(os.path.dirname(__file__), '..', 'mock_data')
-        self.ab_platform = ABTestPlatform(data_dir=mock_data_dir)
-    
-    def test_create_experiment(self):
+
+    def test_create_experiment(self, tmp_path):
+        # data_dir 必须指向临时目录, 否则 create_experiment 会写坏仓库 mock_data/ab_experiments.json
+        self.ab_platform = ABTestPlatform(data_dir=str(tmp_path))
         experiment = self.ab_platform.create_experiment(
             name='Test Experiment',
             description='Test description',

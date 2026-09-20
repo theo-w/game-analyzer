@@ -7,9 +7,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 import os
 import json
-import sys
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from report_utils import generate_report_summary, generate_product_details, analyze_trends, generate_recommendations, DATA_DIR
+from src.report_utils import generate_report_summary, generate_product_details, analyze_trends, generate_recommendations, DATA_DIR
 
 class ReportScheduler:
     """自动化报告推送服务"""
@@ -61,8 +59,12 @@ class ReportScheduler:
             recommendations = generate_recommendations(metrics_data, comments_data)
             
             html_content = self._generate_email_html(summary, product_details, trends, recommendations)
-            
-            subject = f"📊 游戏数据分析报告 - {report_type} - {datetime.now().strftime('%Y年%m月%d日')}"
+
+            # 该报告基于 mock_data 演示数据, 显式标注避免被误认为真实业务数据
+            subject = (
+                f"[Demo 演示数据] 游戏数据分析报告 - {report_type} - "
+                f"{datetime.now().strftime('%Y年%m月%d日')}"
+            )
             
             msg = MIMEMultipart('alternative')
             msg['Subject'] = subject
@@ -117,6 +119,9 @@ class ReportScheduler:
         <body>
             <div class="container">
                 <h1>🎮 游戏数据分析报告</h1>
+                <p style="background:#fff3cd;border-left:4px solid #ffc107;padding:10px;border-radius:0 8px 8px 0;color:#7a5b00;">
+                    ⚠️ 本报告基于 <strong>mock_data 演示数据</strong> 生成，仅用于展示报告能力，不代表真实业务指标。
+                </p>
                 <div class="summary"><pre style="white-space: pre-wrap; margin: 0; font-family: inherit;">{summary}</pre></div>
                 
                 <h2>📱 产品详情</h2>
@@ -258,6 +263,5 @@ class ReportScheduler:
     def get_scheduled_tasks(self) -> List[Dict]:
         """获取所有定时任务"""
         return [{"name": name, "active": not task.done()} for name, task in self.scheduled_tasks.items()]
-
 
 report_scheduler = ReportScheduler()

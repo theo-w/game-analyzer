@@ -8,7 +8,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 
-from auth import PLANS
+from src.auth import PLANS
 from src.data_catalog import derive_data_catalog, enrich_catalog_from_context, restrict_catalog_to_dataset
 from src.data_resolution import get_user_comments_data, get_user_metrics_data, load_data
 from src.services.competitor_workbench import data_provenance_payload
@@ -418,59 +418,6 @@ async def fetch_platform_data(
             return {"success": True, "data": combined_data, "timestamp": datetime.now().isoformat()}
     except Exception as e:
         return {"success": False, "message": f"抓取平台数据失败: {str(e)}"}
-
-@router.post("/api/refresh_data")
-async def refresh_data(request: Request, token: Optional[str] = Query(None)):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    try:
-        body = await request.json()
-        platforms = body.get("platforms", ["steam", "google_play", "app_store"])
-        
-        results = []
-        for platform in platforms:
-            if platform.lower() == 'steam':
-                result = await fetcher.fetch_steam_data()
-            elif platform.lower() == 'google_play':
-                result = await fetcher.fetch_google_play_data()
-            elif platform.lower() == 'app_store':
-                result = await fetcher.fetch_app_store_data()
-            else:
-                continue
-            results.append(result)
-        
-        metrics_path = os.path.join(DATA_DIR, "metrics.json")
-        current_metrics = load_data(metrics_path) or []
-        
-        for result in results:
-            if result["success"]:
-                platform_name = result["data"]["platform"]
-                new_metrics = result["data"]["metrics"]
-                
-                for product in AVAILABLE_PRODUCTS:
-                    product_id = product["id"]
-                    new_entry = {
-                        "product": product_id,
-                        "channel": platform_name,
-                        "cycle": "Week 22",
-                        "metric": "用户总下载量",
-                        "值": new_metrics["downloads"],
-                        "环比变化": "+5%"
-                    }
-                    current_metrics.append(new_entry)
-        
-        with open(metrics_path, 'w', encoding='utf-8') as f:
-            json.dump(current_metrics, f, ensure_ascii=False, indent=2)
-        
-        return {
-            "success": True,
-            "message": "数据刷新完成",
-            "updated_platforms": platforms,
-            "timestamp": datetime.now().isoformat()
-        }
-    except Exception as e:
-        return {"success": False, "message": f"数据刷新失败: {str(e)}"}
 
 @router.get("/api/sync_status")
 async def get_sync_status(token: Optional[str] = Query(None)):
