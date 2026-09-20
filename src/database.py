@@ -139,7 +139,7 @@ class ConfigManager:
 
 class DatabaseManager:
     """数据库管理器"""
-    
+
     def __init__(self):
         from src.db_dialect import resolve_database_backend
 
@@ -150,7 +150,7 @@ class DatabaseManager:
     def _create_connection(self):
         """创建数据库连接"""
         db_config = self._db_config
-        
+
         if self.db_type == 'sqlite':
             import sqlite3
             db_path = db_config['path']
@@ -158,8 +158,12 @@ class DatabaseManager:
                 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
                 db_path = os.path.join(project_root, db_path)
             os.makedirs(os.path.dirname(db_path), exist_ok=True)
-            return sqlite3.connect(db_path)
-        
+            # timeout + busy_timeout: 并发写等待而非立刻 'database is locked'; WAL 允许读写并行
+            conn = sqlite3.connect(db_path, timeout=30)
+            conn.execute('PRAGMA journal_mode=WAL')
+            conn.execute('PRAGMA busy_timeout=30000')
+            return conn
+
         elif self.db_type == 'postgresql':
             import psycopg2
             return psycopg2.connect(
@@ -181,7 +185,7 @@ class DatabaseManager:
                 password=db_config['password'],
                 connect_timeout=db_config['connect_timeout']
             )
-        
+
         else:
             import sqlite3
             return sqlite3.connect(db_config['path'])
@@ -258,9 +262,55 @@ def get_db_connection():
 
 
 def _hash_password(password: str) -> str:
-    """哈希密码（内部函数，避免循环导入）"""
-    import hashlib
-    return hashlib.sha256(password.encode()).hexdigest()
+    """哈希密码（与 src/auth.py 相同的 pbkdf2_sha256 方案, 避免循环导入）"""
+    from passlib.context import CryptContext
+
+    return CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto").hash(password)
+
+
+def demo_accounts_enabled() -> bool:
+    """演示账号开关: 显式配置优先, 未配置时 production 默认关闭。"""
+    raw = os.getenv("ALLOW_DEMO_ACCOUNTS", "").strip().lower()
+    if raw in ("1", "true", "yes", "on"):
+        return True
+    if raw in ("0", "false", "no", "off"):
+        return False
+    return os.getenv("APP_ENV", "development").strip().lower() != "production"
+
+
+def _seed_default_accounts(cursor) -> None:
+    """幂等种子: admin/demo 账号, 并把旧的无盐 sha256 哈希升级为 pbkdf2。"""
+    now = datetime.now().isoformat()
+    admin_password = os.getenv("INITIAL_ADMIN_PASSWORD", "").strip() or "admin123"
+    allow_demo = demo_accounts_enabled()
+
+    seed_accounts = [
+        ("admin", "admin@example.com", "管理员", admin_password, "admin", "enterprise", 10, 10000),
+    ]
+    if allow_demo:
+        seed_accounts.append(
+            ("demo", "demo@example.com", "演示用户", "demo123", "user", "pro", 5, 5000)
+        )
+    else:
+        cursor.execute("DELETE FROM users WHERE username = 'demo' AND role = 'user'")
+
+    for username, email, full_name, password, role, plan_id, games_limit, api_quota in seed_accounts:
+        cursor.execute("SELECT hashed_password FROM users WHERE username = ?", (username,))
+        row = cursor.fetchone()
+        if row is None:
+            cursor.execute(
+                """
+                INSERT INTO users (username, email, full_name, hashed_password, role, plan_id, games_limit, api_quota, is_active, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)
+                """,
+                (username, email, full_name, _hash_password(password), role, plan_id, games_limit, api_quota, now, now),
+            )
+        elif not str(row[0]).startswith("$pbkdf2"):
+            # 历史无盐 sha256 哈希: 升级为 pbkdf2, 密码不变
+            cursor.execute(
+                "UPDATE users SET hashed_password = ?, updated_at = ? WHERE username = ?",
+                (_hash_password(password), now, username),
+            )
 
 
 def _seed_support_agent_users(cursor) -> None:
@@ -270,8 +320,9 @@ def _seed_support_agent_users(cursor) -> None:
         ("agent1", "坐席小王", "agent123"),
         ("agent2", "坐席小李", "agent123"),
     ):
-        cursor.execute("SELECT COUNT(*) FROM users WHERE username = ?", (agent_username,))
-        if cursor.fetchone()[0] == 0:
+        cursor.execute("SELECT hashed_password FROM users WHERE username = ?", (agent_username,))
+        row = cursor.fetchone()
+        if row is None:
             cursor.execute(
                 """
                 INSERT INTO users (username, email, full_name, hashed_password, role, plan_id, games_limit, api_quota, is_active, created_at, updated_at)
@@ -290,6 +341,12 @@ def _seed_support_agent_users(cursor) -> None:
                     now,
                     now,
                 ),
+            )
+        elif not str(row[0]).startswith("$pbkdf2"):
+            # 历史无盐 sha256 哈希: 升级为 pbkdf2, 密码不变
+            cursor.execute(
+                "UPDATE users SET hashed_password = ?, updated_at = ? WHERE username = ?",
+                (_hash_password(agent_password), now, agent_username),
             )
 
 
@@ -362,21 +419,8 @@ def init_database():
         )
         conn.commit()
         
-        # 添加默认管理员用户
-        cursor.execute('SELECT COUNT(*) FROM users WHERE username = ?', ('admin',))
-        if cursor.fetchone()[0] == 0:
-            cursor.execute('''
-                INSERT INTO users (username, email, full_name, hashed_password, role, plan_id, games_limit, api_quota, is_active, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', ('admin', 'admin@example.com', '管理员', _hash_password('admin123'), 'admin', 'enterprise', 10, 10000, 1, datetime.now().isoformat(), datetime.now().isoformat()))
-        
-        # 添加默认演示用户
-        cursor.execute('SELECT COUNT(*) FROM users WHERE username = ?', ('demo',))
-        if cursor.fetchone()[0] == 0:
-            cursor.execute('''
-                INSERT INTO users (username, email, full_name, hashed_password, role, plan_id, games_limit, api_quota, is_active, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', ('demo', 'demo@example.com', '演示用户', _hash_password('demo123'), 'user', 'pro', 5, 5000, 1, datetime.now().isoformat(), datetime.now().isoformat()))
+        # 种子默认账号（admin 密码可用 INITIAL_ADMIN_PASSWORD 注入; demo 受开关控制）
+        _seed_default_accounts(cursor)
 
         _seed_support_agent_users(cursor)
         

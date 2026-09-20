@@ -20,9 +20,10 @@ def app_env() -> str:
 
 
 def demo_accounts_enabled() -> bool:
-    if app_env() == "production" and not _truthy("ALLOW_DEMO_ACCOUNTS", default=False):
-        return False
-    return _truthy("ALLOW_DEMO_ACCOUNTS", default=True)
+    # 统一走 database 的单一定义（production 默认关闭, 显式配置优先）
+    from src.database import demo_accounts_enabled as _enabled
+
+    return _enabled()
 
 
 def payment_test_mode_enabled() -> bool:

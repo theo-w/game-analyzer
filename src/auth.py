@@ -79,8 +79,6 @@ PLANS: Dict[str, PlanConfig] = {
     )
 }
 
-USERS_DB: Dict[str, UserInDB] = {}
-
 LLM_PROVIDERS: Dict[str, Dict] = {
     "openai": {
         "name": "OpenAI GPT",
@@ -127,25 +125,10 @@ def verify_password(plain_password, hashed_password):
     try:
         return pwd_context.verify(plain_password, hashed_password)
     except Exception:
-        import hashlib
-        return hashlib.sha256(plain_password.encode()).hexdigest() == hashed_password
+        return False
 
 def get_password_hash(password):
     return pwd_context.hash(password)
-
-def get_user(db, username: str) -> Optional[UserInDB]:
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
-    return None
-
-def authenticate_user(db, username: str, password: str):
-    user = get_user(db, username)
-    if not user:
-        return False
-    if not verify_password(password, user.hashed_password):
-        return False
-    return user
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
@@ -156,41 +139,3 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
-
-def init_default_users():
-    allow_demo = os.getenv("ALLOW_DEMO_ACCOUNTS", "true").strip().lower() in ("1", "true", "yes")
-    if "admin" not in USERS_DB:
-        admin_user = UserInDB(
-            id="admin",
-            username="admin",
-            email="admin@example.com",
-            full_name="管理员",
-            disabled=False,
-            role="admin",
-            plan="enterprise",
-            games_limit=PLANS["enterprise"].games_limit,
-            api_quota=PLANS["enterprise"].api_quota,
-            hashed_password=get_password_hash("admin123")
-        )
-        USERS_DB["admin"] = admin_user.model_dump()
-
-    if not allow_demo:
-        USERS_DB.pop("demo", None)
-        return
-
-    if "demo" not in USERS_DB:
-        demo_user = UserInDB(
-            id="demo",
-            username="demo",
-            email="demo@example.com",
-            full_name="演示用户",
-            disabled=False,
-            role="user",
-            plan="pro",
-            games_limit=PLANS["pro"].games_limit,
-            api_quota=PLANS["pro"].api_quota,
-            hashed_password=get_password_hash("demo123")
-        )
-        USERS_DB["demo"] = demo_user.model_dump()
-
-init_default_users()

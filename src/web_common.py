@@ -7,8 +7,8 @@ import hmac
 from datetime import datetime, timedelta
 from typing import Any, Dict, Optional
 
-from auth import PLANS, UserInDB
-from database import OperationLogRepository, UserRepository, get_db_connection
+from src.auth import PLANS, UserInDB
+from src.database import OperationLogRepository, UserRepository, get_db_connection
 from src.deps import get_current_user, resolve_user_from_token
 
 # Re-export for routers: Depends(get_current_user) and await get_current_user(token).
@@ -49,7 +49,12 @@ def verify_payment_signature(raw_body: bytes, signature: str, secret: str) -> bo
 
 def mark_order_paid(order: Dict[str, Any], transaction_id: str) -> Dict[str, Any]:
     expires_at = (datetime.now() + timedelta(days=365)).isoformat()
+    plan = PLANS[order["plan_id"]]
+    games_limit = plan.games_limit if plan.games_limit > 0 else 999999
+    api_quota = plan.api_quota if plan.api_quota > 0 else 999999
+    now = datetime.now().isoformat()
 
+    # 订单状态与用户套餐/限额必须同事务落库, 避免已支付但套餐未升级
     with get_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
@@ -60,19 +65,18 @@ def mark_order_paid(order: Dict[str, Any], transaction_id: str) -> Dict[str, Any
             """,
             (
                 transaction_id,
-                datetime.now().isoformat(),
+                now,
                 expires_at,
-                datetime.now().isoformat(),
+                now,
                 order["order_id"],
             ),
         )
+        cursor.execute(
+            'UPDATE users SET plan_id = ?, games_limit = ?, api_quota = ?, updated_at = ? WHERE username = ?',
+            (order["plan_id"], games_limit, api_quota, now, order["username"]),
+        )
         conn.commit()
 
-    UserRepository.update_plan(order["username"], order["plan_id"])
-    plan = PLANS[order["plan_id"]]
-    games_limit = plan.games_limit if plan.games_limit > 0 else 999999
-    api_quota = plan.api_quota if plan.api_quota > 0 else 999999
-    UserRepository.update_limits(order["username"], games_limit, api_quota)
     OperationLogRepository.log(
         order["username"],
         "payment_completed",
