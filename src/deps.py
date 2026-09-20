@@ -8,7 +8,7 @@ from typing import Optional, Union
 from fastapi import HTTPException, Query, Request, status
 from jose import JWTError, jwt
 
-from auth import PLANS
+from src.auth import PLANS
 from src.api_limits import effective_api_quota, effective_plan_id
 from src.auth import ALGORITHM, SECRET_KEY, TokenData, UserInDB
 from src.database import UserRepository

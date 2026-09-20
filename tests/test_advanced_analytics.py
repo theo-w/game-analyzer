@@ -1,10 +1,7 @@
 import pytest
-import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
-
-from advanced_analytics import (
+from src.advanced_analytics import (
     FunnelAnalyzer,
     CohortAnalyzer,
     UserJourneyAnalyzer,
@@ -14,7 +11,6 @@ from advanced_analytics import (
     _derive_scale_metric,
     _derive_arppu,
 )
-
 
 class TestAdvancedAnalytics:
     

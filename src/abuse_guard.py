@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import List, Optional, Tuple
 
-from database import db_manager
+from src.database import db_manager
 from src.api_limits import effective_plan_id
 
 _DEVICE_ID_RE = re.compile(r"^[a-zA-Z0-9_-]{8,64}$")

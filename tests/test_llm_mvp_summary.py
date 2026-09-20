@@ -1,12 +1,7 @@
 import os
-import sys
-
 import pytest
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
 from src.services.llm_mvp_summary import build_mvp_facts_for_llm
-
 
 def test_build_mvp_facts_excludes_raw_comment_bodies():
     analysis = {
@@ -35,7 +30,6 @@ def test_build_mvp_facts_excludes_raw_comment_bodies():
     assert "long raw comment" not in dumped
     assert facts["product_reports"][0]["product"] == "730"
     assert facts["validation_required"] is True
-
 
 @pytest.mark.asyncio
 async def test_summarize_returns_none_without_validation(monkeypatch):

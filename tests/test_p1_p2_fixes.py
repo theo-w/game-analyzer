@@ -61,7 +61,7 @@ async def test_share_report_create_and_fetch_with_expiry(api_client):
 
 @pytest.mark.asyncio
 async def test_share_report_expired_returns_not_found(api_client):
-    from database import db_manager
+    from src.database import db_manager
 
     expired_token = uuid.uuid4().hex
     db_manager.insert(
@@ -104,7 +104,7 @@ async def test_conversation_history_isolated_by_user(api_client):
 
 @pytest.mark.asyncio
 async def test_end_chat_requires_owner(api_client):
-    from support import LiveChat
+    from src.support import LiveChat
 
     chat = LiveChat.start_chat("demo")
     chat_id = chat["chat_id"]

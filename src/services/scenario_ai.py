@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Sequence
 
-from auth import LLM_CONFIG, LLM_PROVIDERS
+from src.auth import LLM_CONFIG, LLM_PROVIDERS
 
 from src.data_resolution import get_user_comments_data, get_user_metrics_data, resolve_user_data_source
 from src.mvp_data import get_mvp_analysis

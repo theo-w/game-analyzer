@@ -7,12 +7,7 @@ import uuid
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 import os
-import sys
-
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import db_manager
-
+from src.database import db_manager
 
 # 可用的组件类型
 COMPONENT_TYPES = {
@@ -103,7 +98,6 @@ COMPONENT_TYPES = {
     }
 }
 
-
 # 可用的数据源
 DATA_SOURCES = {
     'revenue': {
@@ -127,7 +121,6 @@ DATA_SOURCES = {
         'fields': ['downloads', 'registrations', 'tutorial_completion', 'first_purchase', 'conversion_rate']
     }
 }
-
 
 class ReportBuilder:
     """报表构建器"""
@@ -338,7 +331,6 @@ class ReportBuilder:
                 </div>
             '''
 
-
 class ReportRenderer:
     """报表渲染器"""
     
@@ -399,7 +391,6 @@ class ReportRenderer:
                 'config': config
             }
 
-
 def init_report_tables():
     """初始化报表相关表"""
     with db_manager.get_connection() as conn:
@@ -438,7 +429,6 @@ def init_report_tables():
         
         conn.commit()
 
-
 # 初始化表
 init_report_tables()
 
@@ -446,11 +436,9 @@ init_report_tables()
 report_builder = ReportBuilder()
 report_renderer = ReportRenderer()
 
-
 def get_report_builder() -> ReportBuilder:
     """获取报表构建器"""
     return report_builder
-
 
 def get_report_renderer() -> ReportRenderer:
     """获取报表渲染器"""

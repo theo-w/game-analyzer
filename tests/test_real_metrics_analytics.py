@@ -1,15 +1,9 @@
 import os
-import sys
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
 from src.services.real_metrics_analytics import (
     build_realtime_from_data,
     build_review_weekly_cohort,
     resolve_realtime_for_product,
 )
-
 
 def _comment(product, date, score=5, playtime=3000):
     return {
@@ -21,7 +15,6 @@ def _comment(product, date, score=5, playtime=3000):
         "playtime_forever_minutes": playtime,
         "内容": "good game with enough detail for analysis",
     }
-
 
 def test_realtime_uses_weekly_review_trend():
     comments = [
@@ -38,7 +31,6 @@ def test_realtime_uses_weekly_review_trend():
     assert len(payload["revenue_trend"]) >= 1
     assert payload["online_users"] is None
     assert payload["chart_metric"] == "reviews"
-
 
 def test_weekly_cohort_differs_by_product_engagement():
     comments = [
@@ -63,7 +55,6 @@ def test_weekly_cohort_differs_by_product_engagement():
     c570 = build_review_weekly_cohort("570", comments)
     assert c730 and c570
     assert c730["summary"]["avg_retention_d7"] != c570["summary"]["avg_retention_d7"]
-
 
 def test_resolve_realtime_returns_mock_when_empty():
     payload, basis, simulated = resolve_realtime_for_product("730", [], [])

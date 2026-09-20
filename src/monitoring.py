@@ -8,13 +8,9 @@ import time
 import json
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any, List
-import sys
 from threading import Lock
 
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import db_manager
-
+from src.database import db_manager
 
 class SystemHealthMonitor:
     """系统健康监控器"""
@@ -103,7 +99,6 @@ class SystemHealthMonitor:
             VALUES (?, ?, ?)
         ''', (status['status'], json.dumps(status['metrics']), status['timestamp']))
 
-
 class ErrorLogger:
     """错误日志记录器"""
     
@@ -167,7 +162,6 @@ class ErrorLogger:
                 stats[row['level']] = row['count']
         
         return stats
-
 
 class UserBehaviorTracker:
     """用户行为追踪器"""
@@ -240,7 +234,6 @@ class UserBehaviorTracker:
         ''', (cutoff, limit))
         
         return result
-
 
 # 全局实例
 health_monitor = SystemHealthMonitor()

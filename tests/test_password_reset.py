@@ -1,15 +1,10 @@
 import os
-import sys
 import uuid
 from urllib.parse import parse_qs, urlparse
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-from auth import get_password_hash, verify_password
-from database import UserRepository
-from password_reset import create_reset_token_for_email, reset_password_with_token
-
+from src.auth import get_password_hash, verify_password
+from src.database import UserRepository
+from src.password_reset import create_reset_token_for_email, reset_password_with_token
 
 def test_password_reset_round_trip():
     username = f"reset_{uuid.uuid4().hex[:8]}"

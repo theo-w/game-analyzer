@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from auth import LLM_CONFIG, LLM_PROVIDERS
+from src.auth import LLM_CONFIG, LLM_PROVIDERS
 
 from src.mvp_data import get_mvp_analysis, get_mvp_comments_and_metrics, mvp_validation_passed
 from src.services.game_intel import (

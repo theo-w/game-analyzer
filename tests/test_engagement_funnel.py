@@ -1,14 +1,8 @@
 import os
-import sys
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
 from src.services.engagement_funnel import (
     build_review_engagement_journey,
     resolve_journey_for_product,
 )
-
 
 def _steam_comment(product, playtime, positive=True):
     return {
@@ -19,7 +13,6 @@ def _steam_comment(product, playtime, positive=True):
         "voted_up": positive,
     }
 
-
 def _mobile_comment(product, score, text="good game"):
     return {
         "product": product,
@@ -28,7 +21,6 @@ def _mobile_comment(product, score, text="good game"):
         "内容": text,
         "情绪": "positive" if score >= 4 else "negative",
     }
-
 
 def test_review_journey_differs_per_product():
     comments = [
@@ -56,7 +48,6 @@ def test_review_journey_differs_per_product():
     assert nodes570["评论样本"]["count"] == 10
     assert nodes730["核心玩家(≥20h)"]["conversion_rate"] != nodes570["核心玩家(≥20h)"]["conversion_rate"]
 
-
 def test_mobile_review_journey_uses_rating_steps():
     comments = [
         _mobile_comment("com.a", 5, "great game with smooth controls"),
@@ -71,7 +62,6 @@ def test_mobile_review_journey_uses_rating_steps():
     assert names[0] == "评论样本"
     assert "有效评分" in names
     assert journey["summary"]["data_basis"] == "review_engagement"
-
 
 def test_imported_metric_funnel_from_named_metrics():
     from src.services.engagement_funnel import build_metric_funnel

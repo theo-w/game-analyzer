@@ -9,15 +9,15 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Query, Request, status
 from fastapi.responses import HTMLResponse
 
-from auth import (
+from src.auth import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
     PLANS,
     create_access_token,
     get_password_hash,
     verify_password,
 )
-from database import OperationLogRepository, UserRepository
-from password_reset import create_reset_token_for_email, reset_password_with_token
+from src.database import OperationLogRepository, UserRepository
+from src.password_reset import create_reset_token_for_email, reset_password_with_token
 from src.abuse_guard import (
     client_ip,
     extract_device_id,

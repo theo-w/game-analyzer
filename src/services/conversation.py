@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Tuple
 
-from auth import LLM_CONFIG
+from src.auth import LLM_CONFIG
 
 from src.services.llm_client import (
     call_anthropic_api,

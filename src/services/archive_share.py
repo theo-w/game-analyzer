@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from typing import Any, Dict, Optional
 
-from database import SharedReportRepository
+from src.database import SharedReportRepository
 from src.services.analysis_archive import AnalysisArchiveRepository
 
 
@@ -95,7 +95,7 @@ def create_archive_share_link(
 
 
 def db_manager_update_share_token(archive_id: str, username: str, share_token: str) -> None:
-    from database import db_manager
+    from src.database import db_manager
 
     db_manager.execute(
         "UPDATE analysis_archives SET share_token = ?, updated_at = ? WHERE archive_id = ? AND username = ?",

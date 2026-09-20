@@ -6,12 +6,7 @@ import json
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 import os
-import sys
-
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import db_manager
-
+from src.database import db_manager
 
 # 引导步骤配置
 ONBOARDING_STEPS = [
@@ -78,7 +73,6 @@ ONBOARDING_STEPS = [
         'show_skip': False
     }
 ]
-
 
 # 功能教程
 FEATURE_TUTORIALS = [
@@ -153,7 +147,6 @@ FEATURE_TUTORIALS = [
         'duration': '3分钟'
     }
 ]
-
 
 class OnboardingManager:
     """Onboarding引导管理器"""
@@ -262,7 +255,6 @@ class OnboardingManager:
         ''', (user_id,))
         return [r['tutorial_id'] for r in results]
 
-
 def init_onboarding_tables():
     """初始化引导相关表"""
     with db_manager.get_connection() as conn:
@@ -297,13 +289,11 @@ def init_onboarding_tables():
         
         conn.commit()
 
-
 # 初始化表
 init_onboarding_tables()
 
 # 全局实例
 onboarding_manager = OnboardingManager()
-
 
 def get_onboarding_manager() -> OnboardingManager:
     """获取Onboarding引导管理器"""

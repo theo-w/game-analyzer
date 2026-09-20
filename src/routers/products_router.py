@@ -8,7 +8,7 @@ import uuid
 
 from fastapi import APIRouter, Body, HTTPException, Query
 
-from database import OperationLogRepository, ProductRepository
+from src.database import OperationLogRepository, ProductRepository
 from src.web_common import get_current_user
 
 router = APIRouter(tags=["products"])
@@ -23,7 +23,7 @@ async def get_products_management(token: Optional[str] = Query(None)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="只有管理员可以管理产品")
     
-    from database import ProductRepository
+    from src.database import ProductRepository
     
     products = ProductRepository.get_all()
     
@@ -48,7 +48,7 @@ async def add_product(
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="只有管理员可以添加产品")
     
-    from database import ProductRepository
+    from src.database import ProductRepository
     
     if platform not in {"steam", "google_play", "app_store"}:
         raise HTTPException(status_code=400, detail="不支持的平台")

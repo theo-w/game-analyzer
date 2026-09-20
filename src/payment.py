@@ -7,13 +7,8 @@ import uuid
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 import os
-import sys
-
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import db_manager
-from billing import subscription_manager, plan_manager, billing_manager
-
+from src.database import db_manager
+from src.billing import subscription_manager, plan_manager, billing_manager
 
 class PaymentManager:
     """支付管理器"""
@@ -32,7 +27,7 @@ class PaymentManager:
         """初始化Stripe"""
         try:
             import stripe
-            from database import config_manager
+            from src.database import config_manager
             api_key = config_manager.get('payment.stripe.api_key')
             
             if api_key:
@@ -48,7 +43,7 @@ class PaymentManager:
         """初始化支付宝"""
         try:
             from alipay import AliPay
-            from database import config_manager
+            from src.database import config_manager
             
             app_id = config_manager.get('payment.alipay.app_id')
             private_key_path = config_manager.get('payment.alipay.private_key_path')
@@ -72,7 +67,7 @@ class PaymentManager:
         """初始化微信支付"""
         try:
             import wechatpayv3
-            from database import config_manager
+            from src.database import config_manager
             
             mchid = config_manager.get('payment.wechat.mchid')
             serial_no = config_manager.get('payment.wechat.serial_no')
@@ -395,7 +390,6 @@ class PaymentManager:
             SELECT * FROM payments WHERE user_id = ? ORDER BY created_at DESC
         ''', (user_id,))
 
-
 def init_payment_tables():
     """初始化支付相关表"""
     with db_manager.get_connection() as conn:
@@ -422,13 +416,11 @@ def init_payment_tables():
         
         conn.commit()
 
-
 # 初始化表
 init_payment_tables()
 
 # 全局实例
 payment_manager = PaymentManager()
-
 
 def get_payment_manager() -> PaymentManager:
     """获取支付管理器"""

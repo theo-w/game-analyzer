@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from auth import PLANS
+from src.auth import PLANS
 from src.plans_catalog import list_plans_for_api, sync_billing_pricing_plans
 
 

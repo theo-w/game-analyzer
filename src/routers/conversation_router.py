@@ -6,8 +6,8 @@ from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Query, Request
 
-from auth import PLANS
-from database import UserRepository
+from src.auth import PLANS
+from src.database import UserRepository
 from src.services.conversation import (
     clear_conversation_history,
     generate_conversation_reply,

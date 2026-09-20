@@ -7,12 +7,7 @@ import uuid
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 import os
-import sys
-
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import db_manager
-
+from src.database import db_manager
 
 # 帮助中心分类
 HELP_CATEGORIES = [
@@ -25,7 +20,6 @@ HELP_CATEGORIES = [
     {'id': 'troubleshooting', 'name': '故障排除', 'icon': '🔧', 'description': '常见问题解决'},
     {'id': 'billing', 'name': '计费与订阅', 'icon': '💰', 'description': '套餐与支付'}
 ]
-
 
 # FAQ数据
 FAQ_DATA = [
@@ -95,7 +89,6 @@ FAQ_DATA = [
     }
 ]
 
-
 # 视频教程数据
 VIDEO_TUTORIALS = [
     {
@@ -143,7 +136,6 @@ VIDEO_TUTORIALS = [
         'is_featured': False
     }
 ]
-
 
 class HelpCenterManager:
     """帮助中心管理器"""
@@ -304,7 +296,6 @@ class HelpCenterManager:
         db_manager.execute(query, tuple(params))
         return True
 
-
 def init_help_tables():
     """初始化帮助中心相关表"""
     with db_manager.get_connection() as conn:
@@ -362,13 +353,11 @@ def init_help_tables():
         
         conn.commit()
 
-
 # 初始化表
 init_help_tables()
 
 # 全局实例
 help_center_manager = HelpCenterManager()
-
 
 def get_help_center_manager() -> HelpCenterManager:
     """获取帮助中心管理器"""

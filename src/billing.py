@@ -7,12 +7,7 @@ from datetime import datetime, timedelta
 from typing import Optional, Dict, Any, List
 import uuid
 import os
-import sys
-
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import db_manager
-
+from src.database import db_manager
 
 # 定价方案配置
 PRICING_PLANS = {
@@ -81,7 +76,6 @@ PRICING_PLANS = {
     }
 }
 
-
 def _align_pricing_with_auth():
     try:
         from src.plans_catalog import sync_billing_pricing_plans
@@ -90,9 +84,7 @@ def _align_pricing_with_auth():
     except Exception:
         pass
 
-
 _align_pricing_with_auth()
-
 
 class PlanManager:
     """套餐管理器"""
@@ -124,7 +116,6 @@ class PlanManager:
         """获取功能限制"""
         features = self.get_plan_features(plan_id)
         return features.get(feature)
-
 
 class SubscriptionManager:
     """订阅管理器"""
@@ -306,7 +297,6 @@ class SubscriptionManager:
             print(f"Error downgrading expired subscriptions: {e}")
             return 0
 
-
 class BillingManager:
     """计费管理器"""
     
@@ -375,7 +365,6 @@ class BillingManager:
         
         return len(result) > 0
 
-
 class QuotaManager:
     """配额管理器"""
     
@@ -434,13 +423,11 @@ class QuotaManager:
         used = self.get_used_quota(user_id)
         return max(0, quota - used)
 
-
 # 全局实例
 plan_manager = PlanManager()
 subscription_manager = SubscriptionManager()
 billing_manager = BillingManager()
 quota_manager = QuotaManager()
-
 
 def init_billing_tables():
     """初始化计费相关表"""
@@ -500,7 +487,6 @@ def init_billing_tables():
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_api_usage_user_date ON api_usage(user_id, date)')
         
         conn.commit()
-
 
 # 初始化表
 init_billing_tables()

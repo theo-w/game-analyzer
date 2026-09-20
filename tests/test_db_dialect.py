@@ -8,7 +8,7 @@ import pytest
 
 
 def test_parse_database_url():
-    from db_dialect import parse_database_url
+    from src.db_dialect import parse_database_url
 
     cfg = parse_database_url("postgresql://user:pass@db.example.com:5433/mydb")
     assert cfg["host"] == "db.example.com"
@@ -19,7 +19,7 @@ def test_parse_database_url():
 
 
 def test_adapt_sql_placeholders():
-    from db_dialect import adapt_sql
+    from src.db_dialect import adapt_sql
 
     sql = "SELECT * FROM users WHERE username = ? AND role = ?"
     assert adapt_sql(sql, "sqlite") == sql
@@ -29,15 +29,15 @@ def test_adapt_sql_placeholders():
 
 
 def test_adapt_sql_ignores_question_marks_in_strings():
-    from db_dialect import adapt_sql
+    from src.db_dialect import adapt_sql
 
     sql = "SELECT 'a?b' AS x WHERE id = ?"
     assert adapt_sql(sql, "postgresql") == "SELECT 'a?b' AS x WHERE id = %s"
 
 
 def test_resolve_database_backend_prefers_url(monkeypatch):
-    from db_dialect import resolve_database_backend
-    from database import ConfigManager
+    from src.db_dialect import resolve_database_backend
+    from src.database import ConfigManager
 
     monkeypatch.setenv(
         "DATABASE_URL",
@@ -49,7 +49,7 @@ def test_resolve_database_backend_prefers_url(monkeypatch):
 
 
 def test_postgres_schema_statement_count():
-    from db_schema_postgres import POSTGRES_SCHEMA_STATEMENTS
+    from src.db_schema_postgres import POSTGRES_SCHEMA_STATEMENTS
 
     assert len(POSTGRES_SCHEMA_STATEMENTS) >= 30
     assert any("CREATE TABLE IF NOT EXISTS users" in s for s in POSTGRES_SCHEMA_STATEMENTS)
@@ -57,7 +57,7 @@ def test_postgres_schema_statement_count():
 
 def test_health_reports_database_type():
     from fastapi.testclient import TestClient
-    from web_app import app
+    from src.web_app import app
 
     client = TestClient(app)
     res = client.get("/api/health")

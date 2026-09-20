@@ -116,7 +116,7 @@ class GDPRCompliance:
     @staticmethod
     def has_consent(username: str) -> bool:
         """检查用户是否同意隐私政策"""
-        from database import db_manager
+        from src.database import db_manager
         
         result = db_manager.execute_one('''
             SELECT consent_given FROM users WHERE username = ?
@@ -127,7 +127,7 @@ class GDPRCompliance:
     @staticmethod
     def record_consent(username: str, consent_type: str = 'privacy_policy'):
         """记录用户同意"""
-        from database import db_manager
+        from src.database import db_manager
         
         db_manager.execute('''
             UPDATE users SET consent_given = 1, consent_date = ? WHERE username = ?
@@ -142,7 +142,7 @@ class GDPRCompliance:
     @staticmethod
     def export_user_data(username: str) -> Dict:
         """导出用户所有数据（GDPR第15条）"""
-        from database import db_manager
+        from src.database import db_manager
         
         user = db_manager.execute_one('SELECT * FROM users WHERE username = ?', (username,))
         if not user:
@@ -174,7 +174,7 @@ class GDPRCompliance:
     @staticmethod
     def delete_user_data(username: str) -> bool:
         """删除用户所有数据（GDPR第17条 - 被遗忘权）"""
-        from database import db_manager
+        from src.database import db_manager
         
         try:
             db_manager.execute('DELETE FROM subscriptions WHERE user_id = ?', (username,))

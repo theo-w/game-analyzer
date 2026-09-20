@@ -6,14 +6,10 @@ import asyncio
 import aiohttp
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional
-import sys
 import os
 
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import get_db_connection, db_manager
-from billing import subscription_manager
-
+from src.database import get_db_connection, db_manager
+from src.billing import subscription_manager
 
 class SubscriptionReminder:
     """订阅到期提醒管理器"""
@@ -239,12 +235,10 @@ class SubscriptionReminder:
                 print(f"[SubscriptionReminder] Error in scheduler loop: {e}")
                 await asyncio.sleep(self.check_interval)
 
-
 async def main():
     """主函数"""
     reminder = SubscriptionReminder(check_interval=3600)  # 每小时检查一次
     await reminder.run()
-
 
 if __name__ == "__main__":
     asyncio.run(main())

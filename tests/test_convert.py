@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """测试数据转换模块"""
-
-import sys
-sys.path.insert(0, "src")
-
-from convert import convert_to_jsonlines, stream_jsonlines, batch_convert
+from src.convert import convert_to_jsonlines, stream_jsonlines, batch_convert
 from pathlib import Path
-
 
 def test_standardize_item():
     """测试字段标准化的函数"""
@@ -29,7 +24,6 @@ def test_standardize_item():
     
     print("✓ test_standardize_item 通过")
 
-
 def test_stream_jsonlines():
     """测试流式转换"""
     
@@ -40,7 +34,6 @@ def test_stream_jsonlines():
     result = stream_jsonlines(items)
     assert result["items_written"] == 2
     print("✓ test_stream_jsonlines 通过")
-
 
 def test_batch_convert():
     """测试批量转换"""
@@ -64,7 +57,6 @@ def test_batch_convert():
             pass
     
     print("✓ test_batch_convert 通过")
-
 
 if __name__ == "__main__":
     test_standardize_item()

@@ -10,8 +10,8 @@ from typing import Dict, List, Optional
 from fastapi import APIRouter, HTTPException, Query, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 
-from advanced_analytics import get_advanced_analytics
-from auth import LLM_CONFIG, LLM_PROVIDERS
+from src.advanced_analytics import get_advanced_analytics
+from src.auth import LLM_CONFIG, LLM_PROVIDERS
 from src.api_meta import with_simulated
 from src.data_resolution import (
     get_user_comments_data,

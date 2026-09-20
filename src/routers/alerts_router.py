@@ -7,7 +7,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 
-from database import AlertRepository, OperationLogRepository
+from src.database import AlertRepository, OperationLogRepository
 from src.auth import UserInDB
 from src.web_common import get_current_user
 

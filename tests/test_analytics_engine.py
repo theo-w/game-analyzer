@@ -1,11 +1,7 @@
 import pytest
-import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
-
-from analytics_engine import load_data, run_business_intelligence_report
-
+from src.analytics_engine import load_data, run_business_intelligence_report
 
 class TestAnalyticsEngine:
     

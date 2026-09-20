@@ -7,7 +7,7 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from database import db_manager
+from src.database import db_manager
 from src.mvp_data import get_mvp_comments_and_metrics, mvp_validation_passed
 from src.services.game_genre import assign_competitors_by_genre, infer_product_genre
 from src.services.game_versions import GameVersionRepository

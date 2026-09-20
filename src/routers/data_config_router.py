@@ -46,7 +46,7 @@ async def get_data_source_config(current_user=Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="只有管理员可以查看数据源配置")
 
-    from database import DataSourceConfigRepository
+    from src.database import DataSourceConfigRepository
     configs = DataSourceConfigRepository.get_all()
 
     return {"success": True, "configs": [mask_config_secrets(config) for config in configs]}
@@ -67,7 +67,7 @@ async def update_data_source_config(
 
     body = await request.json()
 
-    from database import DataSourceConfigRepository
+    from src.database import DataSourceConfigRepository
     success = DataSourceConfigRepository.create_or_update(platform, body)
 
     if success:
@@ -87,7 +87,7 @@ async def delete_data_source_config(
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="只有管理员可以删除数据源配置")
 
-    from database import DataSourceConfigRepository
+    from src.database import DataSourceConfigRepository
     success = DataSourceConfigRepository.delete(platform)
 
     if success:

@@ -70,7 +70,7 @@ def effective_api_quota(user_row: dict) -> int:
             if user_row.get("trial_end_date") and datetime.fromisoformat(
                 user_row["trial_end_date"]
             ) < datetime.now():
-                from auth import PLANS
+                from src.auth import PLANS
 
                 return PLANS["free"].api_quota
         except ValueError:

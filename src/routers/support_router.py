@@ -38,7 +38,7 @@ async def get_knowledge_base(token: Optional[str] = Query(None)):
     try:
         await get_current_user(token)
         
-        from support import knowledge_base
+        from src.support import knowledge_base
         articles = knowledge_base.get_popular_articles(10)
         
         return {"success": True, "data": articles}
@@ -58,7 +58,7 @@ async def search_knowledge_base(query: str, token: Optional[str] = Query(None)):
     try:
         await get_current_user(token)
         
-        from support import knowledge_base
+        from src.support import knowledge_base
         articles = knowledge_base.search_articles(query)
         
         return {"success": True, "data": articles}
@@ -78,7 +78,7 @@ async def get_knowledge_base_article(article_id: str, token: Optional[str] = Que
     try:
         await get_current_user(token)
         
-        from support import knowledge_base
+        from src.support import knowledge_base
         article = knowledge_base.get_article(article_id)
         
         if article:
@@ -101,7 +101,7 @@ async def get_user_tickets(token: Optional[str] = Query(None)):
     try:
         current_user = await get_current_user(token)
         
-        from support import ticket_system
+        from src.support import ticket_system
         tickets = ticket_system.get_user_tickets(current_user.username)
         
         return {"success": True, "data": tickets}
@@ -127,7 +127,7 @@ async def create_ticket(
     try:
         current_user = await get_current_user(token)
         
-        from support import ticket_system
+        from src.support import ticket_system
         result = ticket_system.create_ticket(
             current_user.username, subject, message, priority, chat_id=chat_id
         )
@@ -154,7 +154,7 @@ async def start_chat(token: Optional[str] = Query(None)):
                 detail="坐席账号请使用「客服工作台」处理客户会话，勿在用户端发起咨询",
             )
 
-        from support import live_chat
+        from src.support import live_chat
         result = live_chat.start_chat(current_user.username)
 
         return {
@@ -177,7 +177,7 @@ async def get_chat_messages(chat_id: str, token: Optional[str] = Query(None)):
     
     try:
         current_user = await get_current_user(token)
-        from support import live_chat
+        from src.support import live_chat
 
         chat = live_chat.get_chat(chat_id)
         if not chat:
@@ -220,7 +220,7 @@ async def send_chat_message(
                 detail="坐席请通过客服工作台回复，不要在用户端发送消息",
             )
 
-        from support import live_chat, ai_chatbot
+        from src.support import live_chat, ai_chatbot
 
         try:
             live_chat.assert_customer_can_access_chat(chat_id, current_user.username)
@@ -261,7 +261,7 @@ async def escalate_chat_to_ticket(
 
     try:
         current_user = await get_current_user(token)
-        from support import live_chat, ticket_system
+        from src.support import live_chat, ticket_system
 
         chat = live_chat.get_chat(chat_id)
         if not chat or chat.get('username') != current_user.username:
@@ -289,7 +289,7 @@ async def get_ticket_detail(ticket_id: str, token: Optional[str] = Query(None)):
 
     try:
         current_user = await get_current_user(token)
-        from support import ticket_system
+        from src.support import ticket_system
 
         ticket = ticket_system.get_ticket(ticket_id)
         if not ticket:
@@ -313,7 +313,7 @@ async def end_chat(chat_id: str, token: Optional[str] = Query(None)):
     
     try:
         current_user = await get_current_user(token)
-        from support import live_chat
+        from src.support import live_chat
 
         try:
             live_chat.assert_customer_can_access_chat(chat_id, current_user.username)
@@ -369,7 +369,7 @@ async def get_agent_inbox(token: Optional[str] = Query(None)):
         current_user = await get_current_user(token)
         require_support_staff(current_user)
 
-        from support import agent_console
+        from src.support import agent_console
         items = agent_console.get_unified_inbox(
             agent_username=current_user.username,
             admin_view=is_admin(current_user),
@@ -391,7 +391,7 @@ async def agent_dashboard(token: Optional[str] = Query(None)):
         current_user = await get_current_user(token)
         require_support_staff(current_user)
         
-        from support import agent_console
+        from src.support import agent_console
         stats = agent_console.get_dashboard_stats()
         
         return {"success": True, "data": stats}
@@ -412,7 +412,7 @@ async def get_agent_chats(status: Optional[str] = Query(None), token: Optional[s
         current_user = await get_current_user(token)
         require_support_staff(current_user)
         
-        from support import agent_console
+        from src.support import agent_console
         chats = agent_console.get_all_chats(
             status,
             agent_username=current_user.username,
@@ -438,7 +438,7 @@ async def get_agent_chat_detail(chat_id: str, token: Optional[str] = Query(None)
         current_user = await get_current_user(token)
         require_support_staff(current_user)
         
-        from support import agent_console
+        from src.support import agent_console
         chat = agent_console.get_chat_detail(chat_id)
         if not _agent_can_access_chat(chat, current_user.username, is_admin(current_user)):
             raise HTTPException(status_code=403, detail="该会话已分配给其他坐席")
@@ -465,7 +465,7 @@ async def agent_reply(
         current_user = await get_current_user(token)
         require_support_staff(current_user)
         
-        from support import agent_console
+        from src.support import agent_console
         chat = agent_console.get_chat_detail(chat_id)
         if not _agent_can_access_chat(chat, current_user.username, is_admin(current_user)):
             raise HTTPException(status_code=403, detail="该会话已分配给其他坐席")
@@ -490,7 +490,7 @@ async def claim_chat_for_agent(
     try:
         current_user = await get_current_user(token)
         require_support_staff(current_user)
-        from support import agent_console
+        from src.support import agent_console
 
         chat = agent_console.get_chat_detail(chat_id)
         if not _agent_can_access_chat(chat, current_user.username, is_admin(current_user)):
@@ -514,7 +514,7 @@ async def release_chat_to_ai(
     try:
         current_user = await get_current_user(token)
         require_support_staff(current_user)
-        from support import agent_console
+        from src.support import agent_console
 
         chat = agent_console.get_chat_detail(chat_id)
         if not _agent_can_access_chat(chat, current_user.username, is_admin(current_user)):
@@ -540,7 +540,7 @@ async def transfer_to_human(
         current_user = await get_current_user(token)
         require_support_staff(current_user)
         
-        from support import agent_console
+        from src.support import agent_console
         agent_console.transfer_to_human(chat_id, current_user.username)
         
         return {"success": True}
@@ -586,7 +586,7 @@ async def assign_chat_to_agent(
     target = UserRepository.get_by_username(agent_username)
     if not target or target.get("role") != "agent":
         raise HTTPException(status_code=400, detail="目标坐席不存在")
-    from support import agent_console
+    from src.support import agent_console
     agent_console.assign_chat(chat_id, agent_username)
     return {"success": True, "message": f"已分配给 {agent_username}"}
 
@@ -605,7 +605,7 @@ async def assign_ticket_to_agent(
     target = UserRepository.get_by_username(agent_username)
     if not target or target.get("role") != "agent":
         raise HTTPException(status_code=400, detail="目标坐席不存在")
-    from support import agent_console
+    from src.support import agent_console
     agent_console.assign_ticket(ticket_id, agent_username)
     return {"success": True, "message": f"已分配给 {agent_username}"}
 
@@ -620,7 +620,7 @@ async def get_agent_tickets(token: Optional[str] = Query(None)):
         current_user = await get_current_user(token)
         require_support_staff(current_user)
         
-        from support import agent_console
+        from src.support import agent_console
         tickets = agent_console.get_all_tickets_for_staff(
             agent_username=current_user.username,
             admin_view=is_admin(current_user),
@@ -648,7 +648,7 @@ async def update_ticket_status(
         current_user = await get_current_user(token)
         require_support_staff(current_user)
         
-        from support import ticket_system
+        from src.support import ticket_system
         ticket = ticket_system.get_ticket(ticket_id)
         if not _agent_can_access_ticket(ticket, current_user.username, is_admin(current_user)):
             raise HTTPException(status_code=403, detail="该工单已分配给其他坐席")
@@ -676,7 +676,7 @@ async def reply_to_ticket(
         current_user = await get_current_user(token)
         require_support_staff(current_user)
         
-        from support import agent_console, ticket_system
+        from src.support import agent_console, ticket_system
         ticket = ticket_system.get_ticket(ticket_id)
         if not _agent_can_access_ticket(ticket, current_user.username, is_admin(current_user)):
             raise HTTPException(status_code=403, detail="该工单已分配给其他坐席")

@@ -9,7 +9,7 @@ from typing import Any, Dict, Optional, Sequence
 
 import asyncio
 
-from auth import LLM_CONFIG
+from src.auth import LLM_CONFIG
 
 _DEFAULT_LLM_TIMEOUT = float(os.getenv("GA_LLM_TIMEOUT_SECONDS", "45"))
 
@@ -17,7 +17,7 @@ _DEFAULT_LLM_TIMEOUT = float(os.getenv("GA_LLM_TIMEOUT_SECONDS", "45"))
 def refresh_llm_config_from_db() -> None:
     """Load persisted LLM settings from SQLite into in-memory LLM_CONFIG."""
     try:
-        from database import LLMConfigRepository
+        from src.database import LLMConfigRepository
 
         row = LLMConfigRepository.get()
         if not row:
@@ -97,7 +97,7 @@ def _resolve_ollama_model_in_config(*, persist: bool = True) -> Optional[str]:
             LLM_CONFIG["model"] = resolved
             if persist:
                 try:
-                    from database import LLMConfigRepository
+                    from src.database import LLMConfigRepository
 
                     LLMConfigRepository.save({"model": resolved})
                 except Exception:
@@ -107,7 +107,7 @@ def _resolve_ollama_model_in_config(*, persist: bool = True) -> Optional[str]:
     LLM_CONFIG["model"] = resolved
     if persist:
         try:
-            from database import LLMConfigRepository
+            from src.database import LLMConfigRepository
 
             LLMConfigRepository.save({"model": resolved})
         except Exception:
