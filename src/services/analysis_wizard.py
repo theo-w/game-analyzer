@@ -6,7 +6,7 @@ import re
 from typing import Any, Dict, List, Optional, Sequence
 
 from src.mvp_data import get_mvp_analysis, load_mvp_artifact, mvp_validation_passed
-from src.mvp_pipeline import run_mvp_pipeline, search_steam_games
+from src.mvp_pipeline import DEFAULT_OUTPUT_DIR, run_mvp_pipeline, search_steam_games
 from src.services.taptap_pipeline import resolve_taptap_inputs, run_taptap_pipeline, search_taptap_games
 from src.services.google_play_pipeline import (
     resolve_google_play_inputs,
@@ -15,6 +15,7 @@ from src.services.google_play_pipeline import (
 )
 from src.services.competitor_workbench import library_game_id
 from src.services.game_intel import sync_library_from_mvp
+from src.services.mvp_storage import resolve_mvp_output_dir
 from src.services.scenario_ai import (
     archive_scenario_report,
     build_action_items,
@@ -222,9 +223,16 @@ async def run_analysis_wizard(
             }
         )
 
+    # 读写统一走同一 MVP 目录: demo bootstrap/抓取产物按用户落盘,
+    # 无用户级数据时回退共享目录(保持旧行为)。否则 skip_crawl 读不到
+    # 用户级数据会误触发联网抓取, 在 CI/离线环境挂死。
+    out_dir = resolve_mvp_output_dir(username)
+    if not mvp_validation_passed(out_dir) and mvp_validation_passed():
+        out_dir = None
+
     crawl_ok = True
     crawl_error = None
-    if skip_crawl and mvp_validation_passed():
+    if skip_crawl and mvp_validation_passed(out_dir):
         steps.append({"id": "crawl", "status": "skipped", "detail": "使用已有 MVP 数据"})
     else:
         try:
@@ -239,6 +247,7 @@ async def run_analysis_wizard(
                 pipeline,
                 app_ids=normalized,
                 max_reviews_per_app=max(10, min(max_reviews, 200)),
+                output_dir=out_dir or DEFAULT_OUTPUT_DIR,
             )
             crawl_ok = bool(result.get("success"))
             steps.append(
@@ -254,8 +263,8 @@ async def run_analysis_wizard(
             crawl_error = str(exc)
             steps.append({"id": "crawl", "status": "error", "detail": crawl_error})
 
-    if not mvp_validation_passed():
-        dataset = load_mvp_artifact("dataset")
+    if not mvp_validation_passed(out_dir):
+        dataset = load_mvp_artifact("dataset", out_dir)
         has_data = bool(
             dataset
             and (dataset.get("comments") or dataset.get("metrics"))
@@ -274,7 +283,7 @@ async def run_analysis_wizard(
             }
         )
 
-    sync = sync_library_from_mvp(username)
+    sync = sync_library_from_mvp(username, output_dir=out_dir)
     steps.append(
         {
             "id": "sync",
@@ -291,7 +300,7 @@ async def run_analysis_wizard(
         steps.append({"id": "report", "status": "error", "detail": report.get("message", "报告生成失败")})
         return {"success": False, "message": report.get("message", "报告生成失败"), "steps": steps}
 
-    mvp_analysis = get_mvp_analysis() or {}
+    mvp_analysis = get_mvp_analysis(out_dir) or {}
     action_items = build_action_items(report.get("facts") or {}, mvp_analysis)
     report["action_items"] = action_items
     report["markdown"] = _append_actions_markdown(report.get("markdown") or "", action_items)

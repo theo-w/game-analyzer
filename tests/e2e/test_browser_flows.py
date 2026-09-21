@@ -27,10 +27,8 @@ def test_advanced_analytics_realtime_panel(page: Page) -> None:
     expect(modal).to_have_class(re.compile(r"\bactive\b"), timeout=10_000)
     expect(page.locator("#panel-realtime")).to_be_visible()
 
-    expect(page.locator("#realtime-online")).not_to_have_text("--", timeout=15_000)
-    online_text = page.locator("#realtime-online").inner_text().strip()
-    assert online_text.replace(",", "").isdigit()
-    assert int(online_text.replace(",", "")) > 0
+    # /api/advanced/* 已按数据边界决策下线(410)，面板应展示失败提示而非留白
+    expect(page.locator("#realtime-product-tip")).to_contain_text("加载失败", timeout=15_000)
 
 
 def test_advanced_analytics_journey_tab(page: Page) -> None:
@@ -40,7 +38,8 @@ def test_advanced_analytics_journey_tab(page: Page) -> None:
 
     page.locator("#tab-journey").click()
     expect(page.locator("#panel-journey")).to_be_visible()
-    expect(page.locator("#journey-nodes")).not_to_be_empty(timeout=15_000)
+    # /api/advanced/* 已按数据边界决策下线(410)，面板应展示下线原因而非空白
+    expect(page.locator("#journey-nodes")).to_contain_text("已下线", timeout=15_000)
 
 
 def test_compare_workbench_loads_cards(page: Page) -> None:

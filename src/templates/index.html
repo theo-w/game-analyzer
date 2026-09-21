@@ -1233,6 +1233,7 @@
             <h1 class="header-title">Game BI Dashboard</h1>
             <p class="header-subtitle">游戏数据分析平台 - 实时监控、智能分析、业务洞察</p>
             <div class="header-actions">
+                <button class="btn btn-secondary" onclick="showAdvancedAnalysis()">⚡ 高级分析</button>
                 <button class="btn btn-secondary" onclick="showReportGenerator()">📋 报告</button>
                 <button class="btn btn-secondary" onclick="showSupportCenter()">🎧 支持</button>
                 <button class="btn btn-primary" onclick="window.location.href='/mvp'">
@@ -3211,7 +3212,7 @@
             try {
                 const response = await authFetch(`/api/advanced/journey?product_ids=${productIds}&compare_mode=${compare}`);
                 const result = await response.json();
-                if (result.success) {
+                if (response.ok && result.success) {
                     if (result.compare_mode) {
                         // 对比模式：展示每个产品的路径
                         renderJourneyComparison(result);
@@ -3228,10 +3229,20 @@
                             tip.innerHTML = `📱 当前分析: ${productInfo?.displayName || '全部产品'} ${productInfo?.compareMode ? '(对比模式)' : ''} · <strong>${basis}</strong>${note}`;
                         }
                     }
+                } else {
+                    // /api/advanced/* 已按数据边界下线(410)，明确告知原因而非留白
+                    renderJourneyNotice(result.message || ('加载失败 (' + response.status + ')'));
                 }
             } catch (e) {
                 console.error('Failed to load journey data:', e);
+                renderJourneyNotice('网络错误，无法加载用户旅程');
             }
+        }
+
+        function renderJourneyNotice(message) {
+            const nodesContainer = document.getElementById('journey-nodes');
+            if (!nodesContainer) return;
+            nodesContainer.innerHTML = '<div style="width:100%;padding:24px;border:1px dashed #d2d2d7;border-radius:12px;color:#86868b;font-size:14px;line-height:1.6;">' + message + '</div>';
         }
         
         function linearJourneySteps(journey) {
