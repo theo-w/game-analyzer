@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>订阅套餐 - 游戏数据分析引擎</title>
+    <link rel="stylesheet" href="/static/css/theme.css">
     <style>
         :root {
-            --primary: #06b6d4;
-            --primary-dark: #0891b2;
-            --success: #10b981;
+            --primary: #0071e3;
+            --primary-dark: #0051a2;
+            --success: #059669;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --border-color: #334155;
+            --bg-dark: #f5f5f7;
+            --bg-card: #ffffff;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --border-color: #d2d2d7;
         }
 
         * {
@@ -59,7 +60,7 @@
             font-size: 0.8125rem;
             font-weight: 500;
             color: var(--text-secondary);
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.04);
             border-radius: 980px;
             white-space: nowrap;
             overflow: hidden;
@@ -90,7 +91,7 @@
         }
 
         .btn-secondary:hover {
-            background: #475569;
+            background: #86868b;
         }
 
         .btn-success {
@@ -116,7 +117,7 @@
         .page-title h2 {
             font-size: 2.5rem;
             margin-bottom: 12px;
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            background: linear-gradient(135deg, var(--primary), #5e5ce6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -150,14 +151,14 @@
 
         .plan-card.featured {
             border: 2px solid var(--primary);
-            box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
+            box-shadow: 0 0 30px rgba(0,113,227,0.2);
         }
 
         .plan-badge {
             position: absolute;
             top: -12px;
             right: 24px;
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            background: linear-gradient(135deg, var(--primary), #5e5ce6);
             color: white;
             padding: 6px 16px;
             border-radius: 20px;
@@ -294,7 +295,7 @@
 
         .payment-method.selected {
             border-color: var(--primary);
-            background: rgba(6, 182, 212, 0.1);
+            background: rgba(0,113,227,0.1);
         }
 
         .payment-method .icon {
@@ -423,7 +424,7 @@
         }
 
         .order-status.pending {
-            background: rgba(245, 158, 11, 0.2);
+            background: rgba(255,159,10,0.2);
             color: var(--warning);
         }
 
@@ -437,17 +438,17 @@
             margin: 0 auto 16px;
             padding: 12px 16px;
             border-radius: 10px;
-            background: rgba(245, 158, 11, 0.12);
-            border: 1px solid rgba(245, 158, 11, 0.35);
+            background: rgba(255,159,10,0.12);
+            border: 1px solid rgba(255,159,10,0.35);
             font-size: 0.875rem;
-            color: #fcd34d;
+            color: #b45309;
             display: none;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 8px;
         }
-        .commercial-env-banner-links a { color: #67e8f9; margin-left: 8px; }
+        .commercial-env-banner-links a { color: #0071e3; margin-left: 8px; }
         .data-lineage-card {
             max-width: 900px;
             margin: 0 auto 28px;
@@ -475,7 +476,7 @@
     <script src="/static/js/app-nav.js"></script>
 </head>
 <body>
-    <header class="app-topbar app-topbar-dark">
+    <header class="app-topbar">
         <div class="app-topbar-left">
             <a class="app-topbar-logo" href="/">🎮</a>
             <div id="app-nav-mount" data-active="pricing"></div>
@@ -497,7 +498,7 @@
             <p>解锁更多高级功能，提升游戏数据分析能力</p>
         </div>
 
-        <div id="demo-payment-notice" style="display:none;max-width:900px;margin:0 auto 24px;padding:14px 18px;border-radius:10px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.35);font-size:0.875rem;color:#fcd34d;text-align:center;">
+        <div id="demo-payment-notice" style="display:none;max-width:900px;margin:0 auto 24px;padding:14px 18px;border-radius:10px;background:rgba(255,159,10,0.12);border:1px solid rgba(255,159,10,0.35);font-size:0.875rem;color:#b45309;text-align:center;">
             ⚠️ 演示环境：支付为模拟流程，不会产生真实扣款。订阅升级仅供产品演示与 POC 评估。
         </div>
 

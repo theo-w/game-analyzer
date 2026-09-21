@@ -135,7 +135,7 @@
         if (!el) return;
         opts = opts || {};
         const variant = opts.variant || "dashboard";
-        const theme = opts.theme || (variant === "dashboard" ? "light" : "dark");
+        const theme = opts.theme || "light";
         const key = "dfg_" + variant;
         const collapsed = isCollapsed(key);
         const highlight =

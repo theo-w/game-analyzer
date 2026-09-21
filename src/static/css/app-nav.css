@@ -16,36 +16,12 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.app-topbar.app-topbar-dark {
-    background: rgba(26, 35, 50, 0.95);
-    border-bottom-color: rgba(255, 255, 255, 0.08);
-}
 
-.app-topbar.app-topbar-dark .app-nav-item {
-    color: #94a3b8;
-}
 
-.app-topbar.app-topbar-dark .app-nav-item:hover {
-    color: #e7ecf3;
-    background: rgba(255, 255, 255, 0.06);
-}
 
-.app-topbar.app-topbar-dark .app-nav-item.active {
-    color: #38bdf8;
-}
 
-.app-topbar.app-topbar-dark .app-nav-dropdown {
-    background: #1a2332;
-    border-color: rgba(255, 255, 255, 0.08);
-}
 
-.app-topbar.app-topbar-dark .app-nav-dropdown a {
-    color: #e7ecf3;
-}
 
-.app-topbar.app-topbar-dark .app-nav-dropdown a:hover {
-    background: rgba(255, 255, 255, 0.06);
-}
 
 .app-topbar-left {
     display: flex;
@@ -68,10 +44,6 @@
     flex-shrink: 0;
 }
 
-.app-topbar.app-topbar-dark .app-topbar-logo {
-    background: #e7ecf3;
-    color: #1a2332;
-}
 
 .app-topbar-right {
     display: flex;

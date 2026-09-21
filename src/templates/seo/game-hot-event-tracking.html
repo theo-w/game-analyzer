@@ -15,16 +15,6 @@
 :root { --ink:#17202d; --muted:#707986; --paper:#f5f6f2; --line:#e3e5df; --orange:#e85e2c; --navy:#172337; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: Arial, "Microsoft YaHei", sans-serif; background: var(--paper); color: var(--ink); line-height: 1.75; }
-.topbar { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 6px 16px; padding: 10px 28px; background: #f5f6f2ee; backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); font-size: 12px; }
-.brand { display: flex; gap: 10px; align-items: center; margin-right: 10px; }
-.logo { width: 34px; height: 34px; border-radius: 10px; background: var(--orange); color: #fff; display: grid; place-items: center; font-size: 18px; }
-.brand b { font-size: 13px; }
-.brand b i { font-style: normal; color: #f48b65; }
-.brand small { display: block; color: #9ca9ba; font-size: 10px; }
-.topbar a { color: #707986; text-decoration: none; }
-.topbar a:hover { color: var(--orange); }
-.topbar a.active { color: var(--orange); font-weight: bold; }
-.topbar .sep { color: #cbd0c8; }
 .wrap { max-width: 1220px; margin: 0 auto; padding: 38px 38px 48px; }
 .sysnote { margin-bottom: 22px; padding: 13px 16px; border-radius: 10px; background: #ffffff0a; border: 1px solid var(--line); color: #727b86; font-size: 11px; background: #fff; }
 .sysnote strong { color: var(--orange); }
@@ -72,11 +62,12 @@ body { font-family: Arial, "Microsoft YaHei", sans-serif; background: var(--pape
 .footer { text-align: center; color: #8c939c; font-size: 10px; padding: 26px 16px 40px; border-top: 1px solid var(--line); }
 .footer a { color: #8c939c; text-decoration: none; margin: 0 6px; }
 </style>
+<link rel="stylesheet" href="/static/css/app-nav.css">
+<script src="/static/js/app-nav.js"></script>
 </head>
 <body>
-<header class="topbar">
-<span class="brand"><span class="logo">◈</span><span><b>游戏舆情 <i>AI 分析</i></b><small>Game Analyzer · 内容站</small></span></span><a href="/game-public-opinion-ai-analysis">平台首页</a><a href="/ai-game-opinion-monitoring-system">AI 监测系统</a><span style="color:#64748b;font-size:.8rem;"> · 内容支撑页</span>
-<a href="/login?redirect=/dashboard" style="margin-left:auto;">进入数据工具 →</a></header>
+<div id="app-nav-mount" data-active="platform"></div>
+<script>if (window.AppNav) AppNav.mount("#app-nav-mount");</script>
 <main class="wrap">
   <div class="sysnote">
     <strong>两系统定位</strong>：本页属于 <span class="sys-a">「游戏舆情 AI 分析平台」内容站</span> —— 对外能力介绍与行业科普（不含实时数据）。

@@ -807,7 +807,7 @@
         .filter-group-dim .filter-label::after {
             content: '（抓取数据无周期维度）';
             font-weight: 400;
-            color: #94a3b8;
+            color: #6e6e73;
             margin-left: 4px;
         }
         #product-select.filter-select {
@@ -942,7 +942,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: var(--apple-radius-xl) 0 0 var(--apple-radius-xl);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.08);
             padding: 24px;
             overflow-y: auto;
             transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1052,7 +1052,7 @@
         .new-product-card .status.developing { background: rgba(245, 158, 11, 0.2); color: var(--accent-yellow); }
         .new-product-card .progress-bar {
             height: 6px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.06);
             border-radius: 3px;
             overflow: hidden;
             margin-top: 8px;
@@ -1295,8 +1295,8 @@
 
         <div class="kpi-grid" id="kpi-grid">
             <div class="kpi-card" style="grid-column: 1 / -1; text-align: center; padding: 28px;">
-                <div style="font-size: 1rem; color: #64748b; margin-bottom: 8px;">看板数据来自抓取或导入</div>
-                <div style="font-size: 0.875rem; color: #94a3b8; margin-bottom: 12px;">抓取结果会自动同步到本看板，无需单独导入</div>
+                <div style="font-size: 1rem; color: #6e6e73; margin-bottom: 8px;">看板数据来自抓取或导入</div>
+                <div style="font-size: 0.875rem; color: #6e6e73; margin-bottom: 12px;">抓取结果会自动同步到本看板，无需单独导入</div>
                 <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
                     <a href="/guide" class="btn btn-primary" style="text-decoration:none;">🚀 分析向导</a>
                     <a href="/import" class="btn btn-secondary" style="text-decoration:none;">📥 导入指标</a>
@@ -1319,13 +1319,13 @@
                 if (data.success && data.themes && data.themes.length && list) {
                     list.innerHTML = data.themes.map(function (t) {
                         const issues = (t.key_issues || []).map(function (k) {
-                            return '<span style="display:inline-block;background:rgba(56,189,248,.12);color:#7dd3fc;border-radius:6px;padding:2px 8px;font-size:0.75rem;margin:2px 4px 2px 0;">' + k + '</span>';
+                            return '<span style="display:inline-block;background:rgba(0,113,227,.1);color:#0071e3;border-radius:6px;padding:2px 8px;font-size:0.75rem;margin:2px 4px 2px 0;">' + k + '</span>';
                         }).join('');
-                        return '<div style="background:var(--bg-card,#1e293b);border:1px solid var(--border-color,#334155);border-radius:12px;padding:14px;">' +
-                            '<div style="font-weight:600;color:#38bdf8;">' + (t.theme_name || '主题') + '</div>' +
-                            '<div style="color:#94a3b8;font-size:0.85rem;margin:6px 0;">' + (t.description || '') + '</div>' +
+                        return '<div style="background:var(--bg-card,#ffffff);border:1px solid var(--border-color,rgba(0,0,0,0.08));border-radius:12px;padding:14px;">' +
+                            '<div style="font-weight:600;color:#0071e3;">' + (t.theme_name || '主题') + '</div>' +
+                            '<div style="color:#6e6e73;font-size:0.85rem;margin:6px 0;">' + (t.description || '') + '</div>' +
                             issues +
-                            '<div style="font-size:0.75rem;color:#64748b;margin-top:8px;">' + (t.member_count || 0) + ' 条评论 · 相似度 ' + Number(t.avg_similarity || 0).toFixed(2) + '</div>' +
+                            '<div style="font-size:0.75rem;color:#6e6e73;margin-top:8px;">' + (t.member_count || 0) + ' 条评论 · 相似度 ' + Number(t.avg_similarity || 0).toFixed(2) + '</div>' +
                             '</div>';
                     }).join('');
                     document.getElementById('ai-themes-panel').style.display = 'block';
@@ -1354,7 +1354,7 @@
                     <div class="alerts-list" id="business-alerts-list">
                         <div class="alert-item yellow">
                             <strong>📋 加载预警中…</strong>
-                            <div style="margin-top:6px;font-size:0.85rem;color:#94a3b8;">应用筛选后显示已选游戏的商机摘要</div>
+                            <div style="margin-top:6px;font-size:0.85rem;color:#6e6e73;">应用筛选后显示已选游戏的商机摘要</div>
                         </div>
                     </div>
                 </div>
@@ -1579,19 +1579,19 @@
             
             <div style="display:flex;flex-direction:column;gap:16px;">
                 <div>
-                    <label style="color:#94a3b8;font-size:0.875rem;margin-bottom:4px;display:block;">规则名称</label>
+                    <label style="color:#6e6e73;font-size:0.875rem;margin-bottom:4px;display:block;">规则名称</label>
                     <input type="text" id="alert-name" class="config-input" placeholder="例如：留存率预警">
                 </div>
                 
                 <div>
-                    <label style="color:#94a3b8;font-size:0.875rem;margin-bottom:4px;display:block;">产品</label>
+                    <label style="color:#6e6e73;font-size:0.875rem;margin-bottom:4px;display:block;">产品</label>
                     <select id="alert-product" class="config-input">
                         <option value="">所有产品</option>
                     </select>
                 </div>
                 
                 <div>
-                    <label style="color:#94a3b8;font-size:0.875rem;margin-bottom:4px;display:block;">指标</label>
+                    <label style="color:#6e6e73;font-size:0.875rem;margin-bottom:4px;display:block;">指标</label>
                     <select id="alert-metric" class="config-input">
                         <option value="抓取评论数">评论量</option>
                         <option value="样本好评率">好评率</option>
@@ -1601,7 +1601,7 @@
                 
                 <div style="display:flex;gap:10px;">
                     <div style="flex:1;">
-                        <label style="color:#94a3b8;font-size:0.875rem;margin-bottom:4px;display:block;">条件</label>
+                        <label style="color:#6e6e73;font-size:0.875rem;margin-bottom:4px;display:block;">条件</label>
                         <select id="alert-operator" class="config-input">
                             <option value=">">大于</option>
                             <option value="<">小于</option>
@@ -1610,13 +1610,13 @@
                         </select>
                     </div>
                     <div style="flex:1;">
-                        <label style="color:#94a3b8;font-size:0.875rem;margin-bottom:4px;display:block;">阈值</label>
+                        <label style="color:#6e6e73;font-size:0.875rem;margin-bottom:4px;display:block;">阈值</label>
                         <input type="number" id="alert-threshold" class="config-input" placeholder="阈值">
                     </div>
                 </div>
                 
                 <div>
-                    <label style="color:#94a3b8;font-size:0.875rem;margin-bottom:4px;display:block;">通知邮箱</label>
+                    <label style="color:#6e6e73;font-size:0.875rem;margin-bottom:4px;display:block;">通知邮箱</label>
                     <input type="email" id="alert-email" class="config-input" placeholder="your@email.com">
                 </div>
                 
@@ -1752,7 +1752,7 @@
                 
                 <div class="section" id="report-preview-section" style="display: none;">
                     <h3 class="section-title">👁️ 报告预览</h3>
-                    <div id="report-preview" style="background: white; color: #1e293b; padding: 20px; border-radius: 8px; max-height: 400px; overflow-y: auto;"></div>
+                    <div id="report-preview" style="background: white; color: #1d1d1f; padding: 20px; border-radius: 8px; max-height: 400px; overflow-y: auto;"></div>
                     
                     <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.1);">
                         <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; color: #1d1d1f;">📥 导出格式</h4>
@@ -1781,7 +1781,7 @@
         let currentChartMetric = '下载量';
         
         const productColors = {
-            'game_a': '#38bdf8',
+            'game_a': '#0071e3',
             'game_b': '#22c55e',
             'game_c': '#f59e0b'
         };
@@ -2262,8 +2262,8 @@
                         : '请先 <a href="/guide">分析向导</a> 拉取数据，返回看板后点击「应用筛选」。';
                     kpiGrid.innerHTML = `
                         <div class="kpi-card" style="grid-column: 1 / -1; text-align: center; padding: 28px;">
-                            <div style="font-size: 1rem; color: #64748b; margin-bottom: 8px;">${hasRaw ? '筛选条件下暂无可见数据' : '当前暂无指标数据'}</div>
-                            <div style="font-size: 0.875rem; color: #94a3b8; margin-bottom: 12px;">${hint}</div>
+                            <div style="font-size: 1rem; color: #6e6e73; margin-bottom: 8px;">${hasRaw ? '筛选条件下暂无可见数据' : '当前暂无指标数据'}</div>
+                            <div style="font-size: 0.875rem; color: #6e6e73; margin-bottom: 12px;">${hint}</div>
                             ${hasRaw ? '<button class="btn btn-primary" type="button" onclick="resetFilters()">↻ 重置筛选并刷新</button>' : ''}
                         </div>`;
                 }
@@ -2415,7 +2415,7 @@
                 html += `
                     <div class="alert-item ${alert.type}">
                         <strong>${icon} ${escapeHtml(alert.name)}：${escapeHtml(alert.title)}</strong>
-                        <div style="margin-top:6px;font-size:0.85rem;color:#94a3b8;">${escapeHtml(alert.desc)}</div>
+                        <div style="margin-top:6px;font-size:0.85rem;color:#6e6e73;">${escapeHtml(alert.desc)}</div>
                     </div>
                 `;
             });
@@ -2423,13 +2423,13 @@
             if (!html) {
                 html = `<div class="alert-item yellow">
                     <strong>📋 暂无已选游戏</strong>
-                    <div style="margin-top:6px;font-size:0.85rem;color:#94a3b8;">请在顶部「产品选择」中勾选要分析的游戏</div>
+                    <div style="margin-top:6px;font-size:0.85rem;color:#6e6e73;">请在顶部「产品选择」中勾选要分析的游戏</div>
                 </div>`;
             } else if (alertIds.length === 1) {
                 html += `
                     <div class="alert-item yellow">
                         <strong>🎯 趋势提示</strong>
-                        <div style="margin-top:6px;font-size:0.85rem;color:#94a3b8;">可再选 1–2 款对标游戏做并排对比</div>
+                        <div style="margin-top:6px;font-size:0.85rem;color:#6e6e73;">可再选 1–2 款对标游戏做并排对比</div>
                     </div>
                 `;
             }
@@ -2457,7 +2457,7 @@
             const channels = getChannelsFromMetrics(viewMetrics);
             const aliases = CHART_METRIC_ALIASES[currentChartMetric] || CHART_METRIC_ALIASES['下载量'];
             const isPercent = currentChartMetric === '留存率';
-            const colors = ['#06b6d4', '#8b5cf6', '#22c55e', '#f59e0b', '#ef4444'];
+            const colors = ['#0071e3', '#5e5ce6', '#34c759', '#ff9f0a', '#ff3b30'];
 
             const activeProducts = (selectedProducts && selectedProducts.length)
                 ? selectedProducts
@@ -2502,7 +2502,7 @@
                             display: true,
                             position: 'top',
                             labels: {
-                                color: '#94a3b8',
+                                color: '#6e6e73',
                                 font: { size: 12, weight: '500' },
                                 padding: 20,
                                 usePointStyle: true,
@@ -2512,7 +2512,7 @@
                         tooltip: {
                             backgroundColor: 'rgba(15, 23, 42, 0.95)',
                             titleColor: '#f1f5f9',
-                            bodyColor: '#94a3b8',
+                            bodyColor: '#a1a1a6',
                             borderColor: 'rgba(255, 255, 255, 0.1)',
                             borderWidth: 1,
                             padding: 14,
@@ -2535,14 +2535,14 @@
                             beginAtZero: true,
                             max: currentChartMetric === '留存率' ? 100 : undefined,
                             ticks: {
-                                color: '#64748b',
+                                color: '#6e6e73',
                                 font: { size: 11 },
                                 callback: yAxisCallback
                             },
                             grid: { color: 'rgba(255, 255, 255, 0.03)' }
                         },
                         x: {
-                            ticks: { color: '#64748b', font: { size: 11 } },
+                            ticks: { color: '#6e6e73', font: { size: 11 } },
                             grid: { display: false }
                         }
                     }
@@ -2702,8 +2702,8 @@
                         <span class="dashboard-product-summary-hint">与看板顶部产品筛选保持一致；如需更改请关闭后调整筛选区。</span>
                     </div>
                     ${llmWarn}
-                    <div style="background: rgba(139, 92, 246, 0.12); border-radius: 16px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #8b5cf6;">
-                        <h4 style="color: #8b5cf6; font-size: 0.9375rem; font-weight: 600; margin-bottom: 8px;">📌 核心摘要</h4>
+                    <div style="background: rgba(94, 92, 230, 0.12); border-radius: 16px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #5e5ce6;">
+                        <h4 style="color: #5e5ce6; font-size: 0.9375rem; font-weight: 600; margin-bottom: 8px;">📌 核心摘要</h4>
                         <p style="color: #1d1d1f; font-size: 0.9375rem; line-height: 1.6;">${escapeHtml(summary)}</p>
                     </div>
                     ${bodyHtml}
@@ -3152,7 +3152,7 @@ ${data.summary || ''}
         function renderAlerts(alerts) {
             const list = document.getElementById('config-alerts-list');
             if (!alerts || alerts.length === 0) {
-                list.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:12px;">暂无预警规则</div>';
+                list.innerHTML = '<div style="color:#6e6e73;text-align:center;padding:12px;">暂无预警规则</div>';
                 return;
             }
             
@@ -3160,10 +3160,10 @@ ${data.summary || ''}
                 <div class="config-tag" style="justify-content:space-between;margin-bottom:8px;">
                     <div>
                         <div style="font-weight:600;">${alert.name}</div>
-                        <div style="font-size:0.75rem;color:#94a3b8;">${alert.metric} ${alert.operator} ${alert.threshold}</div>
+                        <div style="font-size:0.75rem;color:#6e6e73;">${alert.metric} ${alert.operator} ${alert.threshold}</div>
                     </div>
                     <div style="display:flex;gap:6px;">
-                        <button onclick="editAlert(${alert.id})" style="background:transparent;border:none;color:#06b6d4;cursor:pointer;">✏️</button>
+                        <button onclick="editAlert(${alert.id})" style="background:transparent;border:none;color:#0071e3;cursor:pointer;">✏️</button>
                         <button onclick="deleteAlert(${alert.id})" style="background:transparent;border:none;color:#ef4444;cursor:pointer;">🗑️</button>
                     </div>
                 </div>
@@ -3287,7 +3287,7 @@ ${data.summary || ''}
             
             const token = getToken();
             const list = document.getElementById('new-products-list');
-            list.innerHTML = '<div style="color:#64748b;padding:20px;text-align:center;">⏳ 正在从平台采集新品...</div>';
+            list.innerHTML = '<div style="color:#6e6e73;padding:20px;text-align:center;">⏳ 正在从平台采集新品...</div>';
             try {
                 const response = await authFetch(`/api/discover_new`);
                 if (response.status === 401) {
@@ -3309,7 +3309,7 @@ ${data.summary || ''}
         function renderNewProducts(products) {
             const list = document.getElementById('new-products-list');
             if (!products || products.length === 0) {
-                list.innerHTML = '<div style="color:#64748b;padding:20px;">暂无新品</div>';
+                list.innerHTML = '<div style="color:#6e6e73;padding:20px;">暂无新品</div>';
                 return;
             }
             list.innerHTML = products.map(p => `
@@ -3317,7 +3317,7 @@ ${data.summary || ''}
                     <div class="name">🎮 ${p.name}</div>
                     <div>
                         <span class="status ${p.status}">${p.status === 'upcoming' ? '即将上线' : p.status === 'testing' ? '测试中' : '开发中'}</span>
-                        <span style="font-size:0.8rem;color:#64748b;">预计 ${p.targetDate}</span>
+                        <span style="font-size:0.8rem;color:#6e6e73;">预计 ${p.targetDate}</span>
                     </div>
                     <div class="progress-label">完成度: ${p.progress}%</div>
                     <div class="progress-bar"><div class="progress-fill" style="width:${p.progress}%"></div></div>
@@ -3390,7 +3390,7 @@ ${data.summary || ''}
             const container = document.getElementById('ai-chat-messages');
             container.innerHTML = messages.map(m => `
                 <div style="display:flex;flex-direction:column;${m.role === 'user' ? 'align-items:flex-end' : 'align-items:flex-start'};">
-                    <div style="max-width:80%;padding:12px 16px;border-radius:16px;${m.role === 'user' ? 'background:linear-gradient(135deg, #06b6d4, #0891b2);color:white;border-bottom-right-radius:4px;' : 'background:var(--bg-input);color:var(--text-primary);border-bottom-left-radius:4px;'}">
+                    <div style="max-width:80%;padding:12px 16px;border-radius:16px;${m.role === 'user' ? 'background:linear-gradient(135deg, #0071e3, #0051a2);color:white;border-bottom-right-radius:4px;' : 'background:var(--bg-input);color:var(--text-primary);border-bottom-left-radius:4px;'}">
                         ${m.content.replace(/\n/g, '<br>')}
                     </div>
                 </div>
@@ -3413,7 +3413,7 @@ ${data.summary || ''}
             const container = document.getElementById('ai-chat-messages');
             container.innerHTML += `
                 <div style="display:flex;flex-direction:column;align-items:flex-end;">
-                    <div style="max-width:80%;padding:12px 16px;border-radius:16px;background:linear-gradient(135deg, #06b6d4, #0891b2);color:white;border-bottom-right-radius:4px;">
+                    <div style="max-width:80%;padding:12px 16px;border-radius:16px;background:linear-gradient(135deg, #0071e3, #0051a2);color:white;border-bottom-right-radius:4px;">
                         ${userMsg}
                     </div>
                 </div>
@@ -3537,7 +3537,7 @@ ${data.summary || ''}
     
     <div id="chat-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:10000;justify-content:center;align-items:center;">
         <div style="background:var(--bg-card);border-radius:16px;width:90%;max-width:700px;height:80%;max-height:600px;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border-color);">
-            <div style="padding:16px 20px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg, #06b6d4, #0891b2);">
+            <div style="padding:16px 20px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg, #0071e3, #0051a2);">
                 <div>
                     <h3 style="color:white;margin:0;font-size:1.1rem;">💬 AI 对话助手</h3>
                     <p style="color:rgba(255,255,255,0.8);margin:4px 0 0;font-size:0.8rem;" id="chat-context"></p>
@@ -3548,7 +3548,7 @@ ${data.summary || ''}
             </div>
             <div style="padding:16px 20px;border-top:1px solid var(--border-color);display:flex;gap:12px;">
                 <input type="text" id="ai-chat-input" placeholder="输入您的问题..." style="flex:1;padding:12px 16px;border-radius:10px;border:1px solid var(--border-color);background:var(--bg-input);color:var(--text-primary);font-size:0.95rem;" onkeydown="if(event.key==='Enter'){event.preventDefault();sendChatMessage();}">
-                <button onclick="sendChatMessage()" style="padding:12px 24px;background:linear-gradient(135deg, #06b6d4, #0891b2);border:none;color:white;border-radius:10px;cursor:pointer;font-weight:500;white-space:nowrap;">发送</button>
+                <button onclick="sendChatMessage()" style="padding:12px 24px;background:linear-gradient(135deg, #0071e3, #0051a2);border:none;color:white;border-radius:10px;cursor:pointer;font-weight:500;white-space:nowrap;">发送</button>
             </div>
         </div>
     </div>

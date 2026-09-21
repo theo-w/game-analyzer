@@ -10,9 +10,9 @@
 .scene-tab {
     padding: 10px 16px;
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: #1a2332;
-    color: #e7ecf3;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: #ffffff;
+    color: #1d1d1f;
     cursor: pointer;
     font-size: 0.875rem;
 }
@@ -32,8 +32,8 @@
 }
 
 .sr-panel {
-    background: #1a2332;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 14px;
     padding: 20px;
     margin-top: 16px;
@@ -53,10 +53,10 @@
 .delivery-step {
     flex: 1 1 140px;
     font-size: 0.8rem;
-    color: #94a3b8;
+    color: #6e6e73;
     padding: 8px 10px;
     border-radius: 8px;
-    border: 1px dashed rgba(255, 255, 255, 0.12);
+    border: 1px dashed rgba(0, 0, 0, 0.12);
 }
 
 .delivery-step.done {
@@ -78,7 +78,7 @@
     border-radius: 8px;
     background: rgba(0, 0, 0, 0.25);
     font-size: 0.8rem;
-    color: #94a3b8;
+    color: #6e6e73;
     word-break: break-all;
     display: none;
 }
@@ -92,9 +92,9 @@
 }
 
 .sr-btn {
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: #243044;
-    color: #e7ecf3;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: #eef1f5;
+    color: #1d1d1f;
     padding: 8px 14px;
     border-radius: 8px;
     cursor: pointer;
@@ -113,7 +113,7 @@
 
 .sr-status {
     font-size: 0.8rem;
-    color: #94a3b8;
+    color: #6e6e73;
 }
 
 .sr-result-head {
@@ -137,7 +137,7 @@
 
 .sr-badge.rule {
     background: rgba(148, 163, 184, 0.15);
-    color: #94a3b8;
+    color: #6e6e73;
 }
 
 .sr-badge.warn {
@@ -177,7 +177,7 @@
 
 .sr-section p {
     font-size: 0.85rem;
-    color: #94a3b8;
+    color: #6e6e73;
     line-height: 1.55;
     margin: 0;
 }
@@ -194,8 +194,8 @@
 }
 
 .bd-inline-card {
-    background: #1a2332;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 12px;
     padding: 16px;
 }
@@ -218,16 +218,16 @@
 }
 
 .bd-field p {
-    color: #94a3b8;
+    color: #6e6e73;
     line-height: 1.5;
     margin: 0;
 }
 
 .sr-dim-scores { margin: 16px 0; overflow-x: auto; }
-.sr-dim-scores h4 { font-size: 0.9rem; margin-bottom: 8px; color: #94a3b8; }
+.sr-dim-scores h4 { font-size: 0.9rem; margin-bottom: 8px; color: #6e6e73; }
 .sr-score-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
 .sr-score-table th, .sr-score-table td {
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     padding: 8px 10px;
     text-align: center;
 }

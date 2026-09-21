@@ -6,16 +6,17 @@
     <title>导入 Owner 指标</title>
     <script src="/static/js/auth-token.js"></script>
     <script src="/static/js/data-provenance.js"></script>
+    <link rel="stylesheet" href="/static/css/theme.css">
     <style>
-        :root { --bg:#0f1419; --panel:#1a2332; --text:#e7ecf3; --muted:#94a3b8; --accent:#06b6d4; --border:rgba(255,255,255,0.08); }
+        :root { --bg:#f5f5f7; --panel:#ffffff; --text:#1d1d1f; --muted:#6e6e73; --accent:#0071e3; --border:rgba(0,0,0,0.08); }
         body { font-family:-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); margin:0; min-height:100vh; }
         .topbar { display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid var(--border); }
         .layout { max-width:720px; margin:0 auto; padding:24px; }
         .card { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:16px; }
         .btn { border:1px solid var(--border); background:var(--panel); color:var(--text); padding:10px 16px; border-radius:8px; cursor:pointer; text-decoration:none; display:inline-block; }
-        .btn-primary { background:linear-gradient(135deg,var(--accent),#0891b2); border:none; font-weight:600; }
+        .btn-primary { background:linear-gradient(135deg,var(--accent),#0051a2); border:none; font-weight:600; }
         .hint { color:var(--muted); font-size:0.85rem; line-height:1.5; margin-bottom:12px; }
-        pre { background:#243044; padding:12px; border-radius:8px; overflow:auto; font-size:0.8rem; }
+        pre { background:#eef1f5; padding:12px; border-radius:8px; overflow:auto; font-size:0.8rem; }
         #status { margin-top:12px; font-size:0.85rem; color:var(--muted); }
     </style>
 </head>
@@ -29,7 +30,7 @@
         <div class="card">
             <h1 style="font-size:1.2rem;margin-bottom:8px;">上传 CSV 指标数据</h1>
             <p class="hint">导入后系统将优先使用您的 DAU、留存、收入等指标（覆盖 Mock）。Steam 口碑仍来自公开评论抓取。必填列：<code>product</code>、<code>metric</code>、<code>值</code>（或 value）。</p>
-            <p class="hint" style="margin-top:10px;padding:12px;background:#243044;border-radius:8px;border-left:3px solid var(--accent);">
+            <p class="hint" style="margin-top:10px;padding:12px;background:#eef1f5;border-radius:8px;border-left:3px solid var(--accent);">
                 <strong>路径 / 漏斗：</strong>若 CSV 含 <code>installs</code>、<code>retention_1d/7d/30d</code>，或指标名含「下载 / 注册 / 教程 / 战斗 / 付费」，看板「高级分析」中的漏斗将自动使用<strong>经营漏斗</strong>（非评论样本推导）。
                 仅有商店评论抓取时，无法还原「启动 → 登录 → 教程」等客户端埋点漏斗。详见 <a href="/trust" style="color:var(--accent);">数据说明</a>。
             </p>
