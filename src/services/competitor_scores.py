@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Sequence
 
-from database import db_manager
+from src.database import db_manager
 
 COMPETITOR_DIMENSIONS: List[Dict[str, str]] = [
     {"key": "gameplay", "title": "核心玩法"},

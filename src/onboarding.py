@@ -6,12 +6,7 @@ import json
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 import os
-import sys
-
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import db_manager
-
+from src.database import db_manager
 
 # 引导步骤配置
 ONBOARDING_STEPS = [
@@ -43,17 +38,6 @@ ONBOARDING_STEPS = [
         'type': 'highlight',
         'target_selector': '.filters-bar',
         'highlight_color': '#34c759',
-        'next_step': 'step-4',
-        'show_skip': True
-    },
-    {
-        'id': 'step-4',
-        'title': '高级分析',
-        'description': '点击高级分析按钮，进入专业分析模块，包含漏斗分析、群组分析等高级功能。',
-        'icon': '📈',
-        'type': 'highlight',
-        'target_selector': '.analytics-btn',
-        'highlight_color': '#ff9500',
         'next_step': 'step-5',
         'show_skip': True
     },
@@ -79,7 +63,6 @@ ONBOARDING_STEPS = [
     }
 ]
 
-
 # 功能教程
 FEATURE_TUTORIALS = [
     {
@@ -97,48 +80,6 @@ FEATURE_TUTORIALS = [
         'duration': '3分钟'
     },
     {
-        'id': 'tutorial-funnel',
-        'name': '漏斗分析教程',
-        'description': '深入了解用户转化漏斗',
-        'icon': '🔻',
-        'category': 'analytics',
-        'steps': [
-            {'title': '选择漏斗', 'description': '选择要分析的转化漏斗'},
-            {'title': '查看转化', 'description': '分析各步骤的转化率'},
-            {'title': '对比分析', 'description': '对比不同产品的转化情况'},
-            {'title': '获取建议', 'description': '查看智能优化建议'}
-        ],
-        'duration': '5分钟'
-    },
-    {
-        'id': 'tutorial-cohort',
-        'name': '群组分析教程',
-        'description': '分析用户留存和生命周期',
-        'icon': '👥',
-        'category': 'analytics',
-        'steps': [
-            {'title': '选择群组', 'description': '选择时间范围和分组方式'},
-            {'title': '查看留存', 'description': '分析不同群组的留存曲线'},
-            {'title': '对比群组', 'description': '对比多个群组的表现'},
-            {'title': '健康评分', 'description': '查看群组健康度评分'}
-        ],
-        'duration': '4分钟'
-    },
-    {
-        'id': 'tutorial-abtest',
-        'name': 'AB测试教程',
-        'description': '设计和分析实验',
-        'icon': '🧪',
-        'category': 'ab-test',
-        'steps': [
-            {'title': '创建实验', 'description': '设置实验名称和目标'},
-            {'title': '添加变体', 'description': '定义不同的实验变体'},
-            {'title': '配置受众', 'description': '设置目标用户群体'},
-            {'title': '查看结果', 'description': '分析实验数据和统计显著性'}
-        ],
-        'duration': '6分钟'
-    },
-    {
         'id': 'tutorial-alerts',
         'name': '告警设置教程',
         'description': '配置智能告警规则',
@@ -153,7 +94,6 @@ FEATURE_TUTORIALS = [
         'duration': '3分钟'
     }
 ]
-
 
 class OnboardingManager:
     """Onboarding引导管理器"""
@@ -262,7 +202,6 @@ class OnboardingManager:
         ''', (user_id,))
         return [r['tutorial_id'] for r in results]
 
-
 def init_onboarding_tables():
     """初始化引导相关表"""
     with db_manager.get_connection() as conn:
@@ -297,13 +236,11 @@ def init_onboarding_tables():
         
         conn.commit()
 
-
 # 初始化表
 init_onboarding_tables()
 
 # 全局实例
 onboarding_manager = OnboardingManager()
-
 
 def get_onboarding_manager() -> OnboardingManager:
     """获取Onboarding引导管理器"""

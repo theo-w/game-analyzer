@@ -6,12 +6,7 @@ import os
 import json
 from datetime import datetime
 from typing import Optional, Dict, Any, List
-import sys
-
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import db_manager
-
+from src.database import db_manager
 
 class AIChatbot:
     """AI智能客服"""
@@ -143,7 +138,6 @@ class AIChatbot:
 
         text = self._finalize_response(chat_id, username, message, response)
         return {"reply": text, "ai_replied": True, "reason": "auto"}
-
 
 class AgentConsole:
     """人工客服控制台"""
@@ -429,7 +423,6 @@ class AgentConsole:
             (agent_username or "",),
         )
 
-
 class KnowledgeBase:
     """知识库管理器"""
     
@@ -647,7 +640,6 @@ class KnowledgeBase:
         """获取热门文章"""
         return sorted(self.articles, key=lambda x: x['views'], reverse=True)[:limit]
 
-
 class TicketSystem:
     """工单系统"""
     
@@ -806,7 +798,6 @@ class TicketSystem:
             'open_count': open_count['count'] if open_count else 0
         }
 
-
 class LiveChat:
     """在线客服系统"""
     
@@ -928,7 +919,6 @@ class LiveChat:
             WHERE status = 'active' 
             ORDER BY created_at ASC
         ''')
-
 
 # 全局实例
 knowledge_base = KnowledgeBase()

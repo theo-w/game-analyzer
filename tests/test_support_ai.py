@@ -1,12 +1,7 @@
 """Support chatbot keyword and LLM helper tests."""
-
-import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-from support import AIChatbot
-
+from src.support import AIChatbot
 
 def test_capability_question_not_default_template():
     bot = AIChatbot()

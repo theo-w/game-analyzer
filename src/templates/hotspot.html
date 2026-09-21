@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>行业热点文章存档</title>
     <link rel="stylesheet" href="/static/css/analysis-guide.css">
+    <link rel="stylesheet" href="/static/css/app-nav.css">
     <script src="/static/js/auth-token.js"></script>
-    <script src="/static/js/app-nav.js" defer></script>
+    <script src="/static/js/app-nav.js"></script>
     <script src="/static/js/markdown-preview.js"></script>
+    <link rel="stylesheet" href="/static/css/theme.css">
     <style>
         :root {
-            --bg: #0f1419; --panel: #1a2332; --text: #e7ecf3; --muted: #94a3b8;
-            --accent: #f59e0b; --border: rgba(255,255,255,0.08);
+            --bg: #f5f5f7; --panel: #ffffff; --text: #1d1d1f; --muted: #6e6e73;
+            --accent: #f59e0b; --border: rgba(0,0,0,0.08);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
@@ -20,11 +22,11 @@
         .hero h1 { font-size: 1.45rem; margin-bottom: 8px; }
         .hero p { color: var(--muted); line-height: 1.6; font-size: 0.92rem; }
         .archive-notice {
-            border: 1px solid rgba(245,158,11,0.35); border-radius: 14px;
-            background: rgba(245,158,11,0.07); padding: 16px 18px; margin-bottom: 20px;
+            border: 1px solid rgba(255,159,10,0.35); border-radius: 14px;
+            background: rgba(255,159,10,0.07); padding: 16px 18px; margin-bottom: 20px;
             font-size: 0.86rem; line-height: 1.75;
         }
-        .archive-notice strong { color: #fcd34d; }
+        .archive-notice strong { color: #b45309; }
         .archive-notice p { margin-bottom: 6px; }
         .archive-notice p:last-child { margin-bottom: 0; }
         .grid { display: grid; grid-template-columns: 340px 1fr; gap: 20px; align-items: start; }
@@ -36,14 +38,14 @@
             border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; cursor: pointer;
             transition: border-color 0.15s, background 0.15s;
         }
-        .article-card:hover { border-color: rgba(245,158,11,0.45); }
-        .article-card.active { border-color: var(--accent); background: rgba(245,158,11,0.1); }
+        .article-card:hover { border-color: rgba(255,159,10,0.45); }
+        .article-card.active { border-color: var(--accent); background: rgba(255,159,10,0.1); }
         .article-card h3 { font-size: 0.88rem; line-height: 1.45; margin-bottom: 6px; }
         .article-meta { font-size: 0.75rem; color: var(--muted); }
         .status { font-size: 0.82rem; color: var(--muted); min-height: 1.2em; }
         .article-shell { min-height: 360px; }
         .article-shell .md-preview { line-height: 1.7; font-size: 0.95rem; }
-        .article-shell .md-preview h2 { margin: 1.2em 0 0.5em; font-size: 1.15rem; color: #fcd34d; }
+        .article-shell .md-preview h2 { margin: 1.2em 0 0.5em; font-size: 1.15rem; color: #b45309; }
         .article-shell .md-preview h3 { margin: 1em 0 0.4em; font-size: 1rem; }
         .article-shell .md-preview blockquote.lead { border-left: 3px solid var(--accent); padding-left: 12px; color: var(--muted); margin-bottom: 1em; }
         .article-source { font-size: 0.78rem; color: var(--muted); margin-bottom: 12px; }
@@ -51,7 +53,13 @@
     </style>
 </head>
 <body>
-    <div id="app-nav-mount"></div>
+    <header class="app-topbar">
+        <div class="app-topbar-left">
+            <a class="app-topbar-logo" href="/">🎮</a>
+            <div id="app-nav-mount"></div>
+        </div>
+        <div class="app-topbar-right"></div>
+    </header>
     <div class="page">
         <div class="hero">
             <h1>📚 行业热点文章存档</h1>
@@ -168,8 +176,7 @@
             }
 
             if (window.AppNav) {
-                document.getElementById("app-nav-mount").innerHTML = window.AppNav.render("hotspot");
-                window.AppNav.bind();
+                AppNav.mount("#app-nav-mount");
             }
             if (!token) {
                 location.href = "/login?redirect=" + encodeURIComponent("/hotspot");

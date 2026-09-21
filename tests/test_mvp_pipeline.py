@@ -1,10 +1,5 @@
 import os
-import sys
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
 from src.mvp_pipeline import analyze_actual_steam_data, run_mvp_pipeline, validate_analysis
-
 
 class FakeSteamCrawler:
     def crawl(self, app_ids, max_reviews_per_app, review_days=0, **kwargs):
@@ -40,7 +35,6 @@ class FakeSteamCrawler:
             "errors": [],
         }
 
-
 def test_analyze_actual_steam_data_counts_are_deterministic():
     comments = FakeSteamCrawler().crawl(["10"], 2)["comments"]
     metrics = FakeSteamCrawler().crawl(["10"], 2)["metrics"]
@@ -58,7 +52,6 @@ def test_analyze_actual_steam_data_counts_are_deterministic():
     assert analysis["ai_strategy"]["user_needs"]
     assert analysis["ai_strategy"]["prioritized_actions"]
 
-
 def test_validate_analysis_recomputes_counts_from_source_rows():
     dataset = FakeSteamCrawler().crawl(["10"], 2)
     analysis = analyze_actual_steam_data(dataset["comments"], dataset["metrics"])
@@ -68,7 +61,6 @@ def test_validate_analysis_recomputes_counts_from_source_rows():
     assert validation["passed"] is True
     assert all(check["passed"] for check in validation["checks"])
     assert any(check["name"] == "ai_strategy_grounded" for check in validation["checks"])
-
 
 def test_run_mvp_pipeline_writes_artifacts(tmp_path):
     result = run_mvp_pipeline(

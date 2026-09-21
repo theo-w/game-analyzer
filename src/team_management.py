@@ -4,13 +4,9 @@
 """
 from datetime import datetime
 from typing import List, Dict, Optional
-import sys
 import os
 
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import get_db_connection
-
+from src.database import get_db_connection
 
 def _fetchone_dict(cursor) -> Optional[Dict]:
     row = cursor.fetchone()
@@ -19,11 +15,9 @@ def _fetchone_dict(cursor) -> Optional[Dict]:
     columns = [col[0] for col in cursor.description]
     return dict(zip(columns, row))
 
-
 def _fetchall_dicts(cursor) -> List[Dict]:
     columns = [col[0] for col in cursor.description]
     return [dict(zip(columns, row)) for row in cursor.fetchall()]
-
 
 class TeamRepository:
     """团队仓库类"""
@@ -158,7 +152,6 @@ class TeamRepository:
             row = _fetchone_dict(cursor)
             return row.get('role') if row else None
 
-
 class DashboardShareRepository:
     """仪表盘共享仓库类"""
     
@@ -240,7 +233,6 @@ class DashboardShareRepository:
             ''', (username,))
             return _fetchall_dicts(cursor)
 
-
 def check_permission(user_role: str, required_role: str) -> bool:
     """
     检查权限
@@ -257,7 +249,6 @@ def check_permission(user_role: str, required_role: str) -> bool:
     required_level = role_levels.get(required_role, 0)
     
     return user_level >= required_level
-
 
 def init_team_tables():
     """初始化团队协作相关的数据库表"""

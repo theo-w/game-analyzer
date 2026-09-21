@@ -9,7 +9,7 @@ from typing import Optional
 from fastapi import APIRouter, File, HTTPException, Query, Request, UploadFile
 from fastapi.responses import StreamingResponse
 
-from database import ImportedDataRepository, OperationLogRepository
+from src.database import ImportedDataRepository, OperationLogRepository
 from src.import_utils import IMPORT_TEMPLATES, parse_import_file, validate_import_records
 from src.web_common import get_current_user
 

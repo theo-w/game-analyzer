@@ -7,8 +7,8 @@ Multi-platform crawl pipeline: public reviews → normalized schema → analysis
 | Channel | CLI / API | Notes |
 |---------|-----------|-------|
 | Steam | `run_mvp.py --app-ids 730,570` | No API key; public store + reviews |
-| TapTap | `GET /api/mvp/taptap?app_ids=168332` | TapTap `webapiv2` + `X-UA` |
-| Google Play | `GET /api/mvp/google-play?app_ids=com.example.app` | `google-play-scraper` |
+| TapTap | 分析向导 `/guide`（平台选 TapTap） | TapTap `webapiv2` + `X-UA` |
+| Google Play | 分析向导 `/guide`（平台选 Google Play） | `google-play-scraper` |
 
 ## CLI (Steam batch)
 
@@ -26,14 +26,9 @@ python3 run_mvp.py --app-ids 730 --no-use-review-days --use-max-reviews --max-re
 ## FastAPI endpoints
 
 ```text
-GET /api/mvp/steam?app_ids=730,570&use_review_days=true&review_days=30
-GET /api/mvp/google-play?app_ids=com.example.app&market_country=us&use_max_reviews=true&max_reviews=1000
-GET /api/mvp/taptap?app_ids=168332&use_review_days=true&use_max_reviews=true&review_days=14&max_reviews=500
-GET /api/mvp/latest
-GET /mvp
+POST /api/wizard/run  {"app_ids": "730,570", "platform": "steam", "max_reviews": 200}
+GET  /guide           分析向导页（原 /mvp 已 301 重定向至此）
 ```
-
-UI: `/mvp` — per-channel re-crawl buttons + link to `/dashboard`.
 
 Crawl pacing (optional env):
 
@@ -62,5 +57,3 @@ When MVP artifacts exist, these APIs prefer real crawled data:
 - `GET /api/report` — rule-based analysis
 - `GET /api/ai_analysis` — grounded `ai_strategy` from MVP run
 - `GET /api/comments` and `GET /api/metrics` — `source: mvp_steam` / `mvp_multi`
-
-Demo-only advanced analytics endpoints include `"simulated": true` in responses.

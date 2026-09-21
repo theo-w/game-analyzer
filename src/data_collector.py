@@ -24,7 +24,7 @@ class DataCollector:
         self._load_default_config()
         
         try:
-            from database import DataSourceConfigRepository
+            from src.database import DataSourceConfigRepository
             configs = DataSourceConfigRepository.get_all()
             
             for config in configs:

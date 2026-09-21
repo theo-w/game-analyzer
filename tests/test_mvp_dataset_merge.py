@@ -1,12 +1,8 @@
 import json
 import os
-import sys
 import tempfile
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
 from src.services.mvp_dataset_merge import _strip_platform_products, merge_platform_dataset
-
 
 def test_strip_platform_products_replaces_only_matching_gp_rows():
     existing = {
@@ -28,7 +24,6 @@ def test_strip_platform_products_replaces_only_matching_gp_rows():
     assert [c["内容"] for c in stripped["comments"]] == ["keep-b", "steam"]
     assert [m["product"] for m in stripped["metrics"]] == ["com.b"]
     assert [g["package_id"] for g in stripped["games"]] == ["com.b"]
-
 
 def test_merge_platform_dataset_accumulates_google_play_batches():
     with tempfile.TemporaryDirectory() as tmp:

@@ -8,7 +8,7 @@ from typing import List, Optional
 from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import HTMLResponse
 
-from database import OperationLogRepository
+from src.database import OperationLogRepository
 from src.services.game_intel import (
     BUSINESS_MODELS,
     GENRE_PRESETS,

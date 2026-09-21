@@ -23,7 +23,9 @@ class _DemoCrawler:
         "1172470": "Apex Legends",
     }
 
-    def crawl(self, app_ids: List[str], max_reviews_per_app: int = 20):
+    def crawl(self, app_ids: List[str], max_reviews_per_app: int = 20, review_days=None, **kwargs):
+        # **kwargs: run_mvp_pipeline 会持续新增抓取参数(review_days 等),
+        # 离线 demo 数据与这些参数无关, 吞掉即可避免 TypeError
         comments: List[Dict[str, Any]] = []
         metrics: List[Dict[str, Any]] = []
         for pid in app_ids:
@@ -96,7 +98,7 @@ async def bootstrap_demo_pack(username: str = "demo", output_dir: str = None) ->
         crawler=crawler,
     )
     seed_default_library()
-    sync = sync_library_from_mvp(username)
+    sync = sync_library_from_mvp(username, output_dir=out)
     game_ids = [f"steam_{pid}" for pid in DEMO_APP_IDS[:2]]
 
     report = await generate_competitor_scenario_report(game_ids, username=username)

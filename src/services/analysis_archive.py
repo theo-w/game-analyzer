@@ -7,7 +7,7 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from database import db_manager
+from src.database import db_manager
 
 ARCHIVE_CATEGORIES = [
     "竞品分析",

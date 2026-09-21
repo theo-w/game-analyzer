@@ -23,14 +23,14 @@ def _api_error(exc: Exception, user_msg: str = "操作失败，请稍后重试")
 
 
 def _init_team_tables():
-    from team_management import init_team_tables
+    from src.team_management import init_team_tables
     init_team_tables()
 
 
 @router.get("/api/teams")
 async def get_user_teams(current_user: UserInDB = Depends(get_current_user)):
     try:
-        from team_management import TeamRepository
+        from src.team_management import TeamRepository
         _init_team_tables()
         teams = TeamRepository.get_user_teams(current_user.username)
         return {"success": True, "teams": teams, "total": len(teams)}
@@ -46,7 +46,7 @@ async def create_team(
     current_user: UserInDB = Depends(get_current_user),
 ):
     try:
-        from team_management import TeamRepository
+        from src.team_management import TeamRepository
         _init_team_tables()
 
         body = await request.json()
@@ -73,7 +73,7 @@ async def get_team_members(
     current_user: UserInDB = Depends(get_current_user),
 ):
     try:
-        from team_management import TeamRepository
+        from src.team_management import TeamRepository
         _init_team_tables()
 
         members = TeamRepository.get_team_members(team_id)
@@ -92,7 +92,7 @@ async def get_team_shared_archives(
     current_user: UserInDB = Depends(get_current_user),
 ):
     try:
-        from team_management import init_team_tables
+        from src.team_management import init_team_tables
         from src.services.team_archives import list_team_shared_archives
 
         init_team_tables()
@@ -108,7 +108,7 @@ async def add_team_member(
     current_user: UserInDB = Depends(get_current_user),
 ):
     try:
-        from team_management import TeamRepository
+        from src.team_management import TeamRepository
         _init_team_tables()
 
         role = TeamRepository.get_member_role(team_id, current_user.username)
@@ -135,7 +135,7 @@ async def remove_team_member(
     current_user: UserInDB = Depends(get_current_user),
 ):
     try:
-        from team_management import TeamRepository
+        from src.team_management import TeamRepository
         _init_team_tables()
 
         role = TeamRepository.get_member_role(team_id, current_user.username)

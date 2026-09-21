@@ -66,9 +66,9 @@ def test_no_nexus_branding():
 
 def test_topbar_links_use_urls_not_labels():
     html = _client().get("/game-negative-public-opinion-monitoring").text
-    # href 必须是 URL, 文字是标签
-    assert 'href="/game-public-opinion-ai-analysis">平台首页' in html
-    assert 'href="/ai-game-opinion-monitoring-system">AI 监测系统' in html
+    # 顶栏已统一为共享 AppNav：静态 HTML 需含挂载容器与脚本引用，链接 href 必须是 URL
+    assert 'id="app-nav-mount"' in html
+    assert '/static/js/app-nav.js' in html
     assert 'href="平台首页"' not in html
 
 

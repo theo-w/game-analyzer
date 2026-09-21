@@ -1,6 +1,4 @@
-import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Load local .env (KEY=VALUE) before reading any configuration.
 from src.env_loader import load_env_file  # noqa: E402
@@ -28,22 +26,20 @@ import hmac
 import hashlib
 from io import BytesIO
 
-from auth import (
+from src.auth import (
     SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES,
     Token, TokenData, User, UserInDB, PLANS,
     LLM_PROVIDERS, LLM_CONFIG,
-    verify_password, get_user, authenticate_user, create_access_token, get_password_hash
+    verify_password, create_access_token, get_password_hash
 )
-from database import (
+from src.database import (
     UserRepository, OperationLogRepository, LLMConfigRepository, ProductRepository, OrderRepository, AlertRepository, DashboardConfigRepository, SharedReportRepository, ImportedDataRepository, get_db_connection, config_manager
 )
-from report_generator import report_generator
+from src.report_generator import send_report_email
 from src.services.report_helpers import generate_html_period_report
-from ab_test_platform import ab_test_platform
-from data_collector import data_collector
-from report_scheduler import report_scheduler
-from cache import data_cache
-from mvp_pipeline import DEFAULT_OUTPUT_DIR, DEFAULT_STEAM_APP_IDS, run_mvp_pipeline
+from src.data_collector import data_collector
+from src.report_scheduler import report_scheduler
+from src.cache import data_cache
 from src.data_resolution import (
     get_user_comments_data,
     get_user_metrics_data,
@@ -72,7 +68,6 @@ from src.routers.conversation_router import router as conversation_router
 from src.routers.data_router import router as data_router
 from src.routers.import_router import router as import_router
 from src.routers.llm_router import router as llm_router
-from src.routers.mvp_router import router as mvp_router
 from src.routers.pages_router import router as pages_router
 from src.routers.payment_router import router as payment_router
 from src.routers.products_router import router as products_router
@@ -96,10 +91,9 @@ from src.services.report_helpers import (
 _alert_scheduler_stop: Optional[asyncio.Event] = None
 _alert_scheduler_task: Optional[asyncio.Task] = None
 
-
 async def _alert_scheduler_loop(stop_event: asyncio.Event) -> None:
     try:
-        from alert_scheduler import AlertScheduler
+        from src.alert_scheduler import AlertScheduler
 
         scheduler = AlertScheduler(check_interval=60)
         while not stop_event.is_set():
@@ -110,7 +104,6 @@ async def _alert_scheduler_loop(stop_event: asyncio.Event) -> None:
                 pass
     except Exception as exc:
         print(f"Alert scheduler stopped: {exc}")
-
 
 @asynccontextmanager
 async def app_lifespan(app: FastAPI):
@@ -183,13 +176,11 @@ async def app_lifespan(app: FastAPI):
             pass
     print("Alert scheduler background task stopped")
 
-
 app = FastAPI(
     title="游戏数据分析引擎",
     description="AI驱动的游戏商业智能分析平台",
     lifespan=app_lifespan,
 )
-app.include_router(mvp_router)
 app.include_router(health_router)
 app.include_router(commercial_router)
 app.include_router(agent_router)
@@ -227,7 +218,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.middleware("http")
 async def apply_limits_middleware(request: Request, call_next):
     return await limits_middleware(request, call_next)
@@ -242,38 +232,14 @@ async def add_security_headers(request: Request, call_next):
     response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     return response
 
-
 # Google Analytics (GA4 / gtag.js) 注入 —— 所有 HTML 页面自动埋点
 @app.middleware("http")
 async def google_analytics_middleware(request: Request, call_next):
     return await inject_google_analytics(request, call_next)
 
-
-# 不可用外部公开数据验证的功能统一下线(依赖内部埋点/经营数据)
-_UNVERIFIABLE_FEATURE_PREFIXES = ("/api/advanced", "/api/predictive", "/api/abtest")
-_UNVERIFIABLE_MESSAGE = (
-    "该功能依赖内部业务数据（埋点/经营数据），外部公开数据无法验证，已下线。"
-    "可验证能力：Steam/TapTap/Google Play 公开评论抓取、情感与主题分析、负面预警、热点追踪、跨平台聚合。"
-)
-
-
-@app.middleware("http")
-async def disable_unverifiable_features(request: Request, call_next):
-    if request.url.path.startswith(_UNVERIFIABLE_FEATURE_PREFIXES):
-        return JSONResponse(
-            status_code=410,
-            content={
-                "success": False,
-                "code": "feature_disabled",
-                "message": _UNVERIFIABLE_MESSAGE,
-            },
-        )
-    return await call_next(request)
-
 static_dir = os.path.join(BASE_DIR, "static")
 if os.path.exists(static_dir):
     app.mount("/static", StaticFiles(directory=static_dir), name="static")
-
 
 def load_data(file_path: str) -> Any:
     try:
@@ -373,7 +339,7 @@ async def get_data_source_config(token: Optional[str] = Query(None)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="只有管理员可以查看数据源配置")
     
-    from database import DataSourceConfigRepository
+    from src.database import DataSourceConfigRepository
     configs = DataSourceConfigRepository.get_all()
     
     return {"success": True, "configs": [mask_config_secrets(config) for config in configs]}
@@ -397,7 +363,7 @@ async def update_data_source_config(
     
     body = await request.json()
     
-    from database import DataSourceConfigRepository
+    from src.database import DataSourceConfigRepository
     success = DataSourceConfigRepository.create_or_update(platform, body)
     
     if success:
@@ -420,7 +386,7 @@ async def delete_data_source_config(
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="只有管理员可以删除数据源配置")
     
-    from database import DataSourceConfigRepository
+    from src.database import DataSourceConfigRepository
     success = DataSourceConfigRepository.delete(platform)
     
     if success:
@@ -947,7 +913,6 @@ def _period_report_html(username: str, report_type: str, product_ids: Optional[s
     products = [p.strip() for p in product_ids.split(",") if p.strip()] if product_ids else None
     return generate_html_period_report(report_type, metrics, products)
 
-
 def _archive_period_report(
     username: str,
     report_type: str,
@@ -974,7 +939,6 @@ def _archive_period_report(
         comments=filtered_comments,
         html_excerpt=report_html[:4000],
     )
-
 
 @app.get("/api/reports/daily")
 async def generate_daily_report(
@@ -1054,7 +1018,7 @@ async def send_report(
         else:
             return {"success": False, "message": "Invalid report type"}
         
-        result = report_generator.send_report_email(report_html, to_email, subject)
+        result = send_report_email(report_html, to_email, subject)
         return result
     except Exception as e:
         return {"success": False, "message": str(e)}
@@ -1074,184 +1038,6 @@ async def get_report_types(token: Optional[str] = Query(None)):
         ]
     }
 
-# A/B测试平台API
-@app.get("/api/abtest/experiments")
-async def list_ab_experiments(token: Optional[str] = Query(None)):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    experiments = ab_test_platform.list_experiments()
-    result = []
-    
-    for exp in experiments:
-        results = exp.get_results()
-        total_users = sum(r['total_users'] for r in results.values())
-        
-        result.append({
-            "experiment_id": exp.experiment_id,
-            "name": exp.name,
-            "description": exp.description,
-            "status": exp.status,
-            "variants": exp.variants,
-            "traffic_allocation": exp.traffic_allocation,
-            "start_date": exp.start_date,
-            "end_date": exp.end_date,
-            "total_users": total_users,
-            "created_at": exp.created_at
-        })
-    
-    return {"success": True, "experiments": result}
-
-@app.get("/api/abtest/experiments/{experiment_id}")
-async def get_ab_experiment(experiment_id: str, token: Optional[str] = Query(None)):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    exp = ab_test_platform.get_experiment(experiment_id)
-    if not exp:
-        return {"success": False, "message": "Experiment not found"}
-    
-    results = exp.get_results()
-    total_users = sum(r['total_users'] for r in results.values())
-    
-    return {
-        "success": True,
-        "experiment": {
-            "experiment_id": exp.experiment_id,
-            "name": exp.name,
-            "description": exp.description,
-            "status": exp.status,
-            "variants": exp.variants,
-            "traffic_allocation": exp.traffic_allocation,
-            "start_date": exp.start_date,
-            "end_date": exp.end_date,
-            "total_users": total_users,
-            "created_at": exp.created_at,
-            "results": results
-        }
-    }
-
-@app.post("/api/abtest/experiments")
-async def create_ab_experiment(
-    token: Optional[str] = Query(None),
-    name: str = Query(None),
-    description: str = Query(""),
-    traffic_allocation: float = Query(1.0)
-):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    if not name:
-        return {"success": False, "message": "Experiment name is required"}
-    
-    exp = ab_test_platform.create_experiment(
-        name=name,
-        description=description,
-        traffic_allocation=traffic_allocation
-    )
-    
-    return {
-        "success": True,
-        "experiment_id": exp.experiment_id,
-        "message": "Experiment created successfully"
-    }
-
-@app.put("/api/abtest/experiments/{experiment_id}")
-async def update_ab_experiment(
-    experiment_id: str,
-    token: Optional[str] = Query(None),
-    name: Optional[str] = Query(None),
-    description: Optional[str] = Query(None),
-    traffic_allocation: Optional[float] = Query(None),
-    end_date: Optional[str] = Query(None)
-):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    try:
-        kwargs = {}
-        if name: kwargs['name'] = name
-        if description: kwargs['description'] = description
-        if traffic_allocation is not None: kwargs['traffic_allocation'] = traffic_allocation
-        if end_date: kwargs['end_date'] = end_date
-        
-        exp = ab_test_platform.update_experiment(experiment_id, **kwargs)
-        
-        return {
-            "success": True,
-            "experiment_id": exp.experiment_id,
-            "message": "Experiment updated successfully"
-        }
-    except ValueError as e:
-        return {"success": False, "message": str(e)}
-
-@app.delete("/api/abtest/experiments/{experiment_id}")
-async def delete_ab_experiment(experiment_id: str, token: Optional[str] = Query(None)):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    ab_test_platform.delete_experiment(experiment_id)
-    return {"success": True, "message": "Experiment deleted successfully"}
-
-@app.get("/api/abtest/experiments/{experiment_id}/results")
-async def get_ab_experiment_results(experiment_id: str, token: Optional[str] = Query(None)):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    results = ab_test_platform.get_experiment_results(experiment_id)
-    
-    if "error" in results:
-        return {"success": False, "message": results["error"]}
-    
-    return {"success": True, "data": results}
-
-@app.post("/api/abtest/track")
-async def track_ab_test(
-    token: Optional[str] = Query(None),
-    experiment_id: str = Query(None),
-    user_id: str = Query(None)
-):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    if not experiment_id or not user_id:
-        return {"success": False, "message": "experiment_id and user_id are required"}
-    
-    try:
-        variant_id = ab_test_platform.track_user(experiment_id, user_id)
-        return {"success": True, "variant_id": variant_id}
-    except ValueError as e:
-        return {"success": False, "message": str(e)}
-
-@app.post("/api/abtest/convert")
-async def track_ab_conversion(
-    token: Optional[str] = Query(None),
-    experiment_id: str = Query(None),
-    user_id: str = Query(None),
-    variant_id: str = Query(None),
-    conversion_type: str = Query("default")
-):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    if not experiment_id or not user_id or not variant_id:
-        return {"success": False, "message": "experiment_id, user_id, and variant_id are required"}
-    
-    try:
-        ab_test_platform.track_conversion(experiment_id, user_id, variant_id, conversion_type)
-        return {"success": True, "message": "Conversion tracked successfully"}
-    except ValueError as e:
-        return {"success": False, "message": str(e)}
-
-
 @app.get("/api/dashboard/list")
 async def list_dashboards(token: Optional[str] = Query(None)):
     if not token:
@@ -1265,7 +1051,6 @@ async def list_dashboards(token: Optional[str] = Query(None)):
             d['layout'] = json.loads(d['layout'])
     
     return {"success": True, "dashboards": dashboards}
-
 
 @app.get("/api/dashboard/{dashboard_id}")
 async def get_dashboard(dashboard_id: int, token: Optional[str] = Query(None)):
@@ -1285,7 +1070,6 @@ async def get_dashboard(dashboard_id: int, token: Optional[str] = Query(None)):
         dashboard['layout'] = json.loads(dashboard['layout'])
     
     return {"success": True, "dashboard": dashboard}
-
 
 @app.post("/api/dashboard/save")
 async def save_dashboard(request: Request, token: Optional[str] = Query(None)):
@@ -1311,7 +1095,6 @@ async def save_dashboard(request: Request, token: Optional[str] = Query(None)):
         return {"success": True, "dashboard_id": dashboard_id}
     
     return {"success": False, "message": "保存失败"}
-
 
 @app.put("/api/dashboard/{dashboard_id}")
 async def update_dashboard(dashboard_id: int, request: Request, token: Optional[str] = Query(None)):
@@ -1340,7 +1123,6 @@ async def update_dashboard(dashboard_id: int, request: Request, token: Optional[
     
     return {"success": False, "message": "更新失败"}
 
-
 @app.delete("/api/dashboard/{dashboard_id}")
 async def delete_dashboard(dashboard_id: int, token: Optional[str] = Query(None)):
     if not token:
@@ -1362,7 +1144,6 @@ async def delete_dashboard(dashboard_id: int, token: Optional[str] = Query(None)
         return {"success": True}
     
     return {"success": False, "message": "删除失败"}
-
 
 @app.post("/api/report/share")
 async def share_report(request: Request, token: Optional[str] = Query(None)):
@@ -1408,7 +1189,6 @@ async def share_report(request: Request, token: Optional[str] = Query(None)):
     
     return {"success": False, "message": "分享失败"}
 
-
 @app.get("/api/report/shared/{share_token}")
 async def get_shared_report(share_token: str):
     report = SharedReportRepository.get_by_token(share_token)
@@ -1428,7 +1208,6 @@ async def get_shared_report(share_token: str):
         }
     }
 
-
 @app.get("/api/report/history")
 async def get_report_history(token: Optional[str] = Query(None)):
     if not token:
@@ -1443,7 +1222,6 @@ async def get_report_history(token: Optional[str] = Query(None)):
     
     return {"success": True, "reports": reports}
 
-
 # =========================================
 # 团队协作管理API
 # =========================================
@@ -1457,7 +1235,7 @@ async def get_user_teams(token: Optional[str] = Query(None)):
         current_user = await get_current_user(token)
         
         # 初始化团队表
-        from team_management import init_team_tables, TeamRepository
+        from src.team_management import init_team_tables, TeamRepository
         init_team_tables()
         
         # 获取用户所在的所有团队
@@ -1473,7 +1251,6 @@ async def get_user_teams(token: Optional[str] = Query(None)):
     except Exception as e:
         return {"success": False, "message": str(e)}
 
-
 @app.post("/api/teams")
 async def create_team(request: Request, token: Optional[str] = Query(None)):
     if not token:
@@ -1484,7 +1261,7 @@ async def create_team(request: Request, token: Optional[str] = Query(None)):
         body = await request.json()
         
         # 初始化团队表
-        from team_management import init_team_tables, TeamRepository
+        from src.team_management import init_team_tables, TeamRepository
         init_team_tables()
         
         # 创建团队
@@ -1513,7 +1290,6 @@ async def create_team(request: Request, token: Optional[str] = Query(None)):
     except Exception as e:
         return {"success": False, "message": str(e)}
 
-
 @app.get("/api/teams/{team_id}/members")
 async def get_team_members(team_id: int, token: Optional[str] = Query(None)):
     if not token:
@@ -1523,7 +1299,7 @@ async def get_team_members(team_id: int, token: Optional[str] = Query(None)):
         current_user = await get_current_user(token)
         
         # 初始化团队表
-        from team_management import init_team_tables, TeamRepository
+        from src.team_management import init_team_tables, TeamRepository
         init_team_tables()
         
         # 检查是否是团队成员
@@ -1543,21 +1319,19 @@ async def get_team_members(team_id: int, token: Optional[str] = Query(None)):
     except Exception as e:
         return {"success": False, "message": str(e)}
 
-
 @app.get("/api/teams/{team_id}/archives")
 async def get_team_shared_archives(team_id: int, token: Optional[str] = Query(None)):
     if not token:
         raise HTTPException(status_code=401, detail="Token required")
     try:
         current_user = await get_current_user(token)
-        from team_management import init_team_tables
+        from src.team_management import init_team_tables
         from src.services.team_archives import list_team_shared_archives
 
         init_team_tables()
         return list_team_shared_archives(team_id, current_user.username)
     except Exception as e:
         return {"success": False, "message": str(e), "archives": []}
-
 
 @app.post("/api/teams/{team_id}/members")
 async def add_team_member(team_id: int, request: Request, token: Optional[str] = Query(None)):
@@ -1569,7 +1343,7 @@ async def add_team_member(team_id: int, request: Request, token: Optional[str] =
         body = await request.json()
         
         # 初始化团队表
-        from team_management import init_team_tables, TeamRepository
+        from src.team_management import init_team_tables, TeamRepository
         init_team_tables()
         
         # 检查权限（只有管理员可以添加成员）
@@ -1594,7 +1368,6 @@ async def add_team_member(team_id: int, request: Request, token: Optional[str] =
     except Exception as e:
         return {"success": False, "message": str(e)}
 
-
 @app.delete("/api/teams/{team_id}/members/{username}")
 async def remove_team_member(team_id: int, username: str, token: Optional[str] = Query(None)):
     if not token:
@@ -1604,7 +1377,7 @@ async def remove_team_member(team_id: int, username: str, token: Optional[str] =
         current_user = await get_current_user(token)
         
         # 初始化团队表
-        from team_management import init_team_tables, TeamRepository
+        from src.team_management import init_team_tables, TeamRepository
         init_team_tables()
         
         # 检查权限（管理员或自己可以移除）
@@ -1625,11 +1398,9 @@ async def remove_team_member(team_id: int, username: str, token: Optional[str] =
     except Exception as e:
         return {"success": False, "message": str(e)}
 
-
 # --- Search-engine verification files at repo root (e.g. Google Search Console) ---
 _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _VERIFICATION_FILE_RE = re.compile(r"^[A-Za-z0-9_-]+\.html$")
-
 
 @app.get("/{filename}", include_in_schema=False)
 async def serve_root_verification_file(filename: str):

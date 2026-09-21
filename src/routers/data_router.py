@@ -11,11 +11,7 @@ from src.data_catalog import (
     enrich_catalog_from_context,
     restrict_catalog_to_dataset,
 )
-from src.data_resolution import (
-    get_user_comments_data,
-    get_user_metrics_data,
-    resolve_user_data_source,
-)
+from src.data_resolution import resolve_user_dataset
 from src.mvp_data import (
     build_mvp_report_payload,
     filter_records,
@@ -65,9 +61,7 @@ async def get_comments(
     sentiment: Optional[str] = Query(None),
 ):
     current_user = await _resolve_user(request, token)
-    comments = get_user_comments_data(current_user.username)
-    metrics = get_user_metrics_data(current_user.username)
-    source = resolve_user_data_source(current_user.username)
+    source, comments, metrics = resolve_user_dataset(current_user.username)
     product_list = None
     raw_products = products or product_ids
     if raw_products:
@@ -116,9 +110,7 @@ async def get_metrics(
     data_source: Optional[str] = Query(None),
 ):
     current_user = await _resolve_user(request, token)
-    comments = get_user_comments_data(current_user.username)
-    metrics = get_user_metrics_data(current_user.username)
-    source = resolve_user_data_source(current_user.username)
+    source, comments, metrics = resolve_user_dataset(current_user.username)
     product_list = None
     raw_products = products or product_ids
     if raw_products:
@@ -164,9 +156,7 @@ async def get_report(
     include_llm_summary: bool = Query(False),
 ):
     current_user = await _resolve_user(request, token)
-    comments = get_user_comments_data(current_user.username)
-    metrics = get_user_metrics_data(current_user.username)
-    source = resolve_user_data_source(current_user.username)
+    source, comments, metrics = resolve_user_dataset(current_user.username)
 
     product_list = products.split(",") if products else None
     if product_list and current_user.games_limit > 0 and len(product_list) > current_user.games_limit:

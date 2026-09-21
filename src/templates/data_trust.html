@@ -76,13 +76,13 @@
         <div class="card">
             <h2>真实竞品 ↔ 看板：数据怎么流动</h2>
             <ol style="padding-left:1.2rem;line-height:1.75;font-size:0.9rem;color:#424245;margin-bottom:12px;">
-                <li><strong>抓取</strong>：分析向导 <code>/guide</code> 或 MVP <code>/mvp</code> 选择 Steam / TapTap / Google Play，拉取公开评论。</li>
+                <li><strong>抓取</strong>：分析向导 <code>/guide</code> 选择 Steam / TapTap / Google Play，拉取公开评论。</li>
                 <li><strong>写入</strong>：结果保存到 <code>data/mvp/users/{用户名}/steam_dataset.json</code>（评论 + 样本指标），按登录用户隔离。</li>
                 <li><strong>看板读取</strong>：运营看板 <code>/dashboard</code> 通过 API 读同一份数据，抓取后<strong>自动同步</strong>，无需单独导入。</li>
                 <li><strong>筛选查看</strong>：在看板选择产品、数据来源、周期，点击「应用筛选」展示 KPI 与排行。</li>
             </ol>
             <p style="font-size:0.85rem;color:#6e6e73;line-height:1.6;">
-                <strong>页面分工（数据同源）：</strong>MVP/向导侧重深度报告与行动建议；看板侧重筛选汇总与预警；竞品工作台侧重横向对比。不是三套独立数据库。
+                <strong>页面分工（数据同源）：</strong>向导侧重深度报告与行动建议；看板侧重筛选汇总与预警；竞品工作台侧重横向对比。不是三套独立数据库。
             </p>
         </div>
 
@@ -98,39 +98,18 @@
                     <td><span class="tag tag-mix">需导入</span> 通过「导入指标」上传 CSV，不与公开商店自动打通。</td>
                 </tr>
                 <tr>
-                    <th>高级分析 · 用户路径 / 转化漏斗</th>
+                    <th>用户路径 / 转化漏斗 / 实时曲线</th>
                     <td>
-                        <span class="tag tag-mix">评论样本 / 导入指标</span>
-                        抓取的是商店公开评论，<strong>不是</strong>客户端埋点，无法还原「启动 → 登录 → 教程」等真实漏斗。
-                        有抓取数据时展示<strong>参与度转化</strong>（游玩时长、评分、正面评价等）；
-                        导入 CSV 含 installs/留存或下载/注册/教程/付费等字段时，自动切换为<strong>经营漏斗</strong>。
-                        接入 Firebase、Adjust 等埋点并导入指标后同理。数据不足时回退演示模板（<code>simulated: true</code>）。
+                        <span class="tag tag-demo">已移除</span>
+                        这类分析依赖客户端埋点（Firebase、Adjust 等）或内部经营数据，商店公开评论<strong>无法支撑</strong>，
+                        演示占位数据已随功能一并下线。导入经营指标后，报告与 KPI 会使用您自己的数据。
                     </td>
-                </tr>
-                <tr>
-                    <th>高级分析 · 实时曲线 · 群组等</th>
-                    <td><span class="tag tag-demo">可能为演示</span> 数据不足时接口返回 <code>simulated: true</code>，页面会提示。</td>
                 </tr>
                 <tr>
                     <th>平台同步 API（无密钥时）</th>
                     <td><span class="tag tag-demo">模拟</span> 配置密钥后切换为真实拉取。</td>
                 </tr>
             </table>
-        </div>
-
-        <div class="card">
-            <h2>用户路径 / 漏斗：能看什么、不能看什么</h2>
-            <ul>
-                <li><strong>当前抓取（MVP / 向导）</strong>：Steam / TapTap / Google Play 的<strong>公开评论样本</strong>，不含客户端埋点事件。</li>
-                <li><strong>不能还原</strong>：「启动游戏 → 登录 → 新手教程 → 首次战斗」等真实客户端漏斗（需 Firebase、Adjust 或自建埋点）。</li>
-                <li><strong>有抓取数据时</strong>：看板「高级分析 → 用户路径 / 漏斗」展示基于评论的<strong>参与度转化</strong>（如游玩时长分层、评分与正面评价）；各游戏因样本结构不同，转化率会不同。</li>
-                <li><strong>导入 Owner 指标后</strong>：若 CSV 含 <code>installs</code> + <code>retention_1d/7d/30d</code>，或指标名含下载/注册/教程/战斗/付费，漏斗会<strong>自动切换为经营漏斗</strong>（优先级高于评论推导）。</li>
-                <li><strong>后续接入埋点</strong>：将 Firebase / Adjust 等指标导出为 CSV 导入，或与平台 API 打通后，同一套逻辑优先使用经营数据。</li>
-                <li><strong>无数据时</strong>：回退演示模板，接口与页面标注 <code>simulated</code> /「演示模板」。</li>
-            </ul>
-            <p style="margin-top:12px;font-size:0.85rem;color:#6e6e73;">
-                在看板打开「用户路径」或「漏斗分析」标签页，可看到页面内嵌的同款说明。
-            </p>
         </div>
 
         <div class="card">

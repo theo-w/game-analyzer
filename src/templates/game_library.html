@@ -8,22 +8,25 @@
     <script src="/static/js/device-id.js"></script>
     <script src="/static/js/auth-token.js"></script>
     <link rel="stylesheet" href="/static/css/scenario-workspace.css">
+    <link rel="stylesheet" href="/static/css/app-nav.css">
     <script src="/static/js/analysis-guide.js"></script>
     <script src="/static/js/data-flow-guide.js"></script>
     <script src="/static/js/site-map-panel.js" defer></script>
     <script src="/static/js/scenario-report.js"></script>
+    <script src="/static/js/app-nav.js"></script>
+    <link rel="stylesheet" href="/static/css/theme.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
-            --bg: #0f1419;
-            --panel: #1a2332;
-            --panel-2: #243044;
-            --text: #e7ecf3;
-            --muted: #94a3b8;
-            --accent: #06b6d4;
-            --accent-2: #8b5cf6;
-            --border: rgba(255,255,255,0.08);
-            --ok: #22c55e;
+            --bg: #f5f5f7;
+            --panel: #ffffff;
+            --panel-2: #eef1f5;
+            --text: #1d1d1f;
+            --muted: #6e6e73;
+            --accent: #0071e3;
+            --accent-2: #5e5ce6;
+            --border: rgba(0,0,0,0.08);
+            --ok: #16a34a;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -37,7 +40,7 @@
             justify-content: space-between;
             padding: 16px 24px;
             border-bottom: 1px solid var(--border);
-            background: rgba(26,35,50,0.9);
+            background: rgba(255,255,255,0.9);
             backdrop-filter: blur(12px);
             position: sticky;
             top: 0;
@@ -56,7 +59,7 @@
             font-size: 0.875rem;
         }
         .btn:hover { border-color: var(--accent); }
-        .btn-primary { background: linear-gradient(135deg, var(--accent), #0891b2); border: none; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent), #0051a2); border: none; }
         .btn-ghost { background: transparent; }
         .layout {
             display: grid;
@@ -117,16 +120,16 @@
             margin-top: 2px;
         }
         .btn-icon-delete:hover {
-            color: #f87171;
+            color: #dc2626;
             border-color: rgba(248,113,113,0.5);
             background: rgba(248,113,113,0.1);
         }
         .btn-danger {
             background: rgba(239,68,68,0.15);
             border: 1px solid rgba(239,68,68,0.35);
-            color: #fca5a5;
+            color: #dc2626;
         }
-        .btn-danger:hover { border-color: #ef4444; color: #fecaca; }
+        .btn-danger:hover { border-color: #ef4444; color: #fee2e2; }
         .btn-danger-solid {
             background: #dc2626;
             border: none;
@@ -139,7 +142,7 @@
             border-radius: 10px;
             background: rgba(239,68,68,0.1);
             border: 1px solid rgba(239,68,68,0.25);
-            color: #fca5a5;
+            color: #dc2626;
             font-size: 0.875rem;
             line-height: 1.6;
             margin-bottom: 16px;
@@ -164,7 +167,7 @@
             display: inline-block;
             padding: 2px 8px;
             border-radius: 999px;
-            background: rgba(6,182,212,0.15);
+            background: rgba(0,113,227,0.15);
             color: var(--accent);
             font-size: 0.7rem;
         }
@@ -234,7 +237,7 @@
             padding: 12px;
             border-radius: 8px;
             border: 1px solid var(--border);
-            background: #0f1419;
+            background: #f5f5f7;
             color: var(--text);
             resize: vertical;
             font-family: inherit;
@@ -257,8 +260,8 @@
             margin-top: 16px;
             padding: 14px;
             border-radius: 12px;
-            background: rgba(139,92,246,0.1);
-            border: 1px solid rgba(139,92,246,0.25);
+            background: rgba(94,92,230,0.1);
+            border: 1px solid rgba(94,92,230,0.25);
             font-size: 0.85rem;
             color: var(--muted);
             line-height: 1.6;
@@ -316,7 +319,7 @@
             display: none;
         }
         .toast.show { display: block; }
-        .toast.error { border-color: #ef4444; color: #fca5a5; }
+        .toast.error { border-color: #ef4444; color: #dc2626; }
         .toast.ok { border-color: var(--ok); }
         .ai-bar {
             display: flex;
@@ -326,12 +329,12 @@
             margin-bottom: 16px;
             padding: 12px 14px;
             border-radius: 12px;
-            background: rgba(6,182,212,0.08);
-            border: 1px solid rgba(6,182,212,0.2);
+            background: rgba(0,113,227,0.08);
+            border: 1px solid rgba(0,113,227,0.2);
         }
         .ai-bar p { font-size: 0.8rem; color: var(--muted); flex: 1 1 200px; margin: 0; }
         .btn-ai {
-            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            background: linear-gradient(135deg, #5e5ce6, #0071e3);
             border: none;
             color: #fff;
         }
@@ -339,20 +342,21 @@
     </style>
 </head>
 <body>
-    <header class="topbar">
-        <div>
-            <h1>🎮 游戏资料库 · 玩法拆解</h1>
-            <p>参考 GameRefinery / Sensor Tower 档案结构，沉淀竞品信息与核心玩法分析</p>
+    <header class="app-topbar">
+        <div class="app-topbar-left">
+            <a class="app-topbar-logo" href="/">🎮</a>
+            <div id="app-nav-mount" data-active="library"></div>
         </div>
-        <div class="actions">
-            <button class="btn btn-ghost" onclick="location.href='/dashboard'">← 返回看板</button>
-            <button class="btn btn-ghost" onclick="location.href='/games/compare'">竞品工作台</button>
-            <button class="btn btn-ghost" onclick="location.href='/games/review'">复盘与归档</button>
+        <div class="app-topbar-right">
             <button class="btn btn-ghost" type="button" data-sitemap-open>帮助指引</button>
-            <button class="btn" onclick="syncMvp()">同步 Steam MVP</button>
+            <button class="btn" onclick="syncMvp()">同步向导抓取</button>
             <button class="btn btn-primary" onclick="openCreateModal()">+ 添加游戏</button>
         </div>
     </header>
+    <div style="max-width:1400px;margin:0 auto;padding:12px 24px 0;">
+        <h1 style="margin:0;font-size:1.25rem;">🎮 游戏资料库 · 玩法拆解</h1>
+        <p style="margin:4px 0 0;color:var(--muted, #6e6e73);font-size:0.85rem;">参考 GameRefinery / Sensor Tower 档案结构，沉淀竞品信息与核心玩法分析</p>
+    </div>
 
     <div id="module-guide-root" style="max-width:1400px;margin:0 auto;padding:16px 24px 0;"></div>
 
@@ -371,7 +375,7 @@
             <div class="empty" id="empty-state">
                 <div style="font-size:3rem;margin-bottom:12px;">📚</div>
                 <p>从左侧选择游戏，查看资料与玩法拆解</p>
-                <p style="margin-top:8px;font-size:0.85rem;">或点击「同步 Steam MVP」导入已抓取的真实竞品</p>
+                <p style="margin-top:8px;font-size:0.85rem;">或点击「同步向导抓取」导入已抓取的真实竞品</p>
             </div>
             <div id="detail-view" style="display:none;"></div>
         </main>
@@ -409,7 +413,7 @@
             <div class="delete-target" id="delete-target-name"></div>
             <div class="delete-warning">
                 删除后该游戏将从资料库列表中移除，关联的玩法拆解也不再显示。
-                此操作不可在界面内撤销，之后可通过「添加游戏」或「同步 Steam MVP」重新导入。
+                此操作不可在界面内撤销，之后可通过「添加游戏」或「同步向导抓取」重新导入。
             </div>
             <label class="delete-check">
                 <input type="checkbox" id="delete-confirm-check" onchange="updateDeleteConfirmState()">
@@ -473,6 +477,7 @@
         }
 
         async function init() {
+            if (window.AppNav) AppNav.mount('#app-nav-mount');
             if (!getToken()) {
                 location.href = '/login?redirect=' + encodeURIComponent('/games/library');
                 return;
@@ -650,7 +655,7 @@
                                 <div style="margin-top:8px;font-weight:600;">${escapeHtml(c.name)}</div>
                                 <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">${escapeHtml(c.genre || '')}</div>
                             </div>
-                        `).join('') : '<p style="color:var(--muted);">暂未关联对标竞品。请点顶部「同步 Steam MVP」或刷新本页自动补链。</p>'}
+                        `).join('') : '<p style="color:var(--muted);">暂未关联对标竞品。请点顶部「同步向导抓取」或刷新本页自动补链。</p>'}
                     </div>
                 </div>
                 <div class="tab-content" id="tab-ai-report">

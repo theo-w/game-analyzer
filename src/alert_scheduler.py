@@ -6,14 +6,10 @@ import asyncio
 import aiohttp
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional
-import sys
 import os
 
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import AlertRepository, get_db_connection
-from analytics_engine import load_data
-
+from src.database import AlertRepository, get_db_connection
+from src.analytics_engine import load_data
 
 class AlertScheduler:
     """告警调度器"""
@@ -210,12 +206,10 @@ class AlertScheduler:
                 print(f"[AlertScheduler] Error in scheduler loop: {e}")
                 await asyncio.sleep(self.check_interval)
 
-
 async def main():
     """主函数"""
     scheduler = AlertScheduler(check_interval=60)  # 每分钟检查一次
     await scheduler.run()
-
 
 if __name__ == "__main__":
     asyncio.run(main())

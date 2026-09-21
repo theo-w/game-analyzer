@@ -1,9 +1,9 @@
 /** Data provenance badges for dashboard and compare views. */
 (function (global) {
     const TRUST_STYLES = {
-        high: { bg: 'rgba(34,197,94,0.15)', border: '#22c55e', color: '#86efac' },
-        medium: { bg: 'rgba(234,179,8,0.12)', border: '#eab308', color: '#fde047' },
-        low: { bg: 'rgba(239,68,68,0.12)', border: '#ef4444', color: '#fca5a5' },
+        high: { bg: 'rgba(34,197,94,0.15)', border: '#22c55e', color: '#15803d' },
+        medium: { bg: 'rgba(234,179,8,0.12)', border: '#eab308', color: '#b45309' },
+        low: { bg: 'rgba(239,68,68,0.12)', border: '#ef4444', color: '#dc2626' },
     };
 
     function renderBadge(trust, source) {
@@ -40,8 +40,8 @@
     function importCtaHtml() {
         return (
             '<a href="/import" class="data-trust-import-cta" ' +
-            'style="margin-left:auto;font-size:0.8rem;color:#67e8f9;text-decoration:none;' +
-            'padding:4px 10px;border-radius:8px;border:1px solid rgba(103,232,249,0.35);">' +
+            'style="margin-left:auto;font-size:0.8rem;color:#0071e3;text-decoration:none;' +
+            'padding:4px 10px;border-radius:8px;border:1px solid rgba(0,113,227,0.35);">' +
             '📥 导入真实数据</a>'
         );
     }
@@ -55,27 +55,25 @@
         let extra = '';
         if (payload.source === 'empty' || payload.needs_crawl) {
             extra =
-                '<span style="font-size:0.8rem;color:#fca5a5;">看板暂无数据，请先完成抓取后再查看指标</span>';
+                '<span style="font-size:0.8rem;color:#dc2626;">看板暂无数据，请先完成抓取后再查看指标</span>';
         } else if (payload.show_mock_warning) {
             extra =
-                '<span style="font-size:0.8rem;color:#fca5a5;">演示 KPI 已弱化显示，请优先参考 Steam 口碑指标</span>';
+                '<span style="font-size:0.8rem;color:#dc2626;">演示 KPI 已弱化显示，请优先参考 Steam 口碑指标</span>';
         } else if (level === 'low') {
             extra =
-                '<span style="font-size:0.8rem;color:#fde047;">可信度较低，结论仅供流程演示</span>';
+                '<span style="font-size:0.8rem;color:#b45309;">可信度较低，结论仅供流程演示</span>';
         }
         let cta = '';
         if (payload.source === 'empty' || payload.needs_crawl) {
             cta =
-                '<a href="/guide" style="margin-left:auto;font-size:0.8rem;color:#67e8f9;text-decoration:none;' +
-                'padding:4px 10px;border-radius:8px;border:1px solid rgba(103,232,249,0.35);">🚀 先抓取</a>' +
-                '<a href="/mvp" style="font-size:0.8rem;color:#a5b4fc;text-decoration:none;' +
-                'padding:4px 10px;border-radius:8px;border:1px solid rgba(165,180,252,0.35);">MVP 抓取</a>';
+                '<a href="/guide" style="margin-left:auto;font-size:0.8rem;color:#0071e3;text-decoration:none;' +
+                'padding:4px 10px;border-radius:8px;border:1px solid rgba(0,113,227,0.35);">🚀 先抓取</a>';
         } else if (payload.show_mock_warning || level === 'low' || payload.source === 'mock') {
             cta = importCtaHtml();
         }
         el.innerHTML =
-            '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">' +
-            '<span style="font-size:0.8rem;color:#94a3b8;">当前数据：</span>' +
+            '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 14px;border-radius:10px;background:rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.08);">' +
+            '<span style="font-size:0.8rem;color:#6e6e73;">当前数据：</span>' +
             badge +
             extra +
             cta +

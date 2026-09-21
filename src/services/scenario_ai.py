@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Sequence
 
-from auth import LLM_CONFIG, LLM_PROVIDERS
+from src.auth import LLM_CONFIG, LLM_PROVIDERS
 
 from src.data_resolution import get_user_comments_data, get_user_metrics_data, resolve_user_data_source
 from src.mvp_data import get_mvp_analysis
@@ -739,7 +739,7 @@ def _rule_review_report(
         exec_summary = (
             f"当前数据池含 {metrics_summary.get('product_count', 0)} 款产品、"
             f"{metrics_summary.get('metrics_rows', 0)} 条指标。"
-            " 建议定期运行 MVP 抓取以建立时间轴。"
+            " 建议定期运行分析向导抓取以建立时间轴。"
         )
         sections = [
             {

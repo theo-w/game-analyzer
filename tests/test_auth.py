@@ -1,11 +1,7 @@
 import pytest
-import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
-
-from auth import verify_password, get_password_hash, create_access_token, authenticate_user, USERS_DB
-
+from src.auth import verify_password, get_password_hash, create_access_token
 
 class TestAuth:
     

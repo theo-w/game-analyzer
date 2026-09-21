@@ -6,7 +6,7 @@ from typing import Optional
 
 import httpx
 
-from auth import LLM_CONFIG
+from src.auth import LLM_CONFIG
 from src.services.llm_client import refresh_llm_config_from_db
 from src.web_common import is_masked_secret
 

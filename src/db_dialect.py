@@ -163,6 +163,6 @@ def connect_postgresql(db_config: dict) -> Any:
 
 def postgres_schema_statements() -> list:
     """DDL for PostgreSQL (idempotent). Loaded by init_database."""
-    from db_schema_postgres import POSTGRES_SCHEMA_STATEMENTS
+    from src.db_schema_postgres import POSTGRES_SCHEMA_STATEMENTS
 
     return POSTGRES_SCHEMA_STATEMENTS

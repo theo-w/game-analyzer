@@ -1,1730 +1,254 @@
 [
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "用户总下载量",
-    "值": 65000,
-    "同比置比": "+8%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "平均用户在线时长",
-    "值": "52分钟",
-    "环比变化": "下降 5%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 18.5",
-    "同比置比": "-10%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "7日留存率",
-    "值": "38%",
-    "环比变化": "下降 3个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "DAU/MAU",
-    "值": "7.8%",
-    "环比变化": "下降 2个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "充值金额",
-    "值": 45000,
-    "环比变化": "-5%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "用户总下载量",
-    "值": 55000,
-    "同比置比": "+3%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "平均用户在线时长",
-    "值": "38分钟",
-    "环比变化": "下降 15%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 8.2",
-    "同比置比": "-20%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "7日留存率",
-    "值": "32%",
-    "环比变化": "下降 7个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "DAU/MAU",
-    "值": "6.5%",
-    "环比变化": "下降 3个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "充值金额",
-    "值": 18000,
-    "环比变化": "-12%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "用户总下载量",
-    "值": 30000,
-    "同比置比": "+2%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "平均用户在线时长",
-    "值": "42分钟",
-    "环比变化": "下降 8%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 12.8",
-    "同比置比": "-12%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "7日留存率",
-    "值": "35%",
-    "环比变化": "下降 4个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "DAU/MAU",
-    "值": "7.2%",
-    "环比变化": "下降 2个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "充值金额",
-    "值": 22000,
-    "环比变化": "-8%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "用户总下载量",
-    "值": 45000,
-    "同比置比": "+18%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "平均用户在线时长",
-    "值": "45分钟",
-    "环比变化": "下降 5%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 22.5",
-    "同比置比": "+8%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "7日留存率",
-    "值": "35%",
-    "环比变化": "下降 2个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "DAU/MAU",
-    "值": "8.5%",
-    "环比变化": "上升 1个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "充值金额",
-    "值": 52000,
-    "环比变化": "+5%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "用户总下载量",
-    "值": 32000,
-    "同比置比": "+12%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "平均用户在线时长",
-    "值": "32分钟",
-    "环比变化": "下降 10%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 14.2",
-    "同比置比": "+2%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "7日留存率",
-    "值": "30%",
-    "环比变化": "下降 4个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "DAU/MAU",
-    "值": "7.0%",
-    "环比变化": "下降 1个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "充值金额",
-    "值": 28000,
-    "环比变化": "+3%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "用户总下载量",
-    "值": 21000,
-    "同比置比": "+10%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "平均用户在线时长",
-    "值": "38分钟",
-    "环比变化": "下降 6%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 16.8",
-    "同比置比": "+5%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "7日留存率",
-    "值": "32%",
-    "环比变化": "下降 3个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "DAU/MAU",
-    "值": "7.8%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "充值金额",
-    "值": 25000,
-    "环比变化": "+4%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "用户总下载量",
-    "值": 32000,
-    "同比置比": "+25%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "平均用户在线时长",
-    "值": "48分钟",
-    "环比变化": "上升 8%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 26.5",
-    "同比置比": "+12%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "7日留存率",
-    "值": "45%",
-    "环比变化": "上升 3个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "DAU/MAU",
-    "值": "12.5%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "week_22",
-    "metric": "充值金额",
-    "值": 68000,
-    "环比变化": "+15%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "用户总下载量",
-    "值": 25000,
-    "同比置比": "+20%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "平均用户在线时长",
-    "值": "38分钟",
-    "环比变化": "上升 5%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 18.2",
-    "同比置比": "+6%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "7日留存率",
-    "值": "40%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "DAU/MAU",
-    "值": "10.2%",
-    "环比变化": "上升 1个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "week_22",
-    "metric": "充值金额",
-    "值": 38000,
-    "环比变化": "+10%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "用户总下载量",
-    "值": 18000,
-    "同比置比": "+18%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "平均用户在线时长",
-    "值": "42分钟",
-    "环比变化": "上升 6%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 21.8",
-    "同比置比": "+9%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "7日留存率",
-    "值": "42%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "DAU/MAU",
-    "值": "11.0%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "week_22",
-    "metric": "充值金额",
-    "值": 32000,
-    "环比变化": "+12%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "用户总下载量",
-    "值": 60000,
-    "同比置比": "+10%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "平均用户在线时长",
-    "值": "55分钟",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 20.5",
-    "同比置比": "-5%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "7日留存率",
-    "值": "41%",
-    "环比变化": "上升 1个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "DAU/MAU",
-    "值": "8.5%",
-    "环比变化": "上升 1个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "充值金额",
-    "值": 48000,
-    "环比变化": "-2%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "用户总下载量",
-    "值": 52000,
-    "同比置比": "+5%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "平均用户在线时长",
-    "值": "45分钟",
-    "环比变化": "上升 2%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 10.2",
-    "同比置比": "-8%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "7日留存率",
-    "值": "39%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "DAU/MAU",
-    "值": "7.5%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "充值金额",
-    "值": 21000,
-    "环比变化": "-5%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "用户总下载量",
-    "值": 30000,
-    "同比置比": "+3%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "平均用户在线时长",
-    "值": "46分钟",
-    "环比变化": "上升 1%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 14.5",
-    "同比置比": "-6%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "7日留存率",
-    "值": "39%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "DAU/MAU",
-    "值": "8.0%",
-    "环比变化": "上升 1个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "充值金额",
-    "值": 24000,
-    "环比变化": "-3%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "用户总下载量",
-    "值": 38000,
-    "同比置比": "+22%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "平均用户在线时长",
-    "值": "47分钟",
-    "环比变化": "上升 4%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 21.0",
-    "同比置比": "+12%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "7日留存率",
-    "值": "37%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "DAU/MAU",
-    "值": "8.2%",
-    "环比变化": "上升 1个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "充值金额",
-    "值": 50000,
-    "环比变化": "+8%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "用户总下载量",
-    "值": 28000,
-    "同比置比": "+18%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "平均用户在线时长",
-    "值": "36分钟",
-    "环比变化": "上升 5%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 13.5",
-    "同比置比": "+8%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "7日留存率",
-    "值": "34%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "DAU/MAU",
-    "值": "7.2%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "充值金额",
-    "值": 27000,
-    "环比变化": "+6%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "用户总下载量",
-    "值": 19000,
-    "同比置比": "+15%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "平均用户在线时长",
-    "值": "40分钟",
-    "环比变化": "上升 3%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 16.0",
-    "同比置比": "+10%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "7日留存率",
-    "值": "35%",
-    "环比变化": "上升 1个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "DAU/MAU",
-    "值": "7.6%",
-    "环比变化": "上升 1个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "充值金额",
-    "值": 24000,
-    "环比变化": "+7%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "用户总下载量",
-    "值": "26000",
-    "同比置比": "+32%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "平均用户在线时长",
-    "值": "44分钟",
-    "环比变化": "上升 10%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 23.8",
-    "同比置比": "+15%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "7日留存率",
-    "值": "42%",
-    "环比变化": "上升 4个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "DAU/MAU",
-    "值": "11.8%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Week 21",
-    "metric": "充值金额",
-    "值": 59000,
-    "环比变化": "+18%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "用户总下载量",
-    "值": "20000",
-    "同比置比": "+28%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "平均用户在线时长",
-    "值": "36分钟",
-    "环比变化": "上升 8%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 17.0",
-    "同比置比": "+10%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "7日留存率",
-    "值": "38%",
-    "环比变化": "上升 3个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "DAU/MAU",
-    "值": "9.5%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Week 21",
-    "metric": "充值金额",
-    "值": 35000,
-    "环比变化": "+12%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "用户总下载量",
-    "值": "16000",
-    "同比置比": "+22%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "平均用户在线时长",
-    "值": "40分钟",
-    "环比变化": "上升 7%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 20.0",
-    "同比置比": "+12%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "7日留存率",
-    "值": "40%",
-    "环比变化": "上升 3个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "DAU/MAU",
-    "值": "10.2%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Week 21",
-    "metric": "充值金额",
-    "值": "28000",
-    "环比变化": "+15%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "用户总下载量",
-    "值": "56000",
-    "同比置比": "+15%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "平均用户在线时长",
-    "值": "58分钟",
-    "环比变化": "上升 6%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 22.0",
-    "同比置比": "+3%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "7日留存率",
-    "值": "40%",
-    "环比变化": "下降 1个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "DAU/MAU",
-    "值": "9.0%",
-    "环比变化": "下降 1个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "充值金额",
-    "值": "50000",
-    "环比变化": "+2%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "用户总下载量",
-    "值": "48000",
-    "同比置比": "+10%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "平均用户在线时长",
-    "值": "42分钟",
-    "环比变化": "上升 8%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 11.5",
-    "同比置比": "+2%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "7日留存率",
-    "值": "38%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "DAU/MAU",
-    "值": "8.0%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "充值金额",
-    "值": "22000",
-    "环比变化": "+3%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "用户总下载量",
-    "值": "31000",
-    "同比置比": "+8%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "平均用户在线时长",
-    "值": "48分钟",
-    "环比变化": "上升 5%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 15.8",
-    "同比置比": "+4%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "7日留存率",
-    "值": "37%",
-    "环比变化": "下降 2个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "DAU/MAU",
-    "值": "8.2%",
-    "环比变化": "下降 1个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "充值金额",
-    "值": "25000",
-    "环比变化": "+5%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "用户总下载量",
-    "值": "32000",
-    "同比置比": "+28%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "平均用户在线时长",
-    "值": "44分钟",
-    "环比变化": "上升 10%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 19.5",
-    "同比置比": "+18%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "7日留存率",
-    "值": "36%",
-    "环比变化": "上升 3个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "DAU/MAU",
-    "值": "7.8%",
-    "环比变化": "上升 1个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "充值金额",
-    "值": "46000",
-    "环比变化": "+10%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "用户总下载量",
-    "值": "24000",
-    "同比置比": "+22%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "平均用户在线时长",
-    "值": "34分钟",
-    "环比变化": "上升 6%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 12.5",
-    "同比置比": "+12%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "7日留存率",
-    "值": "33%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "DAU/MAU",
-    "值": "6.8%",
-    "环比变化": "上升 1个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "充值金额",
-    "值": "25000",
-    "环比变化": "+8%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "用户总下载量",
-    "值": "16000",
-    "同比置比": "+18%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "平均用户在线时长",
-    "值": "38分钟",
-    "环比变化": "上升 5%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 14.8",
-    "同比置比": "+15%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "7日留存率",
-    "值": "34%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "DAU/MAU",
-    "值": "7.4%",
-    "环比变化": "上升 1个百分点"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "充值金额",
-    "值": "22000",
-    "环比变化": "+9%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "用户总下载量",
-    "值": "20000",
-    "同比置比": "+38%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "平均用户在线时长",
-    "值": "40分钟",
-    "环比变化": "上升 12%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 21.0",
-    "同比置比": "+20%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "7日留存率",
-    "值": "38%",
-    "环比变化": "上升 5个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "DAU/MAU",
-    "值": "10.5%",
-    "环比变化": "上升 3个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Week 20",
-    "metric": "充值金额",
-    "值": "50000",
-    "环比变化": "+20%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "用户总下载量",
-    "值": "16000",
-    "同比置比": "+32%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "平均用户在线时长",
-    "值": "32分钟",
-    "环比变化": "上升 10%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 15.5",
-    "同比置比": "+15%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "7日留存率",
-    "值": "35%",
-    "环比变化": "上升 4个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "DAU/MAU",
-    "值": "8.8%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Week 20",
-    "metric": "充值金额",
-    "值": "31000",
-    "环比变化": "+15%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "用户总下载量",
-    "值": "12000",
-    "同比置比": "+28%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "平均用户在线时长",
-    "值": "36分钟",
-    "环比变化": "上升 8%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 18.0",
-    "同比置比": "+18%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "7日留存率",
-    "值": "37%",
-    "环比变化": "上升 4个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "DAU/MAU",
-    "值": "9.5%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Week 20",
-    "metric": "充值金额",
-    "值": "24000",
-    "环比变化": "+18%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "用户总下载量",
-    "值": 180000,
-    "同比置比": "+12%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "平均用户在线时长",
-    "值": "55分钟",
-    "环比变化": "下降 2%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 20.0",
-    "同比置比": "-5%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "7日留存率",
-    "值": "40%",
-    "环比变化": "下降 1个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "DAU/MAU",
-    "值": "8.4%",
-    "环比变化": "下降 1个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "充值金额",
-    "值": 143000,
-    "环比变化": "-3%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "用户总下载量",
-    "值": 155000,
-    "同比置比": "+8%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "平均用户在线时长",
-    "值": "42分钟",
-    "环比变化": "下降 10%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 10.0",
-    "同比置比": "-15%"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "7日留存率",
-    "值": "36%",
-    "环比变化": "下降 3个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "DAU/MAU",
-    "值": "7.2%",
-    "环比变化": "下降 2个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "充值金额",
-    "值": 61000,
-    "环比变化": "-7%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "用户总下载量",
-    "值": 90000,
-    "同比置比": "+6%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "平均用户在线时长",
-    "值": "45分钟",
-    "环比变化": "下降 5%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 14.0",
-    "同比置比": "-8%"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "7日留存率",
-    "值": "37%",
-    "环比变化": "下降 2个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "DAU/MAU",
-    "值": "7.8%",
-    "环比变化": "下降 1个百分点"
-  },
-  {
-    "product": "game_a",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "充值金额",
-    "值": 71000,
-    "环比变化": "-5%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "用户总下载量",
-    "值": 115000,
-    "同比置比": "+25%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "平均用户在线时长",
-    "值": "45分钟",
-    "环比变化": "上升 3%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 21.0",
-    "同比置比": "+10%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "7日留存率",
-    "值": "36%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "DAU/MAU",
-    "值": "8.2%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_b",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "充值金额",
-    "值": 148000,
-    "环比变化": "+8%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "用户总下载量",
-    "值": 84000,
-    "同比置比": "+20%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "平均用户在线时长",
-    "值": "34分钟",
-    "环比变化": "上升 2%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 13.0",
-    "同比置比": "+6%"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "7日留存率",
-    "值": "32%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "DAU/MAU",
-    "值": "7.0%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_b",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "充值金额",
-    "值": 79000,
-    "环比变化": "+6%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "用户总下载量",
-    "值": 56000,
-    "同比置比": "+15%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "平均用户在线时长",
-    "值": "39分钟",
-    "环比变化": "上升 1%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 15.5",
-    "同比置比": "+8%"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "7日留存率",
-    "值": "34%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "DAU/MAU",
-    "值": "7.6%",
-    "环比变化": "持平"
-  },
-  {
-    "product": "game_b",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "充值金额",
-    "值": 71000,
-    "环比变化": "+7%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "用户总下载量",
-    "值": 78000,
-    "同比置比": "+35%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "平均用户在线时长",
-    "值": "44分钟",
-    "环比变化": "上升 10%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 23.5",
-    "同比置比": "+16%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "7日留存率",
-    "值": "42%",
-    "环比变化": "上升 4个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "DAU/MAU",
-    "值": "11.6%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Steam",
-    "cycle": "Q2",
-    "metric": "充值金额",
-    "值": 177000,
-    "环比变化": "+18%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "用户总下载量",
-    "值": 61000,
-    "同比置比": "+30%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "平均用户在线时长",
-    "值": "35分钟",
-    "环比变化": "上升 8%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 17.0",
-    "同比置比": "+12%"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "7日留存率",
-    "值": "38%",
-    "环比变化": "上升 3个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "DAU/MAU",
-    "值": "9.6%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "Google Play",
-    "cycle": "Q2",
-    "metric": "充值金额",
-    "值": 104000,
-    "环比变化": "+13%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "用户总下载量",
-    "值": 46000,
-    "同比置比": "+25%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "平均用户在线时长",
-    "值": "39分钟",
-    "环比变化": "上升 6%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "付费付费占比 (ARPPU)",
-    "值": "¥ 19.5",
-    "同比置比": "+14%"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "7日留存率",
-    "值": "40%",
-    "环比变化": "上升 3个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "DAU/MAU",
-    "值": "10.2%",
-    "环比变化": "上升 2个百分点"
-  },
-  {
-    "product": "game_c",
-    "channel": "App Store",
-    "cycle": "Q2",
-    "metric": "充值金额",
-    "值": 84000,
-    "环比变化": "+15%"
-  }
+ {
+  "product": "game_a",
+  "channel": "Steam",
+  "cycle": "Week 20",
+  "metric": "抓取评论数",
+  "值": 1980
+ },
+ {
+  "product": "game_a",
+  "channel": "Steam",
+  "cycle": "Week 20",
+  "metric": "样本好评率",
+  "值": 82.6
+ },
+ {
+  "product": "game_a",
+  "channel": "Steam",
+  "cycle": "Week 20",
+  "metric": "当前价格_美分",
+  "值": 0
+ },
+ {
+  "product": "game_a",
+  "channel": "Steam",
+  "cycle": "Week 21",
+  "metric": "抓取评论数",
+  "值": 2150
+ },
+ {
+  "product": "game_a",
+  "channel": "Steam",
+  "cycle": "Week 21",
+  "metric": "样本好评率",
+  "值": 84.0
+ },
+ {
+  "product": "game_a",
+  "channel": "Steam",
+  "cycle": "Week 21",
+  "metric": "当前价格_美分",
+  "值": 0
+ },
+ {
+  "product": "game_a",
+  "channel": "Steam",
+  "cycle": "week_22",
+  "metric": "抓取评论数",
+  "值": 2280
+ },
+ {
+  "product": "game_a",
+  "channel": "Steam",
+  "cycle": "week_22",
+  "metric": "样本好评率",
+  "值": 85.1
+ },
+ {
+  "product": "game_a",
+  "channel": "Steam",
+  "cycle": "week_22",
+  "metric": "当前价格_美分",
+  "值": 0
+ },
+ {
+  "product": "game_a",
+  "channel": "Steam",
+  "cycle": "Q2",
+  "metric": "抓取评论数",
+  "值": 2400
+ },
+ {
+  "product": "game_a",
+  "channel": "Steam",
+  "cycle": "Q2",
+  "metric": "样本好评率",
+  "值": 86.4
+ },
+ {
+  "product": "game_a",
+  "channel": "Steam",
+  "cycle": "Q2",
+  "metric": "当前价格_美分",
+  "值": 0
+ },
+ {
+  "product": "game_b",
+  "channel": "Steam",
+  "cycle": "Week 20",
+  "metric": "抓取评论数",
+  "值": 1330
+ },
+ {
+  "product": "game_b",
+  "channel": "Steam",
+  "cycle": "Week 20",
+  "metric": "样本好评率",
+  "值": 76.8
+ },
+ {
+  "product": "game_b",
+  "channel": "Steam",
+  "cycle": "Week 20",
+  "metric": "当前价格_美分",
+  "值": 999
+ },
+ {
+  "product": "game_b",
+  "channel": "Steam",
+  "cycle": "Week 21",
+  "metric": "抓取评论数",
+  "值": 1410
+ },
+ {
+  "product": "game_b",
+  "channel": "Steam",
+  "cycle": "Week 21",
+  "metric": "样本好评率",
+  "值": 79.4
+ },
+ {
+  "product": "game_b",
+  "channel": "Steam",
+  "cycle": "Week 21",
+  "metric": "当前价格_美分",
+  "值": 999
+ },
+ {
+  "product": "game_b",
+  "channel": "Steam",
+  "cycle": "week_22",
+  "metric": "抓取评论数",
+  "值": 1490
+ },
+ {
+  "product": "game_b",
+  "channel": "Steam",
+  "cycle": "week_22",
+  "metric": "样本好评率",
+  "值": 77.0
+ },
+ {
+  "product": "game_b",
+  "channel": "Steam",
+  "cycle": "week_22",
+  "metric": "当前价格_美分",
+  "值": 999
+ },
+ {
+  "product": "game_b",
+  "channel": "Steam",
+  "cycle": "Q2",
+  "metric": "抓取评论数",
+  "值": 1560
+ },
+ {
+  "product": "game_b",
+  "channel": "Steam",
+  "cycle": "Q2",
+  "metric": "样本好评率",
+  "值": 78.2
+ },
+ {
+  "product": "game_b",
+  "channel": "Steam",
+  "cycle": "Q2",
+  "metric": "当前价格_美分",
+  "值": 999
+ },
+ {
+  "product": "game_c",
+  "channel": "Steam",
+  "cycle": "Week 20",
+  "metric": "抓取评论数",
+  "值": 890
+ },
+ {
+  "product": "game_c",
+  "channel": "Steam",
+  "cycle": "Week 20",
+  "metric": "样本好评率",
+  "值": 90.9
+ },
+ {
+  "product": "game_c",
+  "channel": "Steam",
+  "cycle": "Week 20",
+  "metric": "当前价格_美分",
+  "值": 1999
+ },
+ {
+  "product": "game_c",
+  "channel": "Steam",
+  "cycle": "Week 21",
+  "metric": "抓取评论数",
+  "值": 940
+ },
+ {
+  "product": "game_c",
+  "channel": "Steam",
+  "cycle": "Week 21",
+  "metric": "样本好评率",
+  "值": 89.8
+ },
+ {
+  "product": "game_c",
+  "channel": "Steam",
+  "cycle": "Week 21",
+  "metric": "当前价格_美分",
+  "值": 1999
+ },
+ {
+  "product": "game_c",
+  "channel": "Steam",
+  "cycle": "week_22",
+  "metric": "抓取评论数",
+  "值": 1010
+ },
+ {
+  "product": "game_c",
+  "channel": "Steam",
+  "cycle": "week_22",
+  "metric": "样本好评率",
+  "值": 90.5
+ },
+ {
+  "product": "game_c",
+  "channel": "Steam",
+  "cycle": "week_22",
+  "metric": "当前价格_美分",
+  "值": 1999
+ },
+ {
+  "product": "game_c",
+  "channel": "Steam",
+  "cycle": "Q2",
+  "metric": "抓取评论数",
+  "值": 980
+ },
+ {
+  "product": "game_c",
+  "channel": "Steam",
+  "cycle": "Q2",
+  "metric": "样本好评率",
+  "值": 91.2
+ },
+ {
+  "product": "game_c",
+  "channel": "Steam",
+  "cycle": "Q2",
+  "metric": "当前价格_美分",
+  "值": 1999
+ }
 ]

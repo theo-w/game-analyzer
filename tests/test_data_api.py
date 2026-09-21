@@ -3,21 +3,15 @@
 from __future__ import annotations
 
 import os
-import sys
-
 import pytest
 from fastapi.testclient import TestClient
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-from auth import create_access_token
-from web_app import app
-
+from src.auth import create_access_token
+from src.web_app import app
 
 @pytest.fixture
 def client():
     return TestClient(app)
-
 
 def test_comments_and_metrics_for_demo(client):
     token = create_access_token({"sub": "demo"})
@@ -34,7 +28,6 @@ def test_comments_and_metrics_for_demo(client):
     assert mbody["success"] is True
     assert mbody["total"] > 0
     assert mbody["filtered_count"] > 0
-
 
 def test_api_user_accepts_bearer_header(client):
     token = create_access_token({"sub": "demo"})

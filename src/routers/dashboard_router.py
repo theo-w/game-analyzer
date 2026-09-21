@@ -10,7 +10,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
 
-from database import DashboardConfigRepository, OperationLogRepository, SharedReportRepository
+from src.database import DashboardConfigRepository, OperationLogRepository, SharedReportRepository
 from src.auth import UserInDB
 from src.web_common import get_current_user
 

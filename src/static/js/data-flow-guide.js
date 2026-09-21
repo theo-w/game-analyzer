@@ -7,21 +7,18 @@
     const COPY = {
         title: "真实竞品数据如何进入看板",
         summary:
-            "抓取与看板共用同一份数据集，不是两套系统。在向导或 MVP 页完成抓取后，看板会自动读到评论与样本指标。",
+            "抓取与看板共用同一份数据集，不是两套系统。在分析向导完成抓取后，看板会自动读到评论与样本指标。",
         steps: [
             {
                 num: "①",
                 title: "抓取真实竞品",
-                body: "在分析向导或 MVP 页选择 Steam / TapTap / Google Play，输入游戏名、AppID 或包名，执行抓取。",
-                links: [
-                    { label: "分析向导", href: "/guide" },
-                    { label: "MVP 抓取", href: "/mvp" },
-                ],
+                body: "在分析向导选择 Steam / TapTap / Google Play，输入游戏名、AppID 或包名，执行抓取。",
+                links: [{ label: "分析向导", href: "/guide" }],
             },
             {
                 num: "②",
                 title: "写入统一数据集",
-                body: "评论、样本好评率等指标写入 data/mvp/users/{用户名}/steam_dataset.json。MVP 与看板读取该登录用户目录下的数据。",
+                body: "评论、样本好评率等指标写入 data/mvp/users/{用户名}/steam_dataset.json。向导与看板读取该登录用户目录下的数据。",
                 links: [],
             },
             {
@@ -38,33 +35,9 @@
             },
         ],
         optional:
-            "可选：通过「导入指标」上传 CSV（DAU、收入、下载/注册/留存等 Owner 数据），会与抓取评论合并分析；导入数据优先级更高。看板「用户路径 / 漏斗」在仅有评论时会展示参与度转化，而非客户端埋点漏斗。",
-        advancedAnalytics: {
-            title: "路径 / 漏斗：数据含义说明",
-            intro:
-                "MVP / 向导抓取的是商店公开评论样本，不是客户端埋点（Firebase、Adjust 等）事件流。",
-            bullets: [
-                "不能还原「启动 → 登录 → 教程」等真实客户端漏斗步骤。",
-                "仅有抓取数据时：展示基于评论样本的参与度转化（Steam 游玩时长、手游评分与正面评价等）；各游戏因样本结构不同，转化率会不同。",
-                "导入 Owner 指标 CSV 后：若含 installs + retention，或指标名含下载/注册/教程/战斗/付费，漏斗会自动切换为经营漏斗。",
-                "后续接入 Firebase、Adjust 等埋点并导入对应指标，同一套逻辑也会优先使用经营漏斗。",
-                "数据不足时回退演示模板，接口与页面会标注 simulated / 演示模板。",
-            ],
-            realtimeNote: "实时曲线：评论样本与按周评论量为真实数据；在线用户/收入为演示占位。",
-            cohortNote: "群组分析：有导入留存时用经营留存；否则按评论发布周统计参与度代理指标。",
-            journeyNote:
-                "用户路径对比表展示的是上述参与度转化或导入经营指标推导的步骤，不是埋点还原的启动/登录链路。",
-            funnelNote:
-                "转化漏斗优先使用您导入的经营指标；无导入时由评论样本推导参与度漏斗。",
-            mvpNote:
-                "本页抓取结果用于口碑与样本指标；要看差异化路径/漏斗对比，请在看板「高级分析」中选择已抓取产品。",
-            links: [
-                { label: "导入经营指标", href: "/import" },
-                { label: "完整数据说明", href: "/trust" },
-            ],
-        },
+            "可选：通过「导入指标」上传 CSV（DAU、收入、下载/注册/留存等 Owner 数据），会与抓取评论合并分析；导入数据优先级更高。",
         pages: [
-            { name: "MVP / 分析向导", role: "抓取 + 深度报告（口碑主题、行动建议）" },
+            { name: "分析向导", role: "抓取 + 深度报告（口碑主题、行动建议）" },
             { name: "运营看板", role: "筛选 + KPI 汇总 + 平台排行 + 预警" },
             { name: "竞品工作台", role: "横向对比、玩法拆解（读取同一数据集）" },
         ],
@@ -155,26 +128,23 @@
 
     /**
      * @param {string} containerId
-     * @param {{ variant?: 'dashboard'|'wizard'|'mvp', theme?: 'light'|'dark', highlight?: string, showTable?: boolean }} opts
+     * @param {{ variant?: 'dashboard'|'wizard', theme?: 'light'|'dark', highlight?: string, showTable?: boolean }} opts
      */
     function render(containerId, opts) {
         const el = document.getElementById(containerId);
         if (!el) return;
         opts = opts || {};
         const variant = opts.variant || "dashboard";
-        const theme = opts.theme || (variant === "dashboard" ? "light" : "dark");
+        const theme = opts.theme || "light";
         const key = "dfg_" + variant;
         const collapsed = isCollapsed(key);
         const highlight =
-            opts.highlight ||
-            (variant === "wizard" ? "①" : variant === "mvp" ? "①" : null);
+            opts.highlight || (variant === "wizard" ? "①" : null);
 
         const variantNote =
             variant === "wizard"
                 ? "你正在第 ① 步：完成抓取后，打开看板并点击「应用筛选」即可看到同款竞品数据。"
-                : variant === "mvp"
-                  ? "本页「重新抓取」= 第 ① 步；抓取成功后数据立即进入看板数据集。"
-                  : "若刚完成抓取，请点「应用筛选」刷新；顶部横幅会显示当前数据来源。";
+                : "若刚完成抓取，请点「应用筛选」刷新；顶部横幅会显示当前数据来源。";
 
         el.innerHTML =
             '<section class="dfg-panel dfg-theme-' +
@@ -219,59 +189,8 @@
         });
     }
 
-    function renderAdvancedNotice(containerId, opts) {
-        const el = document.getElementById(containerId);
-        if (!el) return;
-        opts = opts || {};
-        const theme = opts.theme || "light";
-        const focus = opts.focus || "general";
-        const copy = COPY.advancedAnalytics;
-        const focusNote =
-            focus === "journey"
-                ? copy.journeyNote
-                : focus === "funnel"
-                  ? copy.funnelNote
-                  : focus === "realtime"
-                    ? copy.realtimeNote
-                    : focus === "cohort"
-                      ? copy.cohortNote
-                      : focus === "mvp"
-                        ? copy.mvpNote
-                        : "";
-
-        const bullets =
-            '<ul class="aan-list">' +
-            copy.bullets.map((item) => "<li>" + esc(item) + "</li>").join("") +
-            "</ul>";
-        const links =
-            '<p class="aan-links">' +
-            copy.links
-                .map(
-                    (l) =>
-                        '<a href="' + esc(l.href) + '">' + esc(l.label) + "</a>"
-                )
-                .join(" · ") +
-            "</p>";
-
-        el.innerHTML =
-            '<section class="aan-panel aan-theme-' +
-            theme +
-            '">' +
-            '<h4 class="aan-title">ℹ️ ' +
-            esc(copy.title) +
-            "</h4>" +
-            '<p class="aan-intro">' +
-            esc(copy.intro) +
-            "</p>" +
-            (focusNote ? '<p class="aan-focus">' + esc(focusNote) + "</p>" : "") +
-            bullets +
-            links +
-            "</section>";
-    }
-
     global.DataFlowGuide = {
         COPY,
         render,
-        renderAdvancedNotice,
     };
 })(typeof window !== "undefined" ? window : globalThis);

@@ -7,7 +7,7 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from database import db_manager
+from src.database import db_manager
 from src.mvp_data import get_mvp_comments_and_metrics, mvp_validation_passed
 from src.services.game_genre import assign_competitors_by_genre, infer_product_genre
 from src.services.game_versions import GameVersionRepository
@@ -324,12 +324,12 @@ def _template_breakdown_for_genre(genre: str, name: str) -> Dict[str, Any]:
     return base
 
 
-def sync_library_from_mvp(username: str = "") -> Dict[str, Any]:
+def sync_library_from_mvp(username: str = "", output_dir: Optional[str] = None) -> Dict[str, Any]:
     """Import Steam MVP crawled titles into the game library."""
-    if not mvp_validation_passed():
-        return {"success": False, "message": "MVP Steam 数据未就绪，请先运行 /mvp 抓取"}
+    if not mvp_validation_passed(output_dir):
+        return {"success": False, "message": "MVP Steam 数据未就绪，请先在分析向导（/guide）完成抓取"}
 
-    comments, metrics, _ = get_mvp_comments_and_metrics()
+    comments, metrics, _ = get_mvp_comments_and_metrics(output_dir)
     if not metrics:
         return {"success": False, "message": "MVP 数据集为空"}
 

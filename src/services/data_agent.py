@@ -15,6 +15,8 @@ import os
 from collections import Counter
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
+from src.mvp_pipeline import DEFAULT_OUTPUT_DIR
+
 PLATFORM_MAP = {
     "steam": "steam", "taptap": "taptap", "google play": "google_play",
     "googleplay": "google_play", "app store": "app_store", "appstore": "app_store",
@@ -95,16 +97,17 @@ def normalize_review(review: Dict[str, Any], idx: int = 0) -> Dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 def resolve_dataset(username: str = "") -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
+    base = os.path.abspath(DEFAULT_OUTPUT_DIR)
     candidates: List[str] = []
     if username:
         candidates += [
-            os.path.join("data", "mvp", "users", username, "steam_dataset.json"),
-            os.path.join("data", "mvp", "users", username, "dataset.json"),
-            os.path.join("data", "mvp", f"{username}.json"),
+            os.path.join(base, "users", username, "steam_dataset.json"),
+            os.path.join(base, "users", username, "dataset.json"),
+            os.path.join(base, f"{username}.json"),
         ]
     candidates += [
-        os.path.join("data", "mvp", "steam_dataset.json"),
-        os.path.join("data", "mvp", "dataset.json"),
+        os.path.join(base, "steam_dataset.json"),
+        os.path.join(base, "dataset.json"),
     ]
     for path in candidates:
         if os.path.isfile(path):

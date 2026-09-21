@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from database import db_manager
+from src.database import db_manager
 
 VERSION_CHANGE_TYPES = ["major", "minor", "patch", "balance", "content", "other"]
 

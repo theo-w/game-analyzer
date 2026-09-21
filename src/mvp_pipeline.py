@@ -40,7 +40,8 @@ STEAM_APP_CATALOG: List[Dict[str, str]] = [
     {"id": "1245620", "name": "Elden Ring", "genre": "Action RPG"},
 ]
 
-DEFAULT_OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "mvp")
+# 环境变量可覆盖 MVP 产物目录（tests/conftest.py 用它把测试写入隔离到临时目录）
+DEFAULT_OUTPUT_DIR = os.environ.get("GA_MVP_OUTPUT_DIR") or os.path.join(os.path.dirname(__file__), "..", "data", "mvp")
 
 
 def steam_app_catalog() -> List[Dict[str, str]]:

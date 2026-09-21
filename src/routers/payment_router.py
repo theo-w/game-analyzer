@@ -10,8 +10,8 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import JSONResponse
 
-from auth import PLANS
-from database import OperationLogRepository, OrderRepository
+from src.auth import PLANS
+from src.database import OperationLogRepository, OrderRepository
 from src.commercial_config import payment_mode, payment_mode_message, stripe_checkout_available
 from src.plans_catalog import list_plans_for_api
 from src.services.stripe_orders import (

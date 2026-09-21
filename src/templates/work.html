@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>落地指导 · Game Analyzer</title>
     <link rel="stylesheet" href="/static/css/scenario-workspace.css">
+    <link rel="stylesheet" href="/static/css/app-nav.css">
     <script src="/static/js/auth-token.js"></script>
+    <link rel="stylesheet" href="/static/css/theme.css">
     <style>
-        :root { --bg:#0f1419; --panel:#1a2332; --text:#e7ecf3; --muted:#94a3b8; --accent:#06b6d4; --border:rgba(255,255,255,0.08); }
+        :root { --bg:#f5f5f7; --panel:#ffffff; --text:#1d1d1f; --muted:#6e6e73; --accent:#0071e3; --border:rgba(0,0,0,0.08); }
         body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; margin:0; }
         .topbar { display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid var(--border); }
         .layout { max-width:960px; margin:0 auto; padding:24px; }
@@ -15,34 +17,32 @@
         .hero p { color:var(--muted); font-size:0.9rem; line-height:1.5; }
         .card { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:16px; }
         .btn { border:1px solid var(--border); background:var(--panel); color:var(--text); padding:8px 14px; border-radius:8px; cursor:pointer; text-decoration:none; font-size:0.875rem; display:inline-block; }
-        .btn-primary { background:linear-gradient(135deg,var(--accent),#0891b2); border:none; }
-        .progress-bar { height:8px; background:rgba(255,255,255,0.08); border-radius:4px; margin:12px 0; overflow:hidden; }
-        .progress-fill { height:100%; background:linear-gradient(90deg,#06b6d4,#22c55e); transition:width 0.3s; }
+        .btn-primary { background:linear-gradient(135deg,var(--accent),#0051a2); border:none; }
+        .progress-bar { height:8px; background:rgba(0,0,0,0.08); border-radius:4px; margin:12px 0; overflow:hidden; }
+        .progress-fill { height:100%; background:linear-gradient(90deg,#0071e3,#16a34a); transition:width 0.3s; }
         .stats { display:flex; gap:16px; flex-wrap:wrap; font-size:0.85rem; color:var(--muted); margin-top:8px; }
         .stats strong { color:var(--text); }
         .wg-steps { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:12px; }
-        .wg-steps li { display:flex; gap:12px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:1px solid var(--border); }
+        .wg-steps li { display:flex; gap:12px; padding:12px; border-radius:10px; background:#f5f5f7; border:1px solid var(--border); }
         .wg-steps li.done { border-color:rgba(34,197,94,0.4); }
         .wg-mark { font-size:1.1rem; min-width:24px; }
         .wg-steps p { font-size:0.85rem; color:var(--muted); margin:4px 0 8px; }
         .wg-steps a { color:var(--accent); font-size:0.85rem; }
-        .wg-btn { padding:6px 12px; border-radius:6px; border:1px solid var(--border); background:#243044; color:var(--text); cursor:pointer; font-size:0.8rem; }
+        .wg-btn { padding:6px 12px; border-radius:6px; border:1px solid var(--border); background:#eef1f5; color:var(--text); cursor:pointer; font-size:0.8rem; }
         .wg-btn.wg-primary { background:var(--accent); border:none; }
         .wg-actions-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
         .wg-hint { color:var(--muted); font-size:0.85rem; }
     </style>
 </head>
 <body>
-    <header class="topbar">
-        <div>
-            <strong>📋 落地指导</strong>
-            <span style="color:var(--muted);font-size:0.85rem;margin-left:8px;">分析 → 导出 → 分享 → 复测</span>
+    <header class="app-topbar">
+        <div class="app-topbar-left">
+            <a class="app-topbar-logo" href="/">🎮</a>
+            <div id="app-nav-mount" data-active="work"></div>
         </div>
-        <div style="display:flex;gap:10px;align-items:center;">
+        <div class="app-topbar-right">
+            <strong>📋 落地指导</strong>
             <span id="usage-badge"></span>
-            <a class="btn" href="/guide">分析向导</a>
-            <a class="btn" href="/games/review">复盘归档</a>
-            <a class="btn" href="/team">团队协作</a>
         </div>
     </header>
     <main class="layout">
@@ -70,11 +70,13 @@
     <script src="/static/js/scenario-report.js"></script>
     <script src="/static/js/work-guidance.js"></script>
     <script src="/static/js/usage-badge.js"></script>
+    <script src="/static/js/app-nav.js"></script>
     <script>
         function token() { return typeof getAuthToken === 'function' ? getAuthToken() : ''; }
         if (!token()) location.href = '/login?redirect=' + encodeURIComponent('/work');
 
         async function init() {
+            if (window.AppNav) AppNav.mount('#app-nav-mount');
             UsageBadge.mount('usage-badge', token, { linkPricing: true });
             const data = await WorkGuidance.loadPage(token());
             if (!data.success) return;
@@ -85,7 +87,7 @@
                 '<span>归档 <strong>' + (st.archives || 0) + '</strong></span>' +
                 '<span>待办 <strong>' + (st.pending || 0) + '</strong></span>' +
                 '<span>已验证 <strong>' + (st.verified || 0) + '</strong></span>' +
-                (st.overdue ? '<span style="color:#f87171;">逾期 <strong>' + st.overdue + '</strong></span>' : '');
+                (st.overdue ? '<span style="color:#dc2626;">逾期 <strong>' + st.overdue + '</strong></span>' : '');
             WorkGuidance.renderSteps(document.getElementById('steps-root'), data.steps);
             const la = data.latest_archive;
             const hint = document.getElementById('latest-archive-hint');

@@ -6,8 +6,8 @@ from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Query, Request
 
-from auth import LLM_CONFIG, LLM_PROVIDERS
-from database import LLMConfigRepository, OperationLogRepository
+from src.auth import LLM_CONFIG, LLM_PROVIDERS
+from src.database import LLMConfigRepository, OperationLogRepository
 from src.web_common import get_current_user, is_masked_secret, mask_config_secrets, mask_secret
 from src.services.llm_client import (
     call_anthropic_api,

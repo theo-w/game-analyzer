@@ -8,7 +8,7 @@ from typing import Optional
 from fastapi import APIRouter, Body, HTTPException, Query, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse
 
-from database import OperationLogRepository
+from src.database import OperationLogRepository
 from src.mvp_pipeline import search_steam_games
 from src.services.action_tasks import export_actions_content, normalize_action_items
 from src.services.analysis_wizard import resolve_game_inputs, run_analysis_wizard

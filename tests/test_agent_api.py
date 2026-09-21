@@ -112,9 +112,12 @@ def test_agent_themes_empty_without_data(client, monkeypatch):
 def test_agent_themes_from_dataset(client, monkeypatch):
     monkeypatch.delenv("SUPABASE_DATABASE_URL", raising=False)
     username, token = _register_and_token(client)
-    # 数据集写到该用户的用户级路径(resolve_dataset 优先读取)，不依赖本地总库文件；
-    # data/ 已被 gitignore，finally 自清理，CI 与本地行为一致。
-    user_dir = os.path.join("data", "mvp", "users", username)
+    # 数据集写到 resolve_dataset 实际读取的用户级路径(与 DEFAULT_OUTPUT_DIR 同源,
+    # 测试隔离时 conftest 会把 GA_MVP_OUTPUT_DIR 指向临时目录);
+    # finally 自清理, CI 与本地行为一致。
+    from src.mvp_pipeline import DEFAULT_OUTPUT_DIR
+
+    user_dir = os.path.join(DEFAULT_OUTPUT_DIR, "users", username)
     os.makedirs(user_dir, exist_ok=True)
     path = os.path.join(user_dir, "steam_dataset.json")
     with open(path, "w", encoding="utf-8") as handle:

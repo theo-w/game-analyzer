@@ -12,7 +12,6 @@
     var MORE = [
         { id: "work", label: "落地指导", href: "/work" },
         { id: "hotspot", label: "热点深析", href: "/hotspot" },
-        { id: "mvp", label: "真实竞品", href: "/mvp" },
         { id: "pricing", label: "订阅套餐", href: "/pricing" },
     ];
 
@@ -42,7 +41,6 @@
         if (path.indexOf("/hotspot") === 0) return "hotspot";
         if (path.indexOf("/metrics") === 0) return "metrics";
         if (path.indexOf("/import") === 0) return "import";
-        if (path.indexOf("/mvp") === 0) return "mvp";
         if (path.indexOf("/team") === 0) return "team";
         if (path.indexOf("/pricing") === 0) return "pricing";
         return fallback || "";

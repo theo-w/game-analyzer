@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from typing import Any, Dict, Optional
 
-from auth import LLM_PROVIDERS, LLM_CONFIG
+from src.auth import LLM_PROVIDERS, LLM_CONFIG
 
 from src.mvp_data import mvp_validation_passed
 from src.services.llm_client import complete_prompt, llm_is_configured

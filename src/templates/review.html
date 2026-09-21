@@ -6,6 +6,7 @@
     <title>复盘与归档</title>
     <link rel="stylesheet" href="/static/css/analysis-guide.css">
     <link rel="stylesheet" href="/static/css/scenario-workspace.css">
+    <link rel="stylesheet" href="/static/css/app-nav.css">
     <script src="/static/js/auth-token.js"></script>
     <script src="/static/js/data-provenance.js"></script>
     <script src="/static/js/analysis-guide.js"></script>
@@ -13,17 +14,19 @@
     <script src="/static/js/site-map-panel.js" defer></script>
     <script src="/static/js/scenario-report.js"></script>
     <script src="/static/js/markdown-preview.js"></script>
+    <script src="/static/js/app-nav.js"></script>
+    <link rel="stylesheet" href="/static/css/theme.css">
     <style>
         :root {
-            --bg: #0f1419; --panel: #1a2332; --text: #e7ecf3; --muted: #94a3b8;
-            --accent: #8b5cf6; --accent2: #06b6d4; --border: rgba(255,255,255,0.08);
+            --bg: #f5f5f7; --panel: #ffffff; --text: #1d1d1f; --muted: #6e6e73;
+            --accent: #5e5ce6; --accent2: #0071e3; --border: rgba(0,0,0,0.08);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
         .topbar {
             display: flex; justify-content: space-between; align-items: center;
             padding: 16px 24px; border-bottom: 1px solid var(--border);
-            background: rgba(26,35,50,0.95); position: sticky; top: 0; z-index: 10;
+            background: rgba(255,255,255,0.9); position: sticky; top: 0; z-index: 10;
         }
         .topbar h1 { font-size: 1.2rem; }
         .topbar p { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
@@ -32,51 +35,47 @@
             border: 1px solid var(--border); background: var(--panel); color: var(--text);
             padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 0.875rem; text-decoration: none;
         }
-        .btn-primary { background: linear-gradient(135deg, var(--accent), #7c3aed); border: none; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent), #4b49c8); border: none; }
         .layout { max-width: 960px; margin: 0 auto; padding: 24px; }
         .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
         .tab {
             padding: 10px 18px; border-radius: 10px; border: 1px solid var(--border);
             background: var(--panel); cursor: pointer; font-size: 0.9rem;
         }
-        .tab.active { border-color: var(--accent); background: rgba(139,92,246,0.15); color: #c4b5fd; }
+        .tab.active { border-color: var(--accent); background: rgba(94,92,230,0.15); color: #d8d7f5; }
         .panel { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
         .panel.active { display: block; }
         .panel h2 { font-size: 1.05rem; margin-bottom: 8px; }
         .hint { color: var(--muted); font-size: 0.85rem; margin-bottom: 16px; line-height: 1.5; }
         .toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-bottom: 16px; }
         label { font-size: 0.75rem; color: var(--muted); display: block; margin-bottom: 4px; }
-        select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: #243044; color: var(--text); min-width: 180px; }
+        select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: #eef1f5; color: var(--text); min-width: 180px; }
         .archive-item { padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
-        .archive-item:hover { background: rgba(255,255,255,0.02); }
-        .archive-item.active { background: rgba(139,92,246,0.12); border-radius: 8px; padding-left: 8px; padding-right: 8px; }
+        .archive-item:hover { background: rgba(0,0,0,0.02); }
+        .archive-item.active { background: rgba(94,92,230,0.12); border-radius: 8px; padding-left: 8px; padding-right: 8px; }
         .archive-editor { margin-top: 20px; display: none; }
         .archive-editor.open { display: block; }
-        .archive-editor textarea { width: 100%; min-height: 280px; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #243044; color: var(--text); font-family: ui-monospace, monospace; font-size: 0.85rem; line-height: 1.5; }
+        .archive-editor textarea { width: 100%; min-height: 280px; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #eef1f5; color: var(--text); font-family: ui-monospace, monospace; font-size: 0.85rem; line-height: 1.5; }
         .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; align-items: flex-end; }
-        .filter-bar input, .filter-bar select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: #243044; color: var(--text); }
+        .filter-bar input, .filter-bar select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: #eef1f5; color: var(--text); }
         .archive-title { font-weight: 600; margin-bottom: 4px; }
         .archive-meta { font-size: 0.8rem; color: var(--muted); }
         .delta-list { list-style: none; }
         .delta-list li { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-        .delta-up { color: #22c55e; }
+        .delta-up { color: #16a34a; }
         .delta-down { color: #ef4444; }
         .empty { text-align: center; color: var(--muted); padding: 32px; }
-        .error-box { background: rgba(239,68,68,0.1); border: 1px solid #ef4444; color: #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 16px; display: none; }
+        .error-box { background: rgba(239,68,68,0.1); border: 1px solid #ef4444; color: #dc2626; padding: 12px; border-radius: 8px; margin-bottom: 16px; display: none; }
     </style>
 </head>
 <body>
-    <header class="topbar">
-        <div>
-            <h1>📅 复盘与归档</h1>
-            <p>MVP 口碑快照对比 · 分析报告案例库</p>
+    <header class="app-topbar">
+        <div class="app-topbar-left">
+            <a class="app-topbar-logo" href="/">🎮</a>
+            <div id="app-nav-mount" data-active="review"></div>
         </div>
-        <div class="nav-links">
-            <a class="btn" href="/guide">分析向导</a>
-            <a class="btn" href="/work">落地指导</a>
-            <a class="btn" href="/team">团队</a>
-            <a class="btn" href="/dashboard">看板</a>
-            <a class="btn" href="/games/compare">竞品工作台</a>
+        <div class="app-topbar-right">
+            <h1 style="font-size:0.95rem;margin:0;">📅 复盘与归档</h1>
             <a class="btn" href="#" data-sitemap-open>帮助指引</a>
         </div>
     </header>
@@ -93,10 +92,10 @@
         </div>
 
         <section id="panel-timeline" class="panel active">
-            <h2>复盘时间轴（MVP 快照）</h2>
+            <h2>复盘时间轴（快照对照）</h2>
             <p class="hint">
                 每次运行 MVP Steam 抓取后会自动保存一条快照。选择两个时间点，对比各产品<strong>样本好评率</strong>变化。
-                若列表为空，请先在「真实竞品」页或命令行运行 <code>python run_mvp.py</code>。
+                若列表为空，请先在<a href="/guide">分析向导</a>完成抓取。
             </p>
             <div class="toolbar">
                 <div>
@@ -152,11 +151,11 @@
             <div id="archive-editor" class="archive-editor card" style="padding:20px;margin-top:16px;">
                 <h3 id="editor-title" style="margin-bottom:12px;">编辑归档</h3>
                 <div class="toolbar" style="margin-bottom:12px;">
-                    <div style="flex:1;"><label>标题</label><input id="edit-archive-title" type="text" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:#243044;color:var(--text);"></div>
-                    <div><label>分类</label><select id="edit-archive-category" style="min-width:140px;padding:8px;border-radius:8px;border:1px solid var(--border);background:#243044;color:var(--text);"></select></div>
+                    <div style="flex:1;"><label>标题</label><input id="edit-archive-title" type="text" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:#eef1f5;color:var(--text);"></div>
+                    <div><label>分类</label><select id="edit-archive-category" style="min-width:140px;padding:8px;border-radius:8px;border:1px solid var(--border);background:#eef1f5;color:var(--text);"></select></div>
                 </div>
                 <div style="margin-bottom:12px;"><label>标签（逗号分隔）</label>
-                    <input id="edit-archive-tags" type="text" placeholder="Steam, RPG, Q1复盘" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:#243044;color:var(--text);"></div>
+                    <input id="edit-archive-tags" type="text" placeholder="Steam, RPG, Q1复盘" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:#eef1f5;color:var(--text);"></div>
                 <label>报告正文（Markdown）</label>
                 <textarea id="edit-archive-body" placeholder="在此编辑分析报告…"></textarea>
                 <div style="margin-top:8px;display:flex;gap:8px;">
@@ -165,7 +164,7 @@
                 </div>
                 <div id="edit-archive-preview" class="preview-pane" style="display:none;"></div>
                 <div id="archive-actions-panel" style="display:none;margin-top:16px;"></div>
-                <div id="archive-version-panel" style="display:none;margin-top:16px;padding:14px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid var(--border);"></div>
+                <div id="archive-version-panel" style="display:none;margin-top:16px;padding:14px;border-radius:10px;background:rgba(0,0,0,0.03);border:1px solid var(--border);"></div>
                 <div id="archive-retest-result" class="hint" style="display:none;margin-top:8px;"></div>
                 <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
                     <button class="btn btn-primary" onclick="saveArchiveEdit()">💾 保存</button>
@@ -278,7 +277,7 @@
             if (!token) {
                 const box = document.getElementById('auth-error');
                 box.style.display = 'block';
-                box.innerHTML = '未登录或会话已过期，<a href="/login" style="color:#c4b5fd;">请先登录</a> 后查看复盘与归档。';
+                box.innerHTML = '未登录或会话已过期，<a href="/login" style="color:#d8d7f5;">请先登录</a> 后查看复盘与归档。';
                 return null;
             }
             return token;
@@ -297,7 +296,7 @@
             fillSnapshotSelects(cachedSnapshots);
             if (!cachedSnapshots.length) {
                 document.getElementById('timeline-result').innerHTML =
-                    '<p class="empty">暂无 MVP 快照。请运行 MVP 抓取后刷新本页。</p>';
+                    '<p class="empty">暂无归档快照。请在分析向导完成抓取后刷新本页。</p>';
             }
         }
 
@@ -403,7 +402,7 @@
             let html = '<h4 style="margin-bottom:8px;">📦 版本 / 补丁上下文</h4>' +
                 '<p class="hint" style="margin-bottom:10px;">' + esc(data.summary || '') + '</p>';
             if (data.correlations && data.correlations.length) {
-                html += '<div style="margin-bottom:12px;padding:10px;border-radius:8px;background:rgba(139,92,246,0.12);font-size:0.85rem;">' +
+                html += '<div style="margin-bottom:12px;padding:10px;border-radius:8px;background:rgba(94,92,230,0.12);font-size:0.85rem;">' +
                     '<strong>版本 ↔ 口碑关联提示</strong><ul style="margin:8px 0 0 16px;">' +
                     data.correlations.map(c => '<li>' + esc(c) + '</li>').join('') + '</ul></div>';
             }
@@ -414,7 +413,7 @@
                     html += '<div class="hint">归档以来无版本记录</div>';
                 } else {
                     html += '<ul class="delta-list">' + rows.map(v =>
-                        '<li><span style="color:#c4b5fd;">' + esc(v.version_label) + '</span> · ' +
+                        '<li><span style="color:#d8d7f5;">' + esc(v.version_label) + '</span> · ' +
                         esc(v.released_at || '') + '<br><span style="color:var(--muted);">' +
                         esc(v.change_summary || '') + '</span></li>'
                     ).join('') + '</ul>';
@@ -488,7 +487,7 @@
             });
             const data = await res.json();
             if (!data.success) {
-                box.innerHTML = '<span style="color:#f87171;">' + esc(data.message || '复测失败') + '</span>';
+                box.innerHTML = '<span style="color:#dc2626;">' + esc(data.message || '复测失败') + '</span>';
                 return;
             }
             box.innerHTML = '✅ 复测完成' + (data.archive_id ? '，新归档 #' + esc(data.archive_id.slice(0, 8)) : '');
@@ -518,12 +517,12 @@
                 });
                 const data = await res.json();
                 if (!data.success) {
-                    box.innerHTML = '<span style="color:#f87171;">分享失败：' + esc(data.message || data.detail || '') + '</span>';
+                    box.innerHTML = '<span style="color:#dc2626;">分享失败：' + esc(data.message || data.detail || '') + '</span>';
                     return;
                 }
                 const url = data.share_url || ('/shared/' + data.share_token);
                 const full = (location.origin || '') + url;
-                box.innerHTML = '✅ 分享链接（7 天有效）：<a href="' + esc(url) + '" target="_blank" rel="noopener" style="color:#c4b5fd;">' + esc(full) + '</a>';
+                box.innerHTML = '✅ 分享链接（7 天有效）：<a href="' + esc(url) + '" target="_blank" rel="noopener" style="color:#d8d7f5;">' + esc(full) + '</a>';
                 box.dataset.shareUrl = full;
                 if (!document.getElementById('btn-copy-archive-share')) {
                     const btn = document.createElement('button');
@@ -612,6 +611,7 @@
         }
 
         async function init() {
+            if (window.AppNav) AppNav.mount('#app-nav-mount');
             wireReviewAiToolbar();
             toggleReviewMode();
             initFromHash();

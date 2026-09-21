@@ -6,6 +6,7 @@
     <title>分析向导 · Steam 竞品一键报告</title>
     <link rel="stylesheet" href="/static/css/scenario-workspace.css">
     <link rel="stylesheet" href="/static/css/analysis-guide.css">
+    <link rel="stylesheet" href="/static/css/app-nav.css">
     <script src="/static/js/auth-token.js"></script>
     <script src="/static/js/auth-nav.js"></script>
     <script src="/static/js/data-provenance.js"></script>
@@ -14,56 +15,56 @@
     <script src="/static/js/analysis-guide.js"></script>
     <script src="/static/js/site-map-panel.js" defer></script>
     <script src="/static/js/usage-badge.js"></script>
+    <script src="/static/js/app-nav.js"></script>
+    <link rel="stylesheet" href="/static/css/theme.css">
     <style>
-        :root { --bg:#0f1419; --panel:#1a2332; --text:#e7ecf3; --muted:#94a3b8; --accent:#06b6d4; --border:rgba(255,255,255,0.08); }
+        :root { --bg:#f5f5f7; --panel:#ffffff; --text:#1d1d1f; --muted:#6e6e73; --accent:#0071e3; --border:rgba(0,0,0,0.08); }
         body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; margin:0; }
-        .topbar { display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid var(--border); background:rgba(26,35,50,0.95); }
+        .topbar { display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid var(--border); background:rgba(255,255,255,0.9); }
         .layout { max-width:960px; margin:0 auto; padding:24px 24px 48px; }
         .hero { margin-bottom:24px; }
         .hero h1 { font-size:1.5rem; margin-bottom:8px; }
         .hero p { color:var(--muted); font-size:0.9rem; line-height:1.5; }
         .card { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:16px; }
         label { font-size:0.75rem; color:var(--muted); display:block; margin-bottom:6px; }
-        textarea, input { width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); background:#243044; color:var(--text); font-size:0.95rem; }
+        textarea, input { width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); background:#eef1f5; color:var(--text); font-size:0.95rem; }
         .btn { border:1px solid var(--border); background:var(--panel); color:var(--text); padding:10px 16px; border-radius:8px; cursor:pointer; font-size:0.875rem; text-decoration:none; display:inline-block; }
-        .btn-primary { background:linear-gradient(135deg,var(--accent),#0891b2); border:none; font-weight:600; }
+        .btn-primary { background:linear-gradient(135deg,var(--accent),#0051a2); border:none; font-weight:600; }
         .btn:disabled { opacity:0.5; cursor:not-allowed; }
         .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:16px; }
         .steps { display:flex; flex-direction:column; gap:8px; margin-top:16px; }
-        .step { display:flex; gap:12px; align-items:flex-start; padding:10px 12px; border-radius:8px; background:rgba(0,0,0,0.2); font-size:0.85rem; }
-        .step.ok { border-left:3px solid #22c55e; }
+        .step { display:flex; gap:12px; align-items:flex-start; padding:10px 12px; border-radius:8px; background:#f5f5f7; font-size:0.85rem; }
+        .step.ok { border-left:3px solid #16a34a; }
         .step.warn { border-left:3px solid #f59e0b; }
         .step.error { border-left:3px solid #ef4444; }
-        .step.skipped { border-left:3px solid #64748b; }
+        .step.skipped { border-left:3px solid #86868b; }
         .step-id { font-weight:600; min-width:72px; color:var(--accent); }
         .action-table { width:100%; border-collapse:collapse; font-size:0.8rem; margin-top:12px; }
         .action-table th, .action-table td { border:1px solid var(--border); padding:8px; text-align:left; vertical-align:top; }
-        .action-table th { background:rgba(255,255,255,0.04); }
+        .action-table th { background:rgba(0,0,0,0.03); }
         .hint { font-size:0.8rem; color:var(--muted); margin-top:8px; }
         .search-item { display:block; width:100%; text-align:left; padding:10px 12px; border:none; background:transparent; color:var(--text); cursor:pointer; font-size:0.875rem; border-bottom:1px solid var(--border); }
-        .search-item:hover { background:rgba(6,182,212,0.12); }
+        .search-item:hover { background:rgba(0,113,227,0.12); }
         .search-item small { color:var(--muted); margin-left:8px; }
         #report-output { margin-top:16px; }
     </style>
 </head>
 <body>
-    <header class="topbar">
-        <div>
-            <strong>🧭 分析向导</strong>
-            <span style="color:var(--muted);font-size:0.85rem;margin-left:8px;">AppID → 抓取 → 报告 → 归档</span>
+    <header class="app-topbar">
+        <div class="app-topbar-left">
+            <a class="app-topbar-logo" href="/">🎮</a>
+            <div id="app-nav-mount" data-active="guide"></div>
         </div>
-        <div style="display:flex;gap:10px;align-items:center;">
+        <div class="app-topbar-right">
             <span id="usage-badge"></span>
-            <a class="btn" href="/work" style="margin-right:8px;">落地指导</a>
-            <a class="btn" href="/import" style="margin-right:8px;">导入指标</a>
+            <a class="btn" href="/import">导入指标</a>
             <button class="btn" type="button" data-sitemap-open title="帮助与指引">📖 指引</button>
-            <a class="btn" href="/dashboard">← 看板</a>
         </div>
     </header>
     <main class="layout">
         <div id="onboarding-root"></div>
         <div id="provenance-banner" style="display:none;margin-bottom:16px;"></div>
-        <div id="demo-banner" style="display:none;margin-bottom:16px;padding:12px 16px;border-radius:10px;background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.35);font-size:0.85rem;"></div>
+        <div id="demo-banner" style="display:none;margin-bottom:16px;padding:12px 16px;border-radius:10px;background:rgba(0,113,227,0.12);border:1px solid rgba(0,113,227,0.35);font-size:0.85rem;"></div>
         <div class="hero">
             <h1>输入游戏名或 AppID，一键生成可执行竞品报告</h1>
             <p>支持 Steam（PC）、TapTap 与 Google Play（手游）。抓取后的评论与指标<strong>自动进入运营看板</strong>，本页额外生成深度报告与行动清单。</p>
@@ -71,7 +72,7 @@
 
         <div class="card">
             <label for="platform">数据来源</label>
-            <select id="platform" style="width:100%;max-width:240px;padding:10px;border-radius:8px;border:1px solid var(--border);background:#243044;color:var(--text);margin-bottom:12px;">
+            <select id="platform" style="width:100%;max-width:240px;padding:10px;border-radius:8px;border:1px solid var(--border);background:#eef1f5;color:var(--text);margin-bottom:12px;">
                 <option value="steam">Steam（PC）</option>
                 <option value="taptap">TapTap（手游）</option>
                 <option value="google_play">Google Play（手游）</option>
@@ -81,16 +82,24 @@
             <div class="search-wrap" style="position:relative;margin-top:10px;">
                 <label for="game-search" style="margin-bottom:6px;">搜索并添加游戏</label>
                 <input type="search" id="game-search" placeholder="输入英文名搜索 Steam…" autocomplete="off"
-                    style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:#243044;color:var(--text);">
-                <div id="search-results" class="search-dropdown" style="display:none;position:absolute;left:0;right:0;top:100%;margin-top:4px;background:#1a2332;border:1px solid var(--border);border-radius:8px;max-height:220px;overflow:auto;z-index:20;"></div>
+                    style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:#eef1f5;color:var(--text);">
+                <div id="search-results" class="search-dropdown" style="display:none;position:absolute;left:0;right:0;top:100%;margin-top:4px;background:#ffffff;border:1px solid var(--border);border-radius:8px;max-height:220px;overflow:auto;z-index:20;"></div>
             </div>
             <div class="hint" id="input-hint">Steam 示例：Counter-Strike 2 · Dota 2 · 或 AppID 730, 570</div>
             <div class="toolbar">
                 <label style="display:flex;align-items:center;gap:6px;margin:0;font-size:0.85rem;">
-                    <input type="checkbox" id="skip-crawl" style="width:auto;"> 跳过抓取（使用已有 MVP 数据）
+                    <input type="checkbox" id="skip-crawl" style="width:auto;"> 跳过抓取（使用已有数据）
                 </label>
                 <label style="display:flex;align-items:center;gap:6px;margin:0;font-size:0.85rem;">
                     <input type="checkbox" id="auto-archive" checked style="width:auto;"> 自动归档
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;margin:0;font-size:0.85rem;">
+                    每款抓取
+                    <select id="max-reviews" style="padding:5px 6px;border-radius:6px;border:1px solid var(--border);background:#eef1f5;color:var(--text);">
+                        <option value="50" selected>50 条</option>
+                        <option value="100">100 条</option>
+                        <option value="200">200 条</option>
+                    </select>
                 </label>
                 <button type="button" class="btn btn-primary" id="btn-run">🚀 开始分析</button>
                 <span id="status" style="color:var(--muted);font-size:0.85rem;"></span>
@@ -215,7 +224,7 @@
                 const data = await res.json();
                 if (!res.ok) data.success = false;
                 if (!data.success) {
-                    box.innerHTML = '<span style="color:#f87171;">复测失败：' + esc(apiErrorMessage(data, '未知错误')) + '</span>';
+                    box.innerHTML = '<span style="color:#dc2626;">复测失败：' + esc(apiErrorMessage(data, '未知错误')) + '</span>';
                     return;
                 }
                 const deltaHtml = (data.deltas || []).map(d => {
@@ -223,7 +232,7 @@
                     return esc(d.product_name) + '：' + d.positive_rate_before + '%→' + d.positive_rate_after + '% (' + sign + d.delta + '%)';
                 }).join(' · ');
                 box.innerHTML = '✅ 复测完成。口碑变化：' + (deltaHtml || '—') +
-                    (data.archive_id ? ' · <a href="/games/review#archives" style="color:#06b6d4;">查看归档</a>' : '');
+                    (data.archive_id ? ' · <a href="/games/review#archives" style="color:#0071e3;">查看归档</a>' : '');
                 renderActions(data.action_items || [], data.archive_id || archiveId);
                 if (data.report) {
                     data.report.action_items = data.action_items;
@@ -262,7 +271,7 @@
             }
             const statusEl = document.getElementById('status');
             if (data.success && !data.skip_crawl && !restored) {
-                statusEl.innerHTML = esc(statusMsg) + ' · <a href="/dashboard" style="color:#06b6d4;">去看板 →</a>';
+                statusEl.innerHTML = esc(statusMsg) + ' · <a href="/dashboard" style="color:#0071e3;">去看板 →</a>';
             } else {
                 statusEl.textContent = statusMsg;
             }
@@ -350,7 +359,7 @@
                         platform: selectedPlatform(),
                         skip_crawl: document.getElementById('skip-crawl').checked,
                         auto_archive: document.getElementById('auto-archive').checked,
-                        max_reviews: 50,
+                        max_reviews: parseInt(document.getElementById('max-reviews').value, 10) || 50,
                     }),
                 });
                 const data = await res.json();
@@ -481,13 +490,13 @@
                 if (!res.ok || !data.success) {
                     const msg = (typeof data.detail === 'string' ? data.detail : null)
                         || data.message || ('HTTP ' + res.status);
-                    shareEl.innerHTML = '<span style="color:#f87171;">分享失败：' + esc(msg) + '</span>';
+                    shareEl.innerHTML = '<span style="color:#dc2626;">分享失败：' + esc(msg) + '</span>';
                     return;
                 }
                 const url = data.share_url;
                 shareEl.innerHTML =
                     '分享链接（7 天有效）：' +
-                    '<a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer" style="color:#06b6d4;">' +
+                    '<a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer" style="color:#0071e3;">' +
                     esc(url) + '</a>' +
                     ' <button type="button" class="btn" id="btn-copy-share" style="margin-left:8px;padding:4px 10px;">复制</button>' +
                     ' <button type="button" class="btn" id="btn-open-share" style="margin-left:4px;padding:4px 10px;">新标签打开</button>';
@@ -503,7 +512,7 @@
                     window.open(url, '_blank', 'noopener');
                 };
             } catch (e) {
-                shareEl.innerHTML = '<span style="color:#f87171;">网络错误，无法生成分享链接</span>';
+                shareEl.innerHTML = '<span style="color:#dc2626;">网络错误，无法生成分享链接</span>';
             } finally {
                 btn.disabled = false;
             }
@@ -544,9 +553,9 @@
                 if (autorun) {
                     banner.textContent = '✅ Demo 已就绪，正在自动生成报告…';
                     await runWizard();
-                    banner.innerHTML = '✅ Demo 报告已生成。可<a href="/work" style="color:#06b6d4;margin-left:4px;">查看落地指导</a>或<a href="/games/review#archives" style="color:#06b6d4;margin-left:4px;">查看归档</a>。';
+                    banner.innerHTML = '✅ Demo 报告已生成。可<a href="/work" style="color:#0071e3;margin-left:4px;">查看落地指导</a>或<a href="/games/review#archives" style="color:#0071e3;margin-left:4px;">查看归档</a>。';
                 } else {
-                    banner.innerHTML = '✅ Demo 已就绪。点击「开始分析」查看样例报告，或<a href="/import" style="color:#06b6d4;margin-left:6px;">导入 Owner 指标</a>叠加经营数据。';
+                    banner.innerHTML = '✅ Demo 已就绪。点击「开始分析」查看样例报告，或<a href="/import" style="color:#0071e3;margin-left:6px;">导入 Owner 指标</a>叠加经营数据。';
                 }
             } catch (e) {
                 banner.textContent = 'Demo 加载失败';
@@ -555,6 +564,7 @@
 
         (async function initWizard() {
             if (!(await ensureAuth())) return;
+            if (window.AppNav) AppNav.mount('#app-nav-mount');
             UsageBadge.mount('usage-badge', token, { linkPricing: true });
             if (typeof OnboardingWizard !== 'undefined') OnboardingWizard.render('onboarding-root');
             DataProvenance.fetchProvenance(token()).then(p => DataProvenance.renderBanner('provenance-banner', p));

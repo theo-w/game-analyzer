@@ -1,10 +1,6 @@
 import json
 import os
-import sys
-
 import pytest
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from src.mvp_data import (
     build_mvp_report_payload,
@@ -13,7 +9,6 @@ from src.mvp_data import (
 )
 from src.mvp_pipeline import analyze_actual_steam_data, validate_analysis
 from tests.test_mvp_pipeline import FakeSteamCrawler
-
 
 @pytest.fixture
 def mvp_artifacts(tmp_path):
@@ -29,14 +24,12 @@ def mvp_artifacts(tmp_path):
             json.dump(payload, handle)
     return tmp_path
 
-
 def test_mvp_validation_and_dataset(tmp_path, mvp_artifacts):
     assert mvp_validation_passed(str(mvp_artifacts)) is True
     comments, metrics, source = get_mvp_comments_and_metrics(str(mvp_artifacts))
     assert source in {"mvp_steam", "steam_public"}
     assert len(comments) == 2
     assert len(metrics) >= 1
-
 
 def test_build_mvp_report_payload(tmp_path, mvp_artifacts):
     comments, metrics, _ = get_mvp_comments_and_metrics(str(mvp_artifacts))

@@ -8,8 +8,8 @@ import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Optional, Tuple
 
-from auth import get_password_hash
-from database import UserRepository, db_manager
+from src.auth import get_password_hash
+from src.database import UserRepository, db_manager
 
 RESET_TOKEN_TTL_MINUTES = 60
 

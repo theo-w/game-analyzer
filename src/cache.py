@@ -6,13 +6,9 @@ import json
 import hashlib
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any, List
-import sys
 import os
 
-sys.path.insert(0, os.path.dirname(__file__))
-
-from database import config_manager
-
+from src.database import config_manager
 
 class RedisCache:
     """Redis缓存管理器"""
@@ -148,7 +144,6 @@ class RedisCache:
             if hasattr(self, '_cache_expire'):
                 self._cache_expire = {}
 
-
 class RateLimiter:
     """速率限制器"""
     
@@ -180,7 +175,6 @@ class RateLimiter:
         minute_key = f"rate_limit:{key}:{datetime.now().strftime('%Y%m%d%H%M')}"
         count = self.cache.get(minute_key) or 0
         return max(0, limit - count)
-
 
 class SessionManager:
     """会话管理器"""
@@ -229,7 +223,6 @@ class SessionManager:
         """检查会话是否有效"""
         return self.cache.exists(f"session:{session_id}")
 
-
 class DataCache:
     """数据缓存管理器"""
     
@@ -269,28 +262,23 @@ class DataCache:
             # 在内存模式下无法批量删除，这里简化处理
             pass
 
-
 # 全局实例
 redis_cache = RedisCache()
 rate_limiter = RateLimiter()
 session_manager = SessionManager()
 data_cache = DataCache()
 
-
 def get_cache() -> RedisCache:
     """获取缓存实例（兼容旧代码）"""
     return redis_cache
-
 
 def get_rate_limiter() -> RateLimiter:
     """获取速率限制器实例"""
     return rate_limiter
 
-
 def get_session_manager() -> SessionManager:
     """获取会话管理器实例"""
     return session_manager
-
 
 def get_data_cache() -> DataCache:
     """获取数据缓存管理器实例"""

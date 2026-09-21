@@ -3,21 +3,15 @@
 from __future__ import annotations
 
 import os
-import sys
-
 import pytest
 from fastapi.testclient import TestClient
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-from auth import create_access_token
-from web_app import app
-
+from src.auth import create_access_token
+from src.web_app import app
 
 @pytest.fixture
 def client():
     return TestClient(app)
-
 
 def test_api_options_accepts_bearer_without_query_token(client):
     token = create_access_token({"sub": "admin"})
@@ -29,7 +23,6 @@ def test_api_options_accepts_bearer_without_query_token(client):
     body = response.json()
     assert body.get("success") is True
     assert "products" in body
-
 
 def test_bearer_wins_over_stale_query_token(client):
     """Regression: stale ?token= must not override a valid Bearer header."""

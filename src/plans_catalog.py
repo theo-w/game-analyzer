@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
-from auth import PLANS, PlanConfig
+from src.auth import PLANS, PlanConfig
 
 
 def plan_to_api_dict(plan_id: str, plan: PlanConfig) -> Dict[str, Any]:

@@ -1,4 +1,4 @@
-"""Playwright browser E2E: login, dashboard, advanced analytics, compare, library."""
+"""Playwright browser E2E: login, dashboard, compare, library, pricing, team."""
 
 from __future__ import annotations
 
@@ -16,31 +16,6 @@ def test_login_dashboard_kpis(page: Page) -> None:
     login(page, redirect_path="/dashboard")
     wait_dashboard_ready(page)
     expect(page.locator("#product-select option")).not_to_have_count(0, timeout=15_000)
-
-
-def test_advanced_analytics_realtime_panel(page: Page) -> None:
-    login(page, redirect_path="/dashboard")
-    wait_dashboard_ready(page)
-
-    page.get_by_role("button", name=re.compile(r"高级分析")).click()
-    modal = page.locator("#advanced-analytics-modal")
-    expect(modal).to_have_class(re.compile(r"\bactive\b"), timeout=10_000)
-    expect(page.locator("#panel-realtime")).to_be_visible()
-
-    expect(page.locator("#realtime-online")).not_to_have_text("--", timeout=15_000)
-    online_text = page.locator("#realtime-online").inner_text().strip()
-    assert online_text.replace(",", "").isdigit()
-    assert int(online_text.replace(",", "")) > 0
-
-
-def test_advanced_analytics_journey_tab(page: Page) -> None:
-    login(page, redirect_path="/dashboard")
-    page.get_by_role("button", name=re.compile(r"高级分析")).click()
-    expect(page.locator("#advanced-analytics-modal")).to_have_class(re.compile(r"\bactive\b"))
-
-    page.locator("#tab-journey").click()
-    expect(page.locator("#panel-journey")).to_be_visible()
-    expect(page.locator("#journey-nodes")).not_to_be_empty(timeout=15_000)
 
 
 def test_compare_workbench_loads_cards(page: Page) -> None:

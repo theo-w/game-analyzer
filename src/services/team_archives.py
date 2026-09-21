@@ -8,7 +8,7 @@ from src.services.analysis_archive import AnalysisArchiveRepository
 
 
 def list_team_shared_archives(team_id: int, viewer_username: str) -> Dict[str, Any]:
-    from team_management import TeamRepository
+    from src.team_management import TeamRepository
 
     members = TeamRepository.get_team_members(team_id)
     member_names = {m.get("username") for m in members if m.get("username")}

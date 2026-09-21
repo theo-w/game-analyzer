@@ -6,7 +6,7 @@ import os
 
 from fastapi.responses import JSONResponse
 
-from database import UserRepository
+from src.database import UserRepository
 from src.abuse_guard import (
     check_device_free_pool,
     extract_device_id,

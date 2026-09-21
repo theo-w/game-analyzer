@@ -93,7 +93,13 @@ def analyze_trends(metrics):
     products = list(set(m.get("product") for m in metrics))
     for product in products:
         p_metrics = [m for m in metrics if m.get("product") == product]
-        download_metric = next((m for m in p_metrics if m.get("metric") == "用户总下载量"), None)
+        download_metric = next(
+            (
+                m for m in p_metrics
+                if any(a in str(m.get("metric") or "") for a in DOWNLOAD_METRIC_ALIASES)
+            ),
+            None,
+        )
         if download_metric and download_metric.get("环比变化"):
             change = download_metric["环比变化"]
             trend_type = "up" if change.startswith("+") else "down"
@@ -153,6 +159,17 @@ def generate_html_period_report(
     ]
     avg_arppu = round(sum(arppu_values) / len(arppu_values), 2) if arppu_values else 0.0
 
+    summary_cards = f"""
+        <div class="card"><div class="card-title">总规模/评论样本</div><div class="card-value">{total_downloads:,}</div></div>
+        <div class="card"><div class="card-title">产品数量</div><div class="card-value">{len(products)}</div></div>"""
+    # 收入/ARPPU 仅在数据集中真实存在（如用户导入的经营 CSV）时输出
+    if total_revenue > 0:
+        summary_cards += f"""
+        <div class="card"><div class="card-title">充值/收入</div><div class="card-value">¥{total_revenue:,}</div></div>"""
+    if avg_arppu > 0:
+        summary_cards += f"""
+        <div class="card"><div class="card-title">平均ARPPU</div><div class="card-value">¥{avg_arppu}</div></div>"""
+
     type_labels = {"daily": "日报", "weekly": "周报", "monthly": "月报"}
     title = type_labels.get(report_type, "报告")
     now = datetime.now()
@@ -199,12 +216,7 @@ def generate_html_period_report(
         <div class="subtitle">{subtitle}</div>
     </div>
     <h3>📊 核心指标汇总</h3>
-    <div class="summary">
-        <div class="card"><div class="card-title">总规模/下载</div><div class="card-value">{total_downloads:,}</div></div>
-        <div class="card"><div class="card-title">充值/收入</div><div class="card-value">¥{total_revenue:,}</div></div>
-        <div class="card"><div class="card-title">平均ARPPU</div><div class="card-value">¥{avg_arppu}</div></div>
-        <div class="card"><div class="card-title">产品数量</div><div class="card-value">{len(products)}</div></div>
-    </div>
+    <div class="summary">{summary_cards}</div>
     <h3>🎮 分产品概览</h3>
     <div class="summary">{product_lines}</div>
     <div class="footer">

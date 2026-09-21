@@ -16,7 +16,7 @@ from src.services.report_helpers import (
     generate_recommendations,
     generate_report_summary,
 )
-from src.report_generator import report_generator
+from src.report_generator import send_report_email
 from src.report_scheduler import report_scheduler
 
 logger = logging.getLogger(__name__)
@@ -234,7 +234,7 @@ async def send_report(
         else:
             return {"success": False, "message": "Invalid report type"}
 
-        result = report_generator.send_report_email(report_html, to_email, subject)
+        result = send_report_email(report_html, to_email, subject)
         return result
     except Exception as e:
         logger.exception("Send report error: %s", e)
