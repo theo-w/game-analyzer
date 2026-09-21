@@ -40,7 +40,6 @@ from src.services.report_helpers import generate_html_period_report
 from src.data_collector import data_collector
 from src.report_scheduler import report_scheduler
 from src.cache import data_cache
-from src.mvp_pipeline import DEFAULT_OUTPUT_DIR, DEFAULT_STEAM_APP_IDS, run_mvp_pipeline
 from src.data_resolution import (
     get_user_comments_data,
     get_user_metrics_data,
@@ -69,7 +68,6 @@ from src.routers.conversation_router import router as conversation_router
 from src.routers.data_router import router as data_router
 from src.routers.import_router import router as import_router
 from src.routers.llm_router import router as llm_router
-from src.routers.mvp_router import router as mvp_router
 from src.routers.pages_router import router as pages_router
 from src.routers.payment_router import router as payment_router
 from src.routers.products_router import router as products_router
@@ -183,7 +181,6 @@ app = FastAPI(
     description="AI驱动的游戏商业智能分析平台",
     lifespan=app_lifespan,
 )
-app.include_router(mvp_router)
 app.include_router(health_router)
 app.include_router(commercial_router)
 app.include_router(agent_router)

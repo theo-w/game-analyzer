@@ -67,9 +67,7 @@
         if (payload.source === 'empty' || payload.needs_crawl) {
             cta =
                 '<a href="/guide" style="margin-left:auto;font-size:0.8rem;color:#67e8f9;text-decoration:none;' +
-                'padding:4px 10px;border-radius:8px;border:1px solid rgba(103,232,249,0.35);">🚀 先抓取</a>' +
-                '<a href="/mvp" style="font-size:0.8rem;color:#a5b4fc;text-decoration:none;' +
-                'padding:4px 10px;border-radius:8px;border:1px solid rgba(165,180,252,0.35);">MVP 抓取</a>';
+                'padding:4px 10px;border-radius:8px;border:1px solid rgba(103,232,249,0.35);">🚀 先抓取</a>';
         } else if (payload.show_mock_warning || level === 'low' || payload.source === 'mock') {
             cta = importCtaHtml();
         }

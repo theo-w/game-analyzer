@@ -134,7 +134,7 @@ def generate_issues_diagnosis(product_ids, product_names):
                 "product": name,
                 "severity": "medium",
                 "issues": ["付费与留存需结合评论样本持续观察", "新手引导与版本节奏可进一步优化"],
-                "impact": "建议结合 MVP 抓取评论做定向验证",
+                "impact": "建议结合抓取评论做定向验证",
             }
         )
     return issues

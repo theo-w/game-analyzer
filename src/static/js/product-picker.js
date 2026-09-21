@@ -72,7 +72,7 @@
                 ? options.selectedIds
                 : new Set(options.selectedIds || []);
         const defaultCount = options.defaultCount ?? 2;
-        const emptyHint = options.emptyHint || "暂无产品，请先在「一键采集」或 MVP 页导入数据";
+        const emptyHint = options.emptyHint || "暂无产品，请先在分析向导抓取数据";
 
         if (!select) return;
 

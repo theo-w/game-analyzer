@@ -7,7 +7,7 @@ import os
 import re
 from typing import Any, Dict, List, Optional, Sequence
 
-# Built-in catalog — extend via data/custom_products.json or POST /api/mvp/custom-products.
+# Built-in catalog — extend via data/custom_products.json.
 PRODUCT_ENTRIES: List[Dict[str, Any]] = [
     {
         "key": "last_war",

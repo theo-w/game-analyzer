@@ -7,21 +7,18 @@
     const COPY = {
         title: "真实竞品数据如何进入看板",
         summary:
-            "抓取与看板共用同一份数据集，不是两套系统。在向导或 MVP 页完成抓取后，看板会自动读到评论与样本指标。",
+            "抓取与看板共用同一份数据集，不是两套系统。在分析向导完成抓取后，看板会自动读到评论与样本指标。",
         steps: [
             {
                 num: "①",
                 title: "抓取真实竞品",
-                body: "在分析向导或 MVP 页选择 Steam / TapTap / Google Play，输入游戏名、AppID 或包名，执行抓取。",
-                links: [
-                    { label: "分析向导", href: "/guide" },
-                    { label: "MVP 抓取", href: "/mvp" },
-                ],
+                body: "在分析向导选择 Steam / TapTap / Google Play，输入游戏名、AppID 或包名，执行抓取。",
+                links: [{ label: "分析向导", href: "/guide" }],
             },
             {
                 num: "②",
                 title: "写入统一数据集",
-                body: "评论、样本好评率等指标写入 data/mvp/users/{用户名}/steam_dataset.json。MVP 与看板读取该登录用户目录下的数据。",
+                body: "评论、样本好评率等指标写入 data/mvp/users/{用户名}/steam_dataset.json。向导与看板读取该登录用户目录下的数据。",
                 links: [],
             },
             {
@@ -40,7 +37,7 @@
         optional:
             "可选：通过「导入指标」上传 CSV（DAU、收入、下载/注册/留存等 Owner 数据），会与抓取评论合并分析；导入数据优先级更高。",
         pages: [
-            { name: "MVP / 分析向导", role: "抓取 + 深度报告（口碑主题、行动建议）" },
+            { name: "分析向导", role: "抓取 + 深度报告（口碑主题、行动建议）" },
             { name: "运营看板", role: "筛选 + KPI 汇总 + 平台排行 + 预警" },
             { name: "竞品工作台", role: "横向对比、玩法拆解（读取同一数据集）" },
         ],
@@ -131,7 +128,7 @@
 
     /**
      * @param {string} containerId
-     * @param {{ variant?: 'dashboard'|'wizard'|'mvp', theme?: 'light'|'dark', highlight?: string, showTable?: boolean }} opts
+     * @param {{ variant?: 'dashboard'|'wizard', theme?: 'light'|'dark', highlight?: string, showTable?: boolean }} opts
      */
     function render(containerId, opts) {
         const el = document.getElementById(containerId);
@@ -142,15 +139,12 @@
         const key = "dfg_" + variant;
         const collapsed = isCollapsed(key);
         const highlight =
-            opts.highlight ||
-            (variant === "wizard" ? "①" : variant === "mvp" ? "①" : null);
+            opts.highlight || (variant === "wizard" ? "①" : null);
 
         const variantNote =
             variant === "wizard"
                 ? "你正在第 ① 步：完成抓取后，打开看板并点击「应用筛选」即可看到同款竞品数据。"
-                : variant === "mvp"
-                  ? "本页「重新抓取」= 第 ① 步；抓取成功后数据立即进入看板数据集。"
-                  : "若刚完成抓取，请点「应用筛选」刷新；顶部横幅会显示当前数据来源。";
+                : "若刚完成抓取，请点「应用筛选」刷新；顶部横幅会显示当前数据来源。";
 
         el.innerHTML =
             '<section class="dfg-panel dfg-theme-' +

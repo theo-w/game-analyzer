@@ -115,7 +115,7 @@ async def get_ai_analysis(
                 names = label_for_products(
                     products, build_product_name_map(products, username=current_user.username)
                 )
-                rule_summary = f"本次分析覆盖 {names}，共 {len(product_reports)} 款产品（基于 MVP 抓取评论）。"
+                rule_summary = f"本次分析覆盖 {names}，共 {len(product_reports)} 款产品（基于抓取评论）。"
         data = {
             "format": "mvp_steam",
             "summary": rule_summary,
@@ -174,7 +174,7 @@ async def get_ai_analysis(
             }
 
     ai_report = {
-        "summary": f"⚠️ 【默认报告】本次分析覆盖 {product_label}，时间周期为 {time_label}。核心结论：用户对产品核心玩法认可度较高，但付费设计和新手引导需要优化。建议关注付费转化率和用户留存问题，适时推出限时活动提升活跃度。\n\n💡 提示：如需获得AI深度分析，请在配置面板中设置LLM提供商（如OpenAI、Claude、Gemini或Ollama本地模型），或运行 Steam MVP 抓取真实评论。",
+        "summary": f"⚠️ 【默认报告】本次分析覆盖 {product_label}，时间周期为 {time_label}。核心结论：用户对产品核心玩法认可度较高，但付费设计和新手引导需要优化。建议关注付费转化率和用户留存问题，适时推出限时活动提升活跃度。\n\n💡 提示：如需获得AI深度分析，请在配置面板中设置LLM提供商（如OpenAI、Claude、Gemini或Ollama本地模型），或运行分析向导抓取真实评论。",
         "product_trends": generate_product_trends(products, product_names),
         "new_product_analysis": generate_new_product_trends(),
         "issues_diagnosis": generate_issues_diagnosis(products, product_names),

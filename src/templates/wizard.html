@@ -87,10 +87,18 @@
             <div class="hint" id="input-hint">Steam 示例：Counter-Strike 2 · Dota 2 · 或 AppID 730, 570</div>
             <div class="toolbar">
                 <label style="display:flex;align-items:center;gap:6px;margin:0;font-size:0.85rem;">
-                    <input type="checkbox" id="skip-crawl" style="width:auto;"> 跳过抓取（使用已有 MVP 数据）
+                    <input type="checkbox" id="skip-crawl" style="width:auto;"> 跳过抓取（使用已有数据）
                 </label>
                 <label style="display:flex;align-items:center;gap:6px;margin:0;font-size:0.85rem;">
                     <input type="checkbox" id="auto-archive" checked style="width:auto;"> 自动归档
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;margin:0;font-size:0.85rem;">
+                    每款抓取
+                    <select id="max-reviews" style="padding:5px 6px;border-radius:6px;border:1px solid var(--border);background:#243044;color:var(--text);">
+                        <option value="50" selected>50 条</option>
+                        <option value="100">100 条</option>
+                        <option value="200">200 条</option>
+                    </select>
                 </label>
                 <button type="button" class="btn btn-primary" id="btn-run">🚀 开始分析</button>
                 <span id="status" style="color:var(--muted);font-size:0.85rem;"></span>
@@ -350,7 +358,7 @@
                         platform: selectedPlatform(),
                         skip_crawl: document.getElementById('skip-crawl').checked,
                         auto_archive: document.getElementById('auto-archive').checked,
-                        max_reviews: 50,
+                        max_reviews: parseInt(document.getElementById('max-reviews').value, 10) || 50,
                     }),
                 });
                 const data = await res.json();

@@ -58,6 +58,12 @@ async def dashboard_page():
     return _read_html_page(HTML_FILE, "dashboard")
 
 
+@router.get("/mvp", include_in_schema=False)
+async def mvp_redirect():
+    """MVP 页已并入分析向导（同一抓取 pipeline，向导为超集）。"""
+    return RedirectResponse(url="/guide", status_code=301)
+
+
 @router.get("/showcase", response_class=HTMLResponse)
 async def showcase_page():
     showcase_file = os.path.join(BASE_DIR, "templates", "showcase.html")
@@ -456,7 +462,6 @@ _PUBLIC_PAGES = [
     ("/dashboard", "0.8", "weekly"),
     ("/guide", "0.8", "weekly"),
     ("/work", "0.7", "weekly"),
-    ("/mvp", "0.7", "weekly"),
     ("/hotspot", "0.3", "monthly"),
     ("/games/library", "0.7", "weekly"),
     ("/games/review", "0.7", "weekly"),

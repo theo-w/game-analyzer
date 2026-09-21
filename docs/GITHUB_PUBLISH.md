@@ -93,8 +93,8 @@ curl http://127.0.0.1:8080/api/health
 期望：`{"status":"ok", ...}`。抓取冒烟（需网络）：
 
 ```bash
-curl "http://127.0.0.1:8080/api/mvp/taptap?app_ids=168332&max_reviews=3"
-curl "http://127.0.0.1:8080/api/mvp/google-play?app_ids=com.miHoYo.GenshinImpact&max_reviews=3"
+curl -X POST http://127.0.0.1:8080/api/wizard/run -H "Content-Type: application/json" \
+  -d '{"app_ids": "730", "platform": "steam", "max_reviews": 3}'
 ```
 
 ## 部署固定 Demo

@@ -230,7 +230,7 @@ def _trust_label(source: str) -> Dict[str, str]:
         "empty": {
             "label": "暂无数据",
             "level": "low",
-            "hint": "请先在分析向导或 MVP 页抓取竞品，或导入 CSV",
+            "hint": "请先在分析向导抓取竞品，或导入 CSV",
         },
     }
     return labels.get(source, {"label": source, "level": "medium", "hint": ""})

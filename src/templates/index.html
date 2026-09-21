@@ -1230,7 +1230,7 @@
             <div class="header-actions">
                 <button class="btn btn-secondary" onclick="showReportGenerator()">📋 报告</button>
                 <button class="btn btn-secondary" onclick="showSupportCenter()">🎧 支持</button>
-                <button class="btn btn-primary" onclick="window.location.href='/mvp'">
+                <button class="btn btn-primary" onclick="window.location.href='/guide'">
                     🌐 真实竞品
                 </button>
             </div>
@@ -1299,7 +1299,7 @@
                 <div style="font-size: 0.875rem; color: #94a3b8; margin-bottom: 12px;">抓取结果会自动同步到本看板，无需单独导入</div>
                 <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
                     <a href="/guide" class="btn btn-primary" style="text-decoration:none;">🚀 分析向导</a>
-                    <a href="/mvp" class="btn btn-secondary" style="text-decoration:none;">MVP 抓取</a>
+                    <a href="/import" class="btn btn-secondary" style="text-decoration:none;">📥 导入指标</a>
                 </div>
             </div>
         </div>
@@ -2259,7 +2259,7 @@
                     const hasRaw = Number(window.dashboardMetricsTotal || 0) > 0;
                     const hint = hasRaw
                         ? '数据集里已有抓取结果，但<strong>当前筛选把它们过滤掉了</strong>。请把数据来源改为「全部来源」、时间周期改为「全部（抓取快照）」，并勾选已抓取的产品（如 Last War），再点「应用筛选」。'
-                        : '请先 <a href="/mvp">MVP 抓取</a> 或 <a href="/guide">分析向导</a> 拉取数据，返回看板后点击「应用筛选」。';
+                        : '请先 <a href="/guide">分析向导</a> 拉取数据，返回看板后点击「应用筛选」。';
                     kpiGrid.innerHTML = `
                         <div class="kpi-card" style="grid-column: 1 / -1; text-align: center; padding: 28px;">
                             <div style="font-size: 1rem; color: #64748b; margin-bottom: 8px;">${hasRaw ? '筛选条件下暂无可见数据' : '当前暂无指标数据'}</div>
@@ -2631,7 +2631,7 @@
                         <div style="font-size:0.875rem;color:#86868b;margin-top:4px;">样本 ${escapeHtml(report.sample_size)} · 好评 ${escapeHtml(report.positive_reviews)} / 差评 ${escapeHtml(report.negative_reviews)}</div>
                         <p style="font-size:0.875rem;color:#1d1d1f;margin-top:10px;line-height:1.5;">${escapeHtml(report.recommendation || '')}</p>
                     </div>
-                `).join('') : '<p style="color:#86868b;">暂无产品报告，请先在 MVP 页面完成数据抓取。</p>';
+                `).join('') : '<p style="color:#86868b;">暂无产品报告，请先在分析向导完成数据抓取。</p>';
 
                 const actionList = actions.length ? actions.map((item, idx) => `
                     <div style="background:#f5f5f7;border-radius:12px;padding:14px;margin-bottom:10px;">
