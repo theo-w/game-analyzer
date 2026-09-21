@@ -35,9 +35,8 @@ from src.auth import (
 from src.database import (
     UserRepository, OperationLogRepository, LLMConfigRepository, ProductRepository, OrderRepository, AlertRepository, DashboardConfigRepository, SharedReportRepository, ImportedDataRepository, get_db_connection, config_manager
 )
-from src.report_generator import report_generator
+from src.report_generator import send_report_email
 from src.services.report_helpers import generate_html_period_report
-from src.ab_test_platform import ab_test_platform
 from src.data_collector import data_collector
 from src.report_scheduler import report_scheduler
 from src.cache import data_cache
@@ -240,26 +239,6 @@ async def add_security_headers(request: Request, call_next):
 @app.middleware("http")
 async def google_analytics_middleware(request: Request, call_next):
     return await inject_google_analytics(request, call_next)
-
-# 不可用外部公开数据验证的功能统一下线(依赖内部埋点/经营数据)
-_UNVERIFIABLE_FEATURE_PREFIXES = ("/api/advanced", "/api/predictive", "/api/abtest")
-_UNVERIFIABLE_MESSAGE = (
-    "该功能依赖内部业务数据（埋点/经营数据），外部公开数据无法验证，已下线。"
-    "可验证能力：Steam/TapTap/Google Play 公开评论抓取、情感与主题分析、负面预警、热点追踪、跨平台聚合。"
-)
-
-@app.middleware("http")
-async def disable_unverifiable_features(request: Request, call_next):
-    if request.url.path.startswith(_UNVERIFIABLE_FEATURE_PREFIXES):
-        return JSONResponse(
-            status_code=410,
-            content={
-                "success": False,
-                "code": "feature_disabled",
-                "message": _UNVERIFIABLE_MESSAGE,
-            },
-        )
-    return await call_next(request)
 
 static_dir = os.path.join(BASE_DIR, "static")
 if os.path.exists(static_dir):
@@ -1042,7 +1021,7 @@ async def send_report(
         else:
             return {"success": False, "message": "Invalid report type"}
         
-        result = report_generator.send_report_email(report_html, to_email, subject)
+        result = send_report_email(report_html, to_email, subject)
         return result
     except Exception as e:
         return {"success": False, "message": str(e)}
@@ -1061,183 +1040,6 @@ async def get_report_types(token: Optional[str] = Query(None)):
             {"id": "monthly", "name": "月报", "description": "每月数据汇总及同比/环比分析"}
         ]
     }
-
-# A/B测试平台API
-@app.get("/api/abtest/experiments")
-async def list_ab_experiments(token: Optional[str] = Query(None)):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    experiments = ab_test_platform.list_experiments()
-    result = []
-    
-    for exp in experiments:
-        results = exp.get_results()
-        total_users = sum(r['total_users'] for r in results.values())
-        
-        result.append({
-            "experiment_id": exp.experiment_id,
-            "name": exp.name,
-            "description": exp.description,
-            "status": exp.status,
-            "variants": exp.variants,
-            "traffic_allocation": exp.traffic_allocation,
-            "start_date": exp.start_date,
-            "end_date": exp.end_date,
-            "total_users": total_users,
-            "created_at": exp.created_at
-        })
-    
-    return {"success": True, "experiments": result}
-
-@app.get("/api/abtest/experiments/{experiment_id}")
-async def get_ab_experiment(experiment_id: str, token: Optional[str] = Query(None)):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    exp = ab_test_platform.get_experiment(experiment_id)
-    if not exp:
-        return {"success": False, "message": "Experiment not found"}
-    
-    results = exp.get_results()
-    total_users = sum(r['total_users'] for r in results.values())
-    
-    return {
-        "success": True,
-        "experiment": {
-            "experiment_id": exp.experiment_id,
-            "name": exp.name,
-            "description": exp.description,
-            "status": exp.status,
-            "variants": exp.variants,
-            "traffic_allocation": exp.traffic_allocation,
-            "start_date": exp.start_date,
-            "end_date": exp.end_date,
-            "total_users": total_users,
-            "created_at": exp.created_at,
-            "results": results
-        }
-    }
-
-@app.post("/api/abtest/experiments")
-async def create_ab_experiment(
-    token: Optional[str] = Query(None),
-    name: str = Query(None),
-    description: str = Query(""),
-    traffic_allocation: float = Query(1.0)
-):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    if not name:
-        return {"success": False, "message": "Experiment name is required"}
-    
-    exp = ab_test_platform.create_experiment(
-        name=name,
-        description=description,
-        traffic_allocation=traffic_allocation
-    )
-    
-    return {
-        "success": True,
-        "experiment_id": exp.experiment_id,
-        "message": "Experiment created successfully"
-    }
-
-@app.put("/api/abtest/experiments/{experiment_id}")
-async def update_ab_experiment(
-    experiment_id: str,
-    token: Optional[str] = Query(None),
-    name: Optional[str] = Query(None),
-    description: Optional[str] = Query(None),
-    traffic_allocation: Optional[float] = Query(None),
-    end_date: Optional[str] = Query(None)
-):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    try:
-        kwargs = {}
-        if name: kwargs['name'] = name
-        if description: kwargs['description'] = description
-        if traffic_allocation is not None: kwargs['traffic_allocation'] = traffic_allocation
-        if end_date: kwargs['end_date'] = end_date
-        
-        exp = ab_test_platform.update_experiment(experiment_id, **kwargs)
-        
-        return {
-            "success": True,
-            "experiment_id": exp.experiment_id,
-            "message": "Experiment updated successfully"
-        }
-    except ValueError as e:
-        return {"success": False, "message": str(e)}
-
-@app.delete("/api/abtest/experiments/{experiment_id}")
-async def delete_ab_experiment(experiment_id: str, token: Optional[str] = Query(None)):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    ab_test_platform.delete_experiment(experiment_id)
-    return {"success": True, "message": "Experiment deleted successfully"}
-
-@app.get("/api/abtest/experiments/{experiment_id}/results")
-async def get_ab_experiment_results(experiment_id: str, token: Optional[str] = Query(None)):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    results = ab_test_platform.get_experiment_results(experiment_id)
-    
-    if "error" in results:
-        return {"success": False, "message": results["error"]}
-    
-    return {"success": True, "data": results}
-
-@app.post("/api/abtest/track")
-async def track_ab_test(
-    token: Optional[str] = Query(None),
-    experiment_id: str = Query(None),
-    user_id: str = Query(None)
-):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    if not experiment_id or not user_id:
-        return {"success": False, "message": "experiment_id and user_id are required"}
-    
-    try:
-        variant_id = ab_test_platform.track_user(experiment_id, user_id)
-        return {"success": True, "variant_id": variant_id}
-    except ValueError as e:
-        return {"success": False, "message": str(e)}
-
-@app.post("/api/abtest/convert")
-async def track_ab_conversion(
-    token: Optional[str] = Query(None),
-    experiment_id: str = Query(None),
-    user_id: str = Query(None),
-    variant_id: str = Query(None),
-    conversion_type: str = Query("default")
-):
-    if not token:
-        raise HTTPException(status_code=401, detail="Token required")
-    await get_current_user(token)
-    
-    if not experiment_id or not user_id or not variant_id:
-        return {"success": False, "message": "experiment_id, user_id, and variant_id are required"}
-    
-    try:
-        ab_test_platform.track_conversion(experiment_id, user_id, variant_id, conversion_type)
-        return {"success": True, "message": "Conversion tracked successfully"}
-    except ValueError as e:
-        return {"success": False, "message": str(e)}
 
 @app.get("/api/dashboard/list")
 async def list_dashboards(token: Optional[str] = Query(None)):

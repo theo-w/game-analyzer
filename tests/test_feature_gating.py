@@ -1,20 +1,9 @@
-"""不可用外部数据验证的功能统一下线测试。"""
+"""数据边界护栏：看板不得重新出现依赖内部数据的分析入口。"""
 
 from __future__ import annotations
 
 import pytest
 from fastapi.testclient import TestClient
-
-DISABLED_PATHS = [
-    "/api/advanced/journey",
-    "/api/advanced/funnel",
-    "/api/advanced/cohort",
-    "/api/advanced/anomaly",
-    "/api/predictive/ltv",
-    "/api/predictive/churn",
-    "/api/predictive/revenue-forecast",
-    "/api/abtest/experiments",
-]
 
 
 @pytest.fixture
@@ -22,15 +11,6 @@ def client():
     from src.web_app import app
 
     return TestClient(app)
-
-
-def test_disabled_features_return_410(client):
-    for path in DISABLED_PATHS:
-        res = client.get(path)
-        assert res.status_code == 410, f"{path} -> {res.status_code}"
-        body = res.json()
-        assert body["success"] is False
-        assert "已下线" in body["message"]
 
 
 def test_verifiable_endpoints_not_blocked(client):

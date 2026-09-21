@@ -1,4 +1,4 @@
-"""Playwright browser E2E: login, dashboard, advanced analytics, compare, library."""
+"""Playwright browser E2E: login, dashboard, compare, library, pricing, team."""
 
 from __future__ import annotations
 

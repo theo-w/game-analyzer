@@ -38,17 +38,6 @@ ONBOARDING_STEPS = [
         'type': 'highlight',
         'target_selector': '.filters-bar',
         'highlight_color': '#34c759',
-        'next_step': 'step-4',
-        'show_skip': True
-    },
-    {
-        'id': 'step-4',
-        'title': '高级分析',
-        'description': '点击高级分析按钮，进入专业分析模块，包含漏斗分析、群组分析等高级功能。',
-        'icon': '📈',
-        'type': 'highlight',
-        'target_selector': '.analytics-btn',
-        'highlight_color': '#ff9500',
         'next_step': 'step-5',
         'show_skip': True
     },
@@ -89,48 +78,6 @@ FEATURE_TUTORIALS = [
             {'title': '保存布局', 'description': '拖拽调整布局后保存'}
         ],
         'duration': '3分钟'
-    },
-    {
-        'id': 'tutorial-funnel',
-        'name': '漏斗分析教程',
-        'description': '深入了解用户转化漏斗',
-        'icon': '🔻',
-        'category': 'analytics',
-        'steps': [
-            {'title': '选择漏斗', 'description': '选择要分析的转化漏斗'},
-            {'title': '查看转化', 'description': '分析各步骤的转化率'},
-            {'title': '对比分析', 'description': '对比不同产品的转化情况'},
-            {'title': '获取建议', 'description': '查看智能优化建议'}
-        ],
-        'duration': '5分钟'
-    },
-    {
-        'id': 'tutorial-cohort',
-        'name': '群组分析教程',
-        'description': '分析用户留存和生命周期',
-        'icon': '👥',
-        'category': 'analytics',
-        'steps': [
-            {'title': '选择群组', 'description': '选择时间范围和分组方式'},
-            {'title': '查看留存', 'description': '分析不同群组的留存曲线'},
-            {'title': '对比群组', 'description': '对比多个群组的表现'},
-            {'title': '健康评分', 'description': '查看群组健康度评分'}
-        ],
-        'duration': '4分钟'
-    },
-    {
-        'id': 'tutorial-abtest',
-        'name': 'AB测试教程',
-        'description': '设计和分析实验',
-        'icon': '🧪',
-        'category': 'ab-test',
-        'steps': [
-            {'title': '创建实验', 'description': '设置实验名称和目标'},
-            {'title': '添加变体', 'description': '定义不同的实验变体'},
-            {'title': '配置受众', 'description': '设置目标用户群体'},
-            {'title': '查看结果', 'description': '分析实验数据和统计显著性'}
-        ],
-        'duration': '6分钟'
     },
     {
         'id': 'tutorial-alerts',

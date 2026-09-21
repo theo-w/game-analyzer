@@ -295,13 +295,11 @@
             '<option value="" disabled selected>暂无产品 — 请先抓取竞品数据</option>';
         global.selectedProducts = [];
         if (global.ProductPicker) {
-            ["product-picker", "advanced-product-picker"].forEach((mountId) => {
-                const root = document.getElementById(mountId);
-                if (root) {
-                    root.innerHTML =
-                        '<p class="product-picker-empty">暂无产品 — 请先到 /mvp 抓取竞品数据</p>';
-                }
-            });
+            const root = document.getElementById("product-picker");
+            if (root) {
+                root.innerHTML =
+                    '<p class="product-picker-empty">暂无产品 — 请先到 /guide 抓取竞品数据</p>';
+            }
         }
     }
 
@@ -326,15 +324,12 @@
         const pickerOptions = {
             selectedIds: options.selectedIds,
             defaultCount: options.defaultCount ?? 2,
-            emptyHint: options.emptyHint || "暂无产品 — 请先到 /mvp 抓取竞品数据",
+            emptyHint: options.emptyHint || "暂无产品 — 请先到 /guide 抓取竞品数据",
             hiddenSelectId: "product-select",
             onChange: pickerOnChange,
         };
         if (global.ProductPicker && document.getElementById("product-picker")) {
             global.ProductPicker.render("product-picker", products, pickerOptions);
-            if (document.getElementById("advanced-product-picker")) {
-                global.ProductPicker.render("advanced-product-picker", products, pickerOptions);
-            }
             global.selectedProducts = global.ProductPicker.getSelectedIds("product-picker");
             return;
         }
@@ -387,12 +382,10 @@
             productSelect.innerHTML = '<option disabled selected>该品类暂无产品数据</option>';
             global.selectedProducts = [];
             if (global.ProductPicker) {
-                ["product-picker", "advanced-product-picker"].forEach((mountId) => {
-                    const root = document.getElementById(mountId);
-                    if (root) {
-                        root.innerHTML = '<p class="product-picker-empty">该品类暂无产品数据</p>';
-                    }
-                });
+                const root = document.getElementById("product-picker");
+                if (root) {
+                    root.innerHTML = '<p class="product-picker-empty">该品类暂无产品数据</p>';
+                }
             }
             if (typeof global.renderProductList === "function") global.renderProductList();
             updateLinkedProductSummaries();
@@ -407,14 +400,12 @@
                     : dataSourcePlatformToken(dataSource) === "app store"
                       ? "App Store"
                       : dataSource.charAt(0).toUpperCase() + dataSource.slice(1).replace(/_/g, " ");
-            productSelect.innerHTML = `<option disabled selected>该来源暂无产品 — 请先在 MVP 抓取 ${sourceLabel} 数据</option>`;
+            productSelect.innerHTML = `<option disabled selected>该来源暂无产品 — 请先在向导抓取 ${sourceLabel} 数据</option>`;
             global.selectedProducts = [];
             if (global.ProductPicker) {
-                const hint = `当前来源（${sourceLabel}）暂无产品，请切换来源或先到 /mvp 抓取`;
-                ["product-picker", "advanced-product-picker"].forEach((mountId) => {
-                    const root = document.getElementById(mountId);
-                    if (root) root.innerHTML = `<p class="product-picker-empty">${hint}</p>`;
-                });
+                const hint = `当前来源（${sourceLabel}）暂无产品，请切换来源或先到 /guide 抓取`;
+                const root = document.getElementById("product-picker");
+                if (root) root.innerHTML = `<p class="product-picker-empty">${hint}</p>`;
             }
             if (typeof global.renderProductList === "function") global.renderProductList();
             updateLinkedProductSummaries();
@@ -441,7 +432,7 @@
         renderProductPickers(list, {
             selectedIds: selectAllInScope ? new Set(list.map((p) => p.id)) : new Set(preferredIds),
             defaultCount: selectAllInScope ? list.length : 2,
-            emptyHint: sourceHint || "暂无产品 — 请先到 /mvp 抓取竞品数据",
+            emptyHint: sourceHint || "暂无产品 — 请先到 /guide 抓取竞品数据",
         });
         global.selectedProducts = Array.from(productSelect.selectedOptions).map((o) => o.value);
         if (typeof global.syncReportProductOptions === "function") {

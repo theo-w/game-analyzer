@@ -101,19 +101,3 @@ def test_parse_version_import_text():
     rows = parse_version_import_text("v2.0 | 2024-06-01 | 大更新")
     assert rows[0]["version_label"] == "v2.0"
     assert rows[0]["change_summary"] == "大更新"
-
-
-@pytest.mark.asyncio
-async def test_advanced_dashboard_returns_realtime(api_client):
-    token = (
-        await api_client.post("/token", data={"username": "demo", "password": "demo123"})
-    ).json()["access_token"]
-    res = await api_client.get(
-        "/api/advanced/dashboard",
-        params={"token": token, "product_ids": "", "compare_mode": "false"},
-    )
-    # 高级分析(实时营收/漏斗/预测)依赖内部业务数据, 已下线
-    assert res.status_code == 410
-    body = res.json()
-    assert body["success"] is False
-    assert "已下线" in body["message"]

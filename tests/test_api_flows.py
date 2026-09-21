@@ -437,26 +437,6 @@ async def test_csv_import_reports_missing_columns(api_client):
     assert "值 或 value" in detail["missing_columns"]
 
 
-@pytest.mark.asyncio
-async def test_anomaly_detection_test_accepts_json_body(api_client):
-    token_data = await _post_form(
-        api_client,
-        "/token",
-        {"username": "demo", "password": "demo123"},
-    )
-    token = token_data["access_token"]
-    response = await api_client.post(
-        "/api/advanced/anomaly/test",
-        params={"token": token},
-        json={"metric_name": "revenue", "current_value": 5000},
-    )
-    # 依赖内部业务数据的功能已下线(410)
-    assert response.status_code == 410, response.text
-    body = response.json()
-    assert body["success"] is False
-    assert "已下线" in body["message"]
-
-
 def test_no_duplicate_route_method_pairs():
     route_pairs = [
         (route.path, tuple(sorted(getattr(route, "methods", []) or [])))
