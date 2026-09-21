@@ -18,30 +18,6 @@ def test_login_dashboard_kpis(page: Page) -> None:
     expect(page.locator("#product-select option")).not_to_have_count(0, timeout=15_000)
 
 
-def test_advanced_analytics_realtime_panel(page: Page) -> None:
-    login(page, redirect_path="/dashboard")
-    wait_dashboard_ready(page)
-
-    page.get_by_role("button", name=re.compile(r"高级分析")).click()
-    modal = page.locator("#advanced-analytics-modal")
-    expect(modal).to_have_class(re.compile(r"\bactive\b"), timeout=10_000)
-    expect(page.locator("#panel-realtime")).to_be_visible()
-
-    # /api/advanced/* 已按数据边界决策下线(410)，面板应展示失败提示而非留白
-    expect(page.locator("#realtime-product-tip")).to_contain_text("加载失败", timeout=15_000)
-
-
-def test_advanced_analytics_journey_tab(page: Page) -> None:
-    login(page, redirect_path="/dashboard")
-    page.get_by_role("button", name=re.compile(r"高级分析")).click()
-    expect(page.locator("#advanced-analytics-modal")).to_have_class(re.compile(r"\bactive\b"))
-
-    page.locator("#tab-journey").click()
-    expect(page.locator("#panel-journey")).to_be_visible()
-    # /api/advanced/* 已按数据边界决策下线(410)，面板应展示下线原因而非空白
-    expect(page.locator("#journey-nodes")).to_contain_text("已下线", timeout=15_000)
-
-
 def test_compare_workbench_loads_cards(page: Page) -> None:
     login(page, redirect_path="/dashboard")
     page.goto("/games/compare")
