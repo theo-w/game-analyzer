@@ -25,13 +25,24 @@ h1 { font-family: Georgia, "SimSun", serif; font-size: 42px; line-height: 1.2; m
 .btn-primary { background: var(--orange); color: #fff; }
 .btn-ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
 .btn-demo { background: var(--navy); color: #fff; }
+.modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; text-align: left; margin-bottom: 40px; }
+.mod { --mc:#0071e3; --mc-bg:rgba(0,113,227,.09); background: #fff; border: 1px solid var(--line); border-top: 4px solid var(--mc); border-radius: 13px; padding: 20px 18px; }
+.mod-blue { --mc:#0071e3; --mc-bg:rgba(0,113,227,.09); }
+.mod-purple { --mc:#5e5ce6; --mc-bg:rgba(94,92,230,.09); }
+.mod-orange { --mc:#e85e2c; --mc-bg:rgba(232,94,44,.09); }
+.mod-icon { width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; font-size: 21px; background: var(--mc-bg); margin-bottom: 12px; }
+.mod h3 { font-size: 15px; color: var(--ink); margin-bottom: 7px; }
+.mod p { font-size: 12px; color: #7e8792; line-height: 1.7; margin-bottom: 8px; }
+.mod-pages { font-size: 11px; color: #9ca3af; margin-bottom: 14px; }
+.mod-cta { display: inline-block; font-size: 13px; font-weight: bold; color: var(--mc); text-decoration: none; cursor: pointer; border: none; background: none; padding: 0; font-family: inherit; }
+.mod-cta:hover { text-decoration: underline; }
 .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; text-align: left; }
 .feat { background: #fff; border: 1px solid var(--line); border-radius: 13px; padding: 18px; }
 .feat h3 { font-size: 13px; margin-bottom: 8px; color: var(--orange); }
 .feat p { font-size: 12px; color: #7e8792; line-height: 1.7; }
-.steps { text-align: left; margin: 28px 0; padding: 18px 20px; border-radius: 13px; background: var(--navy); color: #fff; }
-.steps h2 { font-size: 14px; margin-bottom: 12px; color: #f48b65; }
-.steps ol { padding-left: 20px; color: #aeb9c8; font-size: 12px; line-height: 1.9; }
+.steps { text-align: left; margin: 28px 0; padding: 18px 20px; border-radius: 13px; background: #fff; border: 1px solid var(--line); }
+.steps h2 { font-size: 14px; margin-bottom: 12px; color: var(--orange); }
+.steps ol { padding-left: 20px; color: #5b6470; font-size: 12px; line-height: 1.9; }
 .boundary { margin-top: 24px; padding: 14px 16px; border-radius: 10px; background: #fff; border: 1px solid var(--line); font-size: 12px; color: #7c2d12; text-align: left; }
 #demo-status { font-size: 12px; color: var(--muted); margin-top: 12px; min-height: 1.2em; }
 </style>
@@ -60,15 +71,35 @@ h1 { font-family: Georgia, "SimSun", serif; font-size: 42px; line-height: 1.2; m
             </div>
         </div>
         <p id="user-bar" class="user-bar"></p>
-        <h1>🎮 游戏竞品口碑分析</h1>
-        <p class="sub">支持 Steam / TapTap / Google Play。输入游戏名或 AppID，自动生成可执行竞品报告、行动清单与复测闭环。<br>面向制作人 / 策划 / 运营的一站式竞品调研与落地指导。</p>
+        <h1>🎮 游戏舆情分析工作台</h1>
+        <p class="sub">三个模块，覆盖竞品调研到数据监控的完整闭环。<br>支持 Steam / TapTap / Google Play，基于公开评论数据，来源可回查。</p>
         <div class="cta">
             <button type="button" class="btn btn-demo" id="btn-demo">⚡ 一键体验 Demo（CS2 vs Dota2）</button>
-            <a class="btn btn-primary" id="btn-start" href="#">开始分析 →</a>
-            <a class="btn btn-ghost" id="btn-work" href="#">落地指导</a>
-            <a class="btn btn-ghost" id="btn-dashboard" href="#">查看看板</a>
         </div>
         <p id="demo-status"></p>
+        <div class="modules">
+            <div class="mod mod-blue">
+                <div class="mod-icon">🧭</div>
+                <h3>口碑分析</h3>
+                <p>输入游戏名或 AppID，抓取公开评论，生成竞品报告、P0/P1 行动清单与复测闭环。</p>
+                <div class="mod-pages">分析向导 · 竞品对比 · 复盘归档 · 落地指导</div>
+                <button type="button" class="mod-cta" data-goto="/guide">开始分析 →</button>
+            </div>
+            <div class="mod mod-purple">
+                <div class="mod-icon">📊</div>
+                <h3>数据看板</h3>
+                <p>KPI 汇总、平台口碑排行与预警规则；Owner 经营指标可通过 CSV 导入。</p>
+                <div class="mod-pages">BI 看板 · 预警 · 指标导入</div>
+                <button type="button" class="mod-cta" data-goto="/dashboard">进入看板 →</button>
+            </div>
+            <div class="mod mod-orange">
+                <div class="mod-icon">🔥</div>
+                <h3>热点深析</h3>
+                <p>行业热点事件全周期追踪：争议梳理、观点聚合，证据与来源留档可回查。</p>
+                <div class="mod-pages">热点事件 · 舆情监控</div>
+                <button type="button" class="mod-cta" data-goto="/hotspot">查看热点 →</button>
+            </div>
+        </div>
         <div class="steps">
             <h2>3 分钟 Demo 剧本</h2>
             <ol>
@@ -94,18 +125,9 @@ h1 { font-family: Georgia, "SimSun", serif; font-size: 42px; line-height: 1.2; m
             statusEl.textContent = '正在进入 Demo…';
             AuthNav.goWithAuth('/guide?demo=1&autorun=1', { statusEl, statusHint: '跳转登录后将自动加载 Demo…' });
         };
-        document.getElementById('btn-start').onclick = (e) => {
-            e.preventDefault();
-            AuthNav.goWithAuth('/guide');
-        };
-        document.getElementById('btn-work').onclick = (e) => {
-            e.preventDefault();
-            AuthNav.goWithAuth('/work');
-        };
-        document.getElementById('btn-dashboard').onclick = (e) => {
-            e.preventDefault();
-            AuthNav.goWithAuth('/dashboard');
-        };
+        document.querySelectorAll('.mod-cta[data-goto]').forEach((el) => {
+            el.onclick = () => AuthNav.goWithAuth(el.dataset.goto);
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             if (window.AppNav) AppNav.mount('#app-nav-mount');
