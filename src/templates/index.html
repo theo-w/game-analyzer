@@ -2771,19 +2771,6 @@ ${data.summary || ''}
         // 仪表盘管理功能
         // =========================================
 
-                const response = await authFetch(`/api/dashboard/${dashboardId}`);
-                const result = await response.json();
-                
-                if (result.success) {
-                    const dashboard = result.dashboard;
-                    alert(`已加载仪表盘"${dashboard.name}"`);
-                }
-            } catch (e) {
-                console.error('Failed to load dashboard:', e);
-                alert('加载仪表盘失败');
-            }
-        }
-
         function saveCurrentDashboard() {
             const name = prompt('请输入仪表盘名称：');
             if (!name) return;
