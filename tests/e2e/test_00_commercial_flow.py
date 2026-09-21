@@ -23,7 +23,7 @@ def test_commercial_welcome_to_work_flow(page: Page) -> None:
     dismiss_onboarding(page)
     clear_auth_state(page)
     page.goto("/")
-    expect(page.locator("h1")).to_contain_text("竞品")
+    expect(page.locator("h1")).to_contain_text("舆情分析工作台")
 
     page.get_by_role("button", name=re.compile(r"一键体验 Demo")).click()
     page.wait_for_url(re.compile(r"/login\?redirect=.*guide"), timeout=15_000)
