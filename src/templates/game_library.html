@@ -349,7 +349,7 @@
         </div>
         <div class="app-topbar-right">
             <button class="btn btn-ghost" type="button" data-sitemap-open>帮助指引</button>
-            <button class="btn" onclick="syncMvp()">同步 Steam MVP</button>
+            <button class="btn" onclick="syncMvp()">同步向导抓取</button>
             <button class="btn btn-primary" onclick="openCreateModal()">+ 添加游戏</button>
         </div>
     </header>
@@ -375,7 +375,7 @@
             <div class="empty" id="empty-state">
                 <div style="font-size:3rem;margin-bottom:12px;">📚</div>
                 <p>从左侧选择游戏，查看资料与玩法拆解</p>
-                <p style="margin-top:8px;font-size:0.85rem;">或点击「同步 Steam MVP」导入已抓取的真实竞品</p>
+                <p style="margin-top:8px;font-size:0.85rem;">或点击「同步向导抓取」导入已抓取的真实竞品</p>
             </div>
             <div id="detail-view" style="display:none;"></div>
         </main>
@@ -413,7 +413,7 @@
             <div class="delete-target" id="delete-target-name"></div>
             <div class="delete-warning">
                 删除后该游戏将从资料库列表中移除，关联的玩法拆解也不再显示。
-                此操作不可在界面内撤销，之后可通过「添加游戏」或「同步 Steam MVP」重新导入。
+                此操作不可在界面内撤销，之后可通过「添加游戏」或「同步向导抓取」重新导入。
             </div>
             <label class="delete-check">
                 <input type="checkbox" id="delete-confirm-check" onchange="updateDeleteConfirmState()">
@@ -655,7 +655,7 @@
                                 <div style="margin-top:8px;font-weight:600;">${escapeHtml(c.name)}</div>
                                 <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">${escapeHtml(c.genre || '')}</div>
                             </div>
-                        `).join('') : '<p style="color:var(--muted);">暂未关联对标竞品。请点顶部「同步 Steam MVP」或刷新本页自动补链。</p>'}
+                        `).join('') : '<p style="color:var(--muted);">暂未关联对标竞品。请点顶部「同步向导抓取」或刷新本页自动补链。</p>'}
                     </div>
                 </div>
                 <div class="tab-content" id="tab-ai-report">

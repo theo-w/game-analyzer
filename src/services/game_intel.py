@@ -327,7 +327,7 @@ def _template_breakdown_for_genre(genre: str, name: str) -> Dict[str, Any]:
 def sync_library_from_mvp(username: str = "", output_dir: Optional[str] = None) -> Dict[str, Any]:
     """Import Steam MVP crawled titles into the game library."""
     if not mvp_validation_passed(output_dir):
-        return {"success": False, "message": "MVP Steam 数据未就绪，请先运行 /mvp 抓取"}
+        return {"success": False, "message": "MVP Steam 数据未就绪，请先在分析向导（/guide）完成抓取"}
 
     comments, metrics, _ = get_mvp_comments_and_metrics(output_dir)
     if not metrics:

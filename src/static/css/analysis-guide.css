@@ -139,10 +139,10 @@
     margin-bottom: 6px;
 }
 
-/* 模块页深色主题 */
+/* 模块页指引面板（浅色） */
 .ag-module-guide {
-    background: rgba(26, 35, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     padding: 16px 20px;
     margin-bottom: 20px;
 }
@@ -167,12 +167,12 @@
 }
 
 .ag-module-guide .ag-toggle:hover {
-    border-color: #06b6d4;
-    color: #06b6d4;
+    border-color: #0071e3;
+    color: #0071e3;
 }
 
 .ag-module-guide .ag-steps {
-    color: #cbd5e1;
+    color: #515154;
 }
 
 .ag-module-guide .ag-tip {
@@ -181,7 +181,7 @@
     margin: 12px 0 0;
     line-height: 1.5;
     padding: 10px 12px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.04);
     border-radius: 8px;
 }
 
@@ -191,7 +191,7 @@
 }
 
 .ag-module-guide .ag-back a {
-    color: #06b6d4;
+    color: #0071e3;
     text-decoration: none;
 }
 
@@ -230,13 +230,13 @@
     gap: 8px;
     align-items: center;
 }
-.sim-banner-inner span { color: #cbd5e1; font-size: 0.8rem; }
+.sim-banner-inner span { color: #515154; font-size: 0.8rem; }
 .onboarding-wizard {
     margin: 0 0 16px 0;
     padding: 16px 18px;
     border-radius: 14px;
     background: linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(139, 92, 246, 0.1));
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.08);
 }
 .onboarding-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .onboarding-head h3 { font-size: 1rem; }
@@ -245,17 +245,17 @@
 }
 .onboarding-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
 .onboarding-step {
-    padding: 12px; border-radius: 10px; background: rgba(0, 0, 0, 0.2);
+    padding: 12px; border-radius: 10px; background: rgba(0, 0, 0, 0.04);
 }
 .onboarding-step h4 { font-size: 0.9rem; margin-bottom: 6px; }
 .onboarding-step p { font-size: 0.8rem; color: #6e6e73; line-height: 1.45; margin-bottom: 8px; }
-.onboarding-link { font-size: 0.8rem; color: #06b6d4; text-decoration: none; }
-.md-preview { font-size: 0.9rem; line-height: 1.55; color: #e2e8f0; }
+.onboarding-link { font-size: 0.8rem; color: #0071e3; text-decoration: none; }
+.md-preview { font-size: 0.9rem; line-height: 1.55; color: #1d1d1f; }
 .md-preview h2, .md-preview h3, .md-preview h4 { margin: 12px 0 8px; }
-.md-preview code { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; }
+.md-preview code { background: rgba(0, 0, 0, 0.05); padding: 2px 6px; border-radius: 4px; }
 .archive-editor .preview-pane {
     margin-top: 12px; padding: 16px; border-radius: 10px;
-    background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0, 0, 0, 0.03); border: 1px solid rgba(0, 0, 0, 0.08);
     max-height: 360px; overflow: auto;
 }
 
@@ -317,12 +317,12 @@
 .dfg-num {
     font-weight: 700;
     min-width: 1.6rem;
-    color: #06b6d4;
+    color: #0071e3;
 }
 .dfg-step strong { display: block; font-size: 0.88rem; margin-bottom: 4px; }
 .dfg-step p { margin: 0; font-size: 0.8rem; line-height: 1.45; opacity: 0.9; }
 .dfg-links { display: block; margin-top: 6px; font-size: 0.78rem; }
-.dfg-links a { color: #06b6d4; text-decoration: none; margin-right: 8px; }
+.dfg-links a { color: #0071e3; text-decoration: none; margin-right: 8px; }
 .dfg-theme-light .dfg-links a { color: #0071e3; }
 .dfg-table {
     width: 100%;
@@ -692,7 +692,7 @@ body.smp-no-scroll {
 .aan-theme-dark {
     background: rgba(6, 182, 212, 0.08);
     border: 1px solid rgba(6, 182, 212, 0.25);
-    color: #cbd5e1;
+    color: #515154;
 }
 .aan-title {
     margin: 0 0 8px;
