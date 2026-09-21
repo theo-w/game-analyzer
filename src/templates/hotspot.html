@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>行业热点文章存档</title>
     <link rel="stylesheet" href="/static/css/analysis-guide.css">
+    <link rel="stylesheet" href="/static/css/app-nav.css">
     <script src="/static/js/auth-token.js"></script>
-    <script src="/static/js/app-nav.js" defer></script>
+    <script src="/static/js/app-nav.js"></script>
     <script src="/static/js/markdown-preview.js"></script>
     <style>
         :root {
@@ -51,7 +52,13 @@
     </style>
 </head>
 <body>
-    <div id="app-nav-mount"></div>
+    <header class="app-topbar app-topbar-dark">
+        <div class="app-topbar-left">
+            <a class="app-topbar-logo" href="/">🎮</a>
+            <div id="app-nav-mount"></div>
+        </div>
+        <div class="app-topbar-right"></div>
+    </header>
     <div class="page">
         <div class="hero">
             <h1>📚 行业热点文章存档</h1>
@@ -168,8 +175,7 @@
             }
 
             if (window.AppNav) {
-                document.getElementById("app-nav-mount").innerHTML = window.AppNav.render("hotspot");
-                window.AppNav.bind();
+                AppNav.mount("#app-nav-mount");
             }
             if (!token) {
                 location.href = "/login?redirect=" + encodeURIComponent("/hotspot");

@@ -8,10 +8,12 @@
     <script src="/static/js/device-id.js"></script>
     <script src="/static/js/auth-token.js"></script>
     <link rel="stylesheet" href="/static/css/scenario-workspace.css">
+    <link rel="stylesheet" href="/static/css/app-nav.css">
     <script src="/static/js/analysis-guide.js"></script>
     <script src="/static/js/data-flow-guide.js"></script>
     <script src="/static/js/site-map-panel.js" defer></script>
     <script src="/static/js/scenario-report.js"></script>
+    <script src="/static/js/app-nav.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
@@ -339,20 +341,21 @@
     </style>
 </head>
 <body>
-    <header class="topbar">
-        <div>
-            <h1>🎮 游戏资料库 · 玩法拆解</h1>
-            <p>参考 GameRefinery / Sensor Tower 档案结构，沉淀竞品信息与核心玩法分析</p>
+    <header class="app-topbar app-topbar-dark">
+        <div class="app-topbar-left">
+            <a class="app-topbar-logo" href="/">🎮</a>
+            <div id="app-nav-mount" data-active="library"></div>
         </div>
-        <div class="actions">
-            <button class="btn btn-ghost" onclick="location.href='/dashboard'">← 返回看板</button>
-            <button class="btn btn-ghost" onclick="location.href='/games/compare'">竞品工作台</button>
-            <button class="btn btn-ghost" onclick="location.href='/games/review'">复盘与归档</button>
+        <div class="app-topbar-right">
             <button class="btn btn-ghost" type="button" data-sitemap-open>帮助指引</button>
             <button class="btn" onclick="syncMvp()">同步 Steam MVP</button>
             <button class="btn btn-primary" onclick="openCreateModal()">+ 添加游戏</button>
         </div>
     </header>
+    <div style="max-width:1400px;margin:0 auto;padding:12px 24px 0;">
+        <h1 style="margin:0;font-size:1.25rem;">🎮 游戏资料库 · 玩法拆解</h1>
+        <p style="margin:4px 0 0;color:var(--muted, #94a3b8);font-size:0.85rem;">参考 GameRefinery / Sensor Tower 档案结构，沉淀竞品信息与核心玩法分析</p>
+    </div>
 
     <div id="module-guide-root" style="max-width:1400px;margin:0 auto;padding:16px 24px 0;"></div>
 
@@ -473,6 +476,7 @@
         }
 
         async function init() {
+            if (window.AppNav) AppNav.mount('#app-nav-mount');
             if (!getToken()) {
                 location.href = '/login?redirect=' + encodeURIComponent('/games/library');
                 return;

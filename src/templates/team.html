@@ -44,16 +44,18 @@
     </style>
 </head>
 <body>
+    <header class="app-topbar app-topbar-dark">
+        <div class="app-topbar-left">
+            <a class="app-topbar-logo" href="/">🎮</a>
+            <div id="app-nav-mount" data-active="team"></div>
+        </div>
+        <div class="app-topbar-right"></div>
+    </header>
     <div class="container">
         <div class="header">
             <div>
                 <h1>👥 团队协作</h1>
                 <p>查看成员与已分享的竞品分析归档（需先在复盘页生成分享链接）</p>
-            </div>
-            <div style="display:flex;gap:8px;">
-                <a class="btn" href="/games/review">复盘归档</a>
-                <a class="btn" href="/guide">分析向导</a>
-                <a class="btn" href="/dashboard">看板</a>
             </div>
         </div>
         <div class="grid">
@@ -71,6 +73,8 @@
         </div>
     </div>
     <script src="/static/js/auth-token.js"></script>
+    <script src="/static/js/app-nav.js"></script>
+    <link rel="stylesheet" href="/static/css/app-nav.css">
     <script>
         function token() { return typeof getAuthToken === 'function' ? getAuthToken() : ''; }
         function apiFetch(path, options) {
@@ -219,6 +223,7 @@
             }
         }
 
+        if (window.AppNav) AppNav.mount('#app-nav-mount');
         loadTeams();
     </script>
 </body>

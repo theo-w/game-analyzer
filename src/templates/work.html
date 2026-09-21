@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>落地指导 · Game Analyzer</title>
     <link rel="stylesheet" href="/static/css/scenario-workspace.css">
+    <link rel="stylesheet" href="/static/css/app-nav.css">
     <script src="/static/js/auth-token.js"></script>
     <style>
         :root { --bg:#0f1419; --panel:#1a2332; --text:#e7ecf3; --muted:#94a3b8; --accent:#06b6d4; --border:rgba(255,255,255,0.08); }
@@ -33,16 +34,14 @@
     </style>
 </head>
 <body>
-    <header class="topbar">
-        <div>
-            <strong>📋 落地指导</strong>
-            <span style="color:var(--muted);font-size:0.85rem;margin-left:8px;">分析 → 导出 → 分享 → 复测</span>
+    <header class="app-topbar app-topbar-dark">
+        <div class="app-topbar-left">
+            <a class="app-topbar-logo" href="/">🎮</a>
+            <div id="app-nav-mount" data-active="work"></div>
         </div>
-        <div style="display:flex;gap:10px;align-items:center;">
+        <div class="app-topbar-right">
+            <strong>📋 落地指导</strong>
             <span id="usage-badge"></span>
-            <a class="btn" href="/guide">分析向导</a>
-            <a class="btn" href="/games/review">复盘归档</a>
-            <a class="btn" href="/team">团队协作</a>
         </div>
     </header>
     <main class="layout">
@@ -70,11 +69,13 @@
     <script src="/static/js/scenario-report.js"></script>
     <script src="/static/js/work-guidance.js"></script>
     <script src="/static/js/usage-badge.js"></script>
+    <script src="/static/js/app-nav.js"></script>
     <script>
         function token() { return typeof getAuthToken === 'function' ? getAuthToken() : ''; }
         if (!token()) location.href = '/login?redirect=' + encodeURIComponent('/work');
 
         async function init() {
+            if (window.AppNav) AppNav.mount('#app-nav-mount');
             UsageBadge.mount('usage-badge', token, { linkPricing: true });
             const data = await WorkGuidance.loadPage(token());
             if (!data.success) return;

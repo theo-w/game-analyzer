@@ -6,6 +6,7 @@
     <title>竞品分析 · 一站式工作台</title>
     <link rel="stylesheet" href="/static/css/analysis-guide.css">
     <link rel="stylesheet" href="/static/css/scenario-workspace.css">
+    <link rel="stylesheet" href="/static/css/app-nav.css">
     <script src="/static/js/device-id.js"></script>
     <script src="/static/js/auth-token.js"></script>
     <script src="/static/js/data-provenance.js"></script>
@@ -13,6 +14,7 @@
     <script src="/static/js/data-flow-guide.js"></script>
     <script src="/static/js/site-map-panel.js" defer></script>
     <script src="/static/js/scenario-report.js"></script>
+    <script src="/static/js/app-nav.js"></script>
     <link rel="stylesheet" href="/static/css/commercial-banner.css">
     <script src="/static/js/commercial-banner.js"></script>
     <script src="/static/js/chart.js"></script>
@@ -50,13 +52,15 @@
     </style>
 </head>
 <body>
-    <header class="topbar">
-        <div>
-            <h1>⚔️ 竞品分析 · 一站式工作台</h1>
-            <p>对比 · 玩法拆解 · 复盘归档 · AI 总结 — 本页完成全部操作</p>
+    <header class="app-topbar app-topbar-dark">
+        <div class="app-topbar-left">
+            <a class="app-topbar-logo" href="/">🎮</a>
+            <div id="app-nav-mount" data-active="compare"></div>
         </div>
-        <a class="btn" href="/dashboard">← 看板</a>
-        <a class="btn" id="link-back-guide" href="/guide" style="display:none;margin-left:8px;">← 分析向导</a>
+        <div class="app-topbar-right">
+            <h1 style="font-size:0.95rem;margin:0;">⚔️ 竞品分析 · 一站式工作台</h1>
+            <a class="btn" id="link-back-guide" href="/guide" style="display:none;">← 分析向导</a>
+        </div>
     </header>
     <main class="layout">
         <div id="commercial-banner-slot" style="display:none;margin-bottom:12px;"></div>
@@ -463,6 +467,7 @@
         }
 
         async function init() {
+            if (window.AppNav) AppNav.mount('#app-nav-mount');
             if (!token()) {
                 const dest = '/login?redirect=' + encodeURIComponent('/games/compare');
                 if (typeof redirectToLogin === 'function') redirectToLogin('/games/compare');

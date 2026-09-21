@@ -471,14 +471,22 @@
     </style>
     <link rel="stylesheet" href="/static/css/commercial-banner.css">
     <script src="/static/js/commercial-banner.js"></script>
+    <link rel="stylesheet" href="/static/css/app-nav.css">
+    <script src="/static/js/app-nav.js"></script>
 </head>
 <body>
+    <header class="app-topbar app-topbar-dark">
+        <div class="app-topbar-left">
+            <a class="app-topbar-logo" href="/">🎮</a>
+            <div id="app-nav-mount" data-active="pricing"></div>
+        </div>
+        <div class="app-topbar-right">
+            <span class="account-badge" data-account-badge>…</span>
+        </div>
+    </header>
+
     <div class="header">
         <h1>🎮 游戏数据分析引擎</h1>
-        <div class="header-actions">
-            <span class="account-badge" data-account-badge>…</span>
-            <button class="btn btn-secondary" onclick="goBack()">返回首页</button>
-        </div>
     </div>
 
     <div class="container">
@@ -596,6 +604,7 @@
     <script src="/static/js/auth-token.js"></script>
     <script src="/static/js/account-display.js" defer></script>
     <script>
+        if (window.AppNav) AppNav.mount('#app-nav-mount');
         function getToken() {
             return typeof getAuthToken === 'function' ? getAuthToken() : localStorage.getItem('access_token');
         }
@@ -901,10 +910,6 @@
             const orderId = params.get('order_id');
             if (!orderId) return;
             startOrderPolling(orderId);
-        }
-
-        function goBack() {
-            window.location.href = '/';
         }
 
         async function initCommercialUi() {

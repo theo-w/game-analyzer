@@ -6,6 +6,7 @@
     <title>复盘与归档</title>
     <link rel="stylesheet" href="/static/css/analysis-guide.css">
     <link rel="stylesheet" href="/static/css/scenario-workspace.css">
+    <link rel="stylesheet" href="/static/css/app-nav.css">
     <script src="/static/js/auth-token.js"></script>
     <script src="/static/js/data-provenance.js"></script>
     <script src="/static/js/analysis-guide.js"></script>
@@ -13,6 +14,7 @@
     <script src="/static/js/site-map-panel.js" defer></script>
     <script src="/static/js/scenario-report.js"></script>
     <script src="/static/js/markdown-preview.js"></script>
+    <script src="/static/js/app-nav.js"></script>
     <style>
         :root {
             --bg: #0f1419; --panel: #1a2332; --text: #e7ecf3; --muted: #94a3b8;
@@ -66,17 +68,13 @@
     </style>
 </head>
 <body>
-    <header class="topbar">
-        <div>
-            <h1>📅 复盘与归档</h1>
-            <p>MVP 口碑快照对比 · 分析报告案例库</p>
+    <header class="app-topbar app-topbar-dark">
+        <div class="app-topbar-left">
+            <a class="app-topbar-logo" href="/">🎮</a>
+            <div id="app-nav-mount" data-active="review"></div>
         </div>
-        <div class="nav-links">
-            <a class="btn" href="/guide">分析向导</a>
-            <a class="btn" href="/work">落地指导</a>
-            <a class="btn" href="/team">团队</a>
-            <a class="btn" href="/dashboard">看板</a>
-            <a class="btn" href="/games/compare">竞品工作台</a>
+        <div class="app-topbar-right">
+            <h1 style="font-size:0.95rem;margin:0;">📅 复盘与归档</h1>
             <a class="btn" href="#" data-sitemap-open>帮助指引</a>
         </div>
     </header>
@@ -612,6 +610,7 @@
         }
 
         async function init() {
+            if (window.AppNav) AppNav.mount('#app-nav-mount');
             wireReviewAiToolbar();
             toggleReviewMode();
             initFromHash();

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Game Analyzer MVP</title>
   <link rel="stylesheet" href="/static/css/analysis-guide.css">
+  <link rel="stylesheet" href="/static/css/app-nav.css">
   <style>
     :root {
       color-scheme: light;
@@ -309,17 +310,15 @@
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrap topbar">
-      <div>
-        <h1>Game Analyzer MVP</h1>
-        <p class="subtitle">Steam 真实评论抓取、确定性分析、源数据一致性验证</p>
-      </div>
-      <div class="actions">
-        <button class="button" type="button" data-sitemap-open title="帮助与指引">📖 指引</button>
-        <a class="button" href="/dashboard">← 数据看板</a>
-        <a class="button" href="/api/mvp/latest" target="_blank">查看 JSON</a>
-      </div>
+  <header class="app-topbar app-topbar-dark">
+    <div class="app-topbar-left">
+      <a class="app-topbar-logo" href="/">🎮</a>
+      <div id="app-nav-mount" data-active="mvp"></div>
+    </div>
+    <div class="app-topbar-right">
+      <h1 style="font-size:0.95rem;margin:0;">Game Analyzer MVP</h1>
+      <button class="button" type="button" data-sitemap-open title="帮助与指引">📖 指引</button>
+      <a class="button" href="/api/mvp/latest" target="_blank">查看 JSON</a>
     </div>
   </header>
   <main class="wrap">
@@ -400,6 +399,7 @@
   <script src="/static/js/site-map-panel.js" defer></script>
   <script src="/static/js/product-picker.js"></script>
   <script src="/static/js/auth-token.js"></script>
+  <script src="/static/js/app-nav.js"></script>
   <script>
     const statusEl = document.getElementById('status');
     const contentEl = document.getElementById('content');
@@ -950,6 +950,7 @@
     syncCrawlFilterControls();
 
     (async function init() {
+      if (window.AppNav) AppNav.mount('#app-nav-mount');
       if (window.DataFlowGuide) {
         DataFlowGuide.renderAdvancedNotice('mvp-advanced-notice', { theme: 'light', focus: 'mvp' });
       }
